@@ -9,6 +9,7 @@ import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
+import ru.devkit.shoppinglist.ui.additem.AddItemDialogFragment
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 
@@ -31,7 +32,9 @@ class MainActivity : AppCompatActivity() {
 
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
-            presenter.addItem(ShoppingListItemModel("new item ${count++}"))
+            val dialog = AddItemDialogFragment()
+            dialog.show(supportFragmentManager, AddItemDialogFragment.TAG)
+//            presenter.addItem(ShoppingListItemModel("new item ${count++}"))
         }
     }
 
