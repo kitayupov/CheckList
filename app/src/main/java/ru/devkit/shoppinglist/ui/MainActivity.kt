@@ -15,8 +15,6 @@ import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 
 class MainActivity : AppCompatActivity() {
 
-    private var count = 0
-
     private val presenter = ShoppingListPresenter(ShoppingListRepository())
 
     private val adapter = ShoppingListAdapter()
@@ -33,8 +31,10 @@ class MainActivity : AppCompatActivity() {
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
             val dialog = AddItemDialogFragment()
+            dialog.action = {
+                presenter.addItem(ShoppingListItemModel(it))
+            }
             dialog.show(supportFragmentManager, AddItemDialogFragment.TAG)
-//            presenter.addItem(ShoppingListItemModel("new item ${count++}"))
         }
     }
 
