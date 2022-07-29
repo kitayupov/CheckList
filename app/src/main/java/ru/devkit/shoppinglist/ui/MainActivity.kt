@@ -9,14 +9,14 @@ import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
-import ru.devkit.shoppinglist.ui.additem.AddItemDialogFragment
+import ru.devkit.shoppinglist.ui.additem.CreateNewItemViewRouter
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 
 class MainActivity : AppCompatActivity() {
 
+    private val createNewItemViewRouter = CreateNewItemViewRouter(supportFragmentManager)
     private val presenter = ShoppingListPresenter(ShoppingListRepository())
-
     private val adapter = ShoppingListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,11 +30,9 @@ class MainActivity : AppCompatActivity() {
 
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
-            val dialog = AddItemDialogFragment()
-            dialog.action = {
+            createNewItemViewRouter.showCreateNewItemView {
                 presenter.addItem(ShoppingListItemModel(it))
             }
-            dialog.show(supportFragmentManager, AddItemDialogFragment.TAG)
         }
     }
 

@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import ru.devkit.shoppinglist.R
 
-class AddItemDialogFragment : DialogFragment() {
+class CreateNewItemDialogFragment : DialogFragment() {
 
     private val editText: EditText? by lazy { dialog?.findViewById(R.id.input_text) }
 
