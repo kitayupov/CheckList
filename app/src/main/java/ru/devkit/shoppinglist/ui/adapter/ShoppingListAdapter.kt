@@ -15,8 +15,9 @@ private const val TYPE_ELEMENT = 0
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHolder>() {
 
-    private val list = mutableListOf<ListItemUiModel>()
     var action: (ListItemDataModel) -> Unit = {}
+
+    private val list = mutableListOf<ListItemUiModel>()
 
     fun updateData(update: List<ListItemUiModel>) {
         val callback = ShoppingListDiffCallback(list, update)
@@ -45,8 +46,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         when (holder) {
             is ElementViewHolder -> {
-                val elem = list[position] as? ListItemUiModel.Element ?: return
-                val data = elem.data
+                val data = list[position].data
                 holder.checkBox.apply {
                     text = data.title
                     isChecked = data.checked

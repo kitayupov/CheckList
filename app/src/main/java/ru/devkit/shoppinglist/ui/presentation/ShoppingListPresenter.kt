@@ -37,15 +37,19 @@ class ShoppingListPresenter(
     private fun updateItems() {
         view?.apply {
             val elements = repository.getItems().map { ListItemUiModel.Element(it) }
+
             val unchecked = elements.filterNot { it.data.checked }
             val checked = elements.filter { it.data.checked }
-            val uiItems = mutableListOf<ListItemUiModel>()
-            uiItems.addAll(unchecked)
+
+            val items = mutableListOf<ListItemUiModel>()
+            items.addAll(unchecked)
+
             if (checked.isNotEmpty()) {
-                uiItems.add(ListItemUiModel.Divider)
-                uiItems.addAll(checked)
+                items.add(ListItemUiModel.Divider)
+                items.addAll(checked)
             }
-            showItems(uiItems)
+
+            showItems(items)
         }
     }
 }
