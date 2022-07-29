@@ -22,18 +22,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        recyclerView.addItemDecoration(decoration)
-        recyclerView.adapter = adapter
-
-        val floatingActionButton = findViewById<View>(R.id.floating_button)
-        floatingActionButton.setOnClickListener {
-            createNewItemViewRouter.showCreateNewItemView {
-                presenter.addItem(ShoppingListItemModel(it))
-            }
-        }
+        setupRecyclerView()
+        setupActionButton()
     }
 
     override fun onResume() {
@@ -44,6 +34,23 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         presenter.detachView()
+    }
+
+    private fun setupRecyclerView() {
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        recyclerView.addItemDecoration(decoration)
+        recyclerView.adapter = adapter
+        adapter.action = { presenter.updateItem(it) }
+    }
+
+    private fun setupActionButton() {
+        val floatingActionButton = findViewById<View>(R.id.floating_button)
+        floatingActionButton.setOnClickListener {
+            createNewItemViewRouter.showCreateNewItemView() {
+                presenter.addItem(ShoppingListItemModel(it))
+            }
+        }
     }
 
     inner class MvpViewImpl : ShoppingListContract.MvpView {
