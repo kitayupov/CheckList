@@ -23,6 +23,11 @@ class ShoppingListPresenter(
         updateItems()
     }
 
+    override fun updateItem(item: ShoppingListItemModel) {
+        repository.updateItem(item)
+        updateItems()
+    }
+
     override fun removeItem(item: ShoppingListItemModel) {
         repository.removeItem(item)
         updateItems()

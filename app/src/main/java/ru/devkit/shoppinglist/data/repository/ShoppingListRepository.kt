@@ -21,6 +21,15 @@ class ShoppingListRepository {
         list.add(item)
     }
 
+    fun updateItem(item: ShoppingListItemModel) {
+        val index = list.indexOfFirst { it.title == item.title }
+        if (index != -1) {
+            list[index] = item
+        } else {
+            list.add(item)
+        }
+    }
+
     fun removeItem(item: ShoppingListItemModel) {
         list.remove(item)
     }

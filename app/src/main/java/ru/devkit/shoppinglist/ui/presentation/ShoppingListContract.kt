@@ -12,6 +12,7 @@ object ShoppingListContract {
         fun attachView(view: MvpView)
         fun detachView()
         fun addItem(item: ShoppingListItemModel)
+        fun updateItem(item: ShoppingListItemModel)
         fun removeItem(item: ShoppingListItemModel)
     }
 }

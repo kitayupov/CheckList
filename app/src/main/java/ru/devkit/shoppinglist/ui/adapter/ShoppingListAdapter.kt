@@ -12,6 +12,7 @@ import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHolder>() {
 
     private val list = mutableListOf<ShoppingListItemModel>()
+    var action: (ShoppingListItemModel) -> Unit = {}
 
     fun updateData(update: List<ShoppingListItemModel>) {
         val callback = ShoppingListDiffCallback(list, update)
@@ -29,7 +30,15 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHol
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.checkBox.text = list[position].title
+        val elem = list[position]
+        holder.checkBox.apply {
+            text = elem.title
+            isChecked = elem.checked
+            setOnCheckedChangeListener { _, checked ->
+                elem.checked = checked
+                action.invoke(elem)
+            }
+        }
     }
 
     override fun getItemCount(): Int = list.size
