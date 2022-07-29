@@ -1,17 +1,17 @@
 package ru.devkit.shoppinglist.ui.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
-import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
+import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
 
 class MainActivity : AppCompatActivity() {
 
-    private val repository = ShoppingListRepository()
+    private val presenter = ShoppingListPresenter(ShoppingListRepository())
 
     private val adapter = ShoppingListAdapter()
 
@@ -24,13 +24,23 @@ class MainActivity : AppCompatActivity() {
 
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
-            repository.addItem(ShoppingListItemModel("new item"))
-            adapter.list = repository.getItems()
+            presenter.addItem(ShoppingListItemModel("new item"))
         }
     }
 
     override fun onResume() {
         super.onResume()
-        adapter.list = repository.getItems()
+        presenter.attachView(MvpViewImpl())
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.detachView()
+    }
+
+    inner class MvpViewImpl : ShoppingListContract.MvpView {
+        override fun showItems(list: List<ShoppingListItemModel>) {
+            adapter.list = list
+        }
     }
 }
