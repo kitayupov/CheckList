@@ -1,4 +1,4 @@
-package ru.devkit.shoppinglist.presentation
+package ru.devkit.shoppinglist.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
-import ru.devkit.shoppinglist.model.ShoppingListItemModel
+import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHolder>() {
 

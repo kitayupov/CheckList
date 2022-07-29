@@ -1,12 +1,13 @@
-package ru.devkit.shoppinglist
+package ru.devkit.shoppinglist.ui.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import ru.devkit.shoppinglist.model.ShoppingListItemModel
-import ru.devkit.shoppinglist.presentation.ShoppingListAdapter
-import ru.devkit.shoppinglist.repository.ShoppingListRepository
+import ru.devkit.shoppinglist.R
+import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
+import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
+import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
 
 class MainActivity : AppCompatActivity() {
 

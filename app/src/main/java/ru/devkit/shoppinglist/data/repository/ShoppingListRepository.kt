@@ -1,6 +1,6 @@
-package ru.devkit.shoppinglist.repository
+package ru.devkit.shoppinglist.data.repository
 
-import ru.devkit.shoppinglist.model.ShoppingListItemModel
+import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
 
 class ShoppingListRepository {
 
