@@ -3,6 +3,7 @@ package ru.devkit.shoppinglist.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        recyclerView.addItemDecoration(decoration)
         recyclerView.adapter = adapter
 
         val floatingActionButton = findViewById<View>(R.id.floating_button)
