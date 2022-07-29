@@ -14,6 +14,8 @@ import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 
 class MainActivity : AppCompatActivity() {
 
+    private var count = 0
+
     private val presenter = ShoppingListPresenter(ShoppingListRepository())
 
     private val adapter = ShoppingListAdapter()
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
-            presenter.addItem(ShoppingListItemModel("new item"))
+            presenter.addItem(ShoppingListItemModel("new item ${count++}"))
         }
     }
 
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     inner class MvpViewImpl : ShoppingListContract.MvpView {
         override fun showItems(list: List<ShoppingListItemModel>) {
-            adapter.list = list
+            adapter.updateData(list)
         }
     }
 }
