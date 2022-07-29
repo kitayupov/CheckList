@@ -6,17 +6,11 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.model.ShoppingListItemModel
 import ru.devkit.shoppinglist.presentation.ShoppingListAdapter
+import ru.devkit.shoppinglist.repository.ShoppingListRepository
 
 class MainActivity : AppCompatActivity() {
 
-    private val list = mutableListOf(
-        ShoppingListItemModel("potato"),
-        ShoppingListItemModel("tomato"),
-        ShoppingListItemModel("soup"),
-        ShoppingListItemModel("banana"),
-        ShoppingListItemModel("milk"),
-        ShoppingListItemModel("bread"),
-    )
+    private val repository = ShoppingListRepository()
 
     private val adapter = ShoppingListAdapter()
 
@@ -29,13 +23,13 @@ class MainActivity : AppCompatActivity() {
 
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
-            list.add(ShoppingListItemModel("new item"))
-            adapter.list = list
+            repository.addItem(ShoppingListItemModel("new item"))
+            adapter.list = repository.getItems()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        adapter.list = list
+        adapter.list = repository.getItems()
     }
 }
