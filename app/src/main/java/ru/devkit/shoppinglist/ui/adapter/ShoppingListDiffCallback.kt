@@ -1,11 +1,11 @@
 package ru.devkit.shoppinglist.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.devkit.shoppinglist.ui.model.ShoppingListItemUiModel
+import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 
 class ShoppingListDiffCallback(
-    private val oldList: List<ShoppingListItemUiModel>,
-    private val newList: List<ShoppingListItemUiModel>
+    private val oldList: List<ListItemUiModel>,
+    private val newList: List<ListItemUiModel>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size

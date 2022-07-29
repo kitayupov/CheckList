@@ -1,8 +1,8 @@
 package ru.devkit.shoppinglist.ui.presentation
 
-import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
+import ru.devkit.shoppinglist.data.model.ListItemDataModel
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
-import ru.devkit.shoppinglist.ui.model.ShoppingListItemUiModel
+import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 
 class ShoppingListPresenter(
     private val repository: ShoppingListRepository
@@ -19,30 +19,30 @@ class ShoppingListPresenter(
         this.view = null
     }
 
-    override fun addItem(item: ShoppingListItemModel) {
+    override fun addItem(item: ListItemDataModel) {
         repository.addItem(item)
         updateItems()
     }
 
-    override fun updateItem(item: ShoppingListItemModel) {
+    override fun updateItem(item: ListItemDataModel) {
         repository.updateItem(item)
         updateItems()
     }
 
-    override fun removeItem(item: ShoppingListItemModel) {
+    override fun removeItem(item: ListItemDataModel) {
         repository.removeItem(item)
         updateItems()
     }
 
     private fun updateItems() {
         view?.apply {
-            val items = repository.getItems().map { ShoppingListItemUiModel.Item(it) }
-            val unchecked = items.filterNot { it.data.checked }
-            val checked = items.filter { it.data.checked }
-            val uiItems = mutableListOf<ShoppingListItemUiModel>()
+            val elements = repository.getItems().map { ListItemUiModel.Element(it) }
+            val unchecked = elements.filterNot { it.data.checked }
+            val checked = elements.filter { it.data.checked }
+            val uiItems = mutableListOf<ListItemUiModel>()
             uiItems.addAll(unchecked)
             if (checked.isNotEmpty()) {
-                uiItems.add(ShoppingListItemUiModel.Divider)
+                uiItems.add(ListItemUiModel.Divider)
                 uiItems.addAll(checked)
             }
             showItems(uiItems)

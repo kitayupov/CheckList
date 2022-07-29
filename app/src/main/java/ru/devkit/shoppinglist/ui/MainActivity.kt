@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
-import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
+import ru.devkit.shoppinglist.data.model.ListItemDataModel
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
 import ru.devkit.shoppinglist.ui.additem.CreateNewItemViewRouter
-import ru.devkit.shoppinglist.ui.model.ShoppingListItemUiModel
+import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 
@@ -49,13 +49,13 @@ class MainActivity : AppCompatActivity() {
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
             createNewItemViewRouter.showCreateNewItemView() {
-                presenter.addItem(ShoppingListItemModel(it))
+                presenter.addItem(ListItemDataModel(it))
             }
         }
     }
 
     inner class MvpViewImpl : ShoppingListContract.MvpView {
-        override fun showItems(list: List<ShoppingListItemUiModel>) {
+        override fun showItems(list: List<ListItemUiModel>) {
             adapter.updateData(list)
         }
     }

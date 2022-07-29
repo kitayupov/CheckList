@@ -7,18 +7,18 @@ import android.widget.CheckBox
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
-import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
-import ru.devkit.shoppinglist.ui.model.ShoppingListItemUiModel
+import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 
 private const val TYPE_DIVIDER = -1
-private const val TYPE_ITEM = 0
+private const val TYPE_ELEMENT = 0
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHolder>() {
 
-    private val list = mutableListOf<ShoppingListItemUiModel>()
-    var action: (ShoppingListItemModel) -> Unit = {}
+    private val list = mutableListOf<ListItemUiModel>()
+    var action: (ListItemDataModel) -> Unit = {}
 
-    fun updateData(update: List<ShoppingListItemUiModel>) {
+    fun updateData(update: List<ListItemUiModel>) {
         val callback = ShoppingListDiffCallback(list, update)
         val result = DiffUtil.calculateDiff(callback)
         result.dispatchUpdatesTo(this)
@@ -31,9 +31,9 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            TYPE_ITEM -> {
-                val view = inflater.inflate(R.layout.list_item, parent, false)
-                ItemViewHolder(view)
+            TYPE_ELEMENT -> {
+                val view = inflater.inflate(R.layout.list_item_element, parent, false)
+                ElementViewHolder(view)
             }
             else -> {
                 val view = inflater.inflate(R.layout.list_item_divider, parent, false)
@@ -44,8 +44,8 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         when (holder) {
-            is ItemViewHolder -> {
-                val elem = list[position] as? ShoppingListItemUiModel.Item ?: return
+            is ElementViewHolder -> {
+                val elem = list[position] as? ListItemUiModel.Element ?: return
                 val data = elem.data
                 holder.checkBox.apply {
                     text = data.title
@@ -64,8 +64,8 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     override fun getItemViewType(position: Int): Int {
         return when (list[position]) {
-            is ShoppingListItemUiModel.Item -> TYPE_ITEM
-            is ShoppingListItemUiModel.Divider -> TYPE_DIVIDER
+            is ListItemUiModel.Element -> TYPE_ELEMENT
+            is ListItemUiModel.Divider -> TYPE_DIVIDER
         }
     }
 
@@ -73,7 +73,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     inner class DividerViewHolder(view: View) : BaseViewHolder(view)
 
-    inner class ItemViewHolder(view: View) : BaseViewHolder(view) {
+    inner class ElementViewHolder(view: View) : BaseViewHolder(view) {
         val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
     }
 }

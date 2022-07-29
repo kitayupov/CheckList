@@ -1,27 +1,27 @@
 package ru.devkit.shoppinglist.data.repository
 
-import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
+import ru.devkit.shoppinglist.data.model.ListItemDataModel
 
 class ShoppingListRepository {
 
     private val list = mutableListOf(
-        ShoppingListItemModel("potato"),
-        ShoppingListItemModel("tomato"),
-        ShoppingListItemModel("soup"),
-        ShoppingListItemModel("banana"),
-        ShoppingListItemModel("milk"),
-        ShoppingListItemModel("bread"),
+        ListItemDataModel("potato"),
+        ListItemDataModel("tomato"),
+        ListItemDataModel("soup"),
+        ListItemDataModel("banana"),
+        ListItemDataModel("milk"),
+        ListItemDataModel("bread"),
     )
 
-    fun getItems(): List<ShoppingListItemModel> {
+    fun getItems(): List<ListItemDataModel> {
         return list
     }
 
-    fun addItem(item: ShoppingListItemModel) {
+    fun addItem(item: ListItemDataModel) {
         list.add(item)
     }
 
-    fun updateItem(item: ShoppingListItemModel) {
+    fun updateItem(item: ListItemDataModel) {
         val index = list.indexOfFirst { it.title == item.title }
         if (index != -1) {
             list[index] = item
@@ -30,7 +30,7 @@ class ShoppingListRepository {
         }
     }
 
-    fun removeItem(item: ShoppingListItemModel) {
+    fun removeItem(item: ListItemDataModel) {
         list.remove(item)
     }
 }

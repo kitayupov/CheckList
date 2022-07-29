@@ -1,6 +1,6 @@
 package ru.devkit.shoppinglist.data.model
 
-data class ShoppingListItemModel(
+data class ListItemDataModel(
     val title: String,
     var checked: Boolean = false
 )

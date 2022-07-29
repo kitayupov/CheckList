@@ -1,19 +1,19 @@
 package ru.devkit.shoppinglist.ui.presentation
 
-import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
-import ru.devkit.shoppinglist.ui.model.ShoppingListItemUiModel
+import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 
 object ShoppingListContract {
 
     interface MvpView {
-        fun showItems(list: List<ShoppingListItemUiModel>)
+        fun showItems(list: List<ListItemUiModel>)
     }
 
     interface MvpPresenter {
         fun attachView(view: MvpView)
         fun detachView()
-        fun addItem(item: ShoppingListItemModel)
-        fun updateItem(item: ShoppingListItemModel)
-        fun removeItem(item: ShoppingListItemModel)
+        fun addItem(item: ListItemDataModel)
+        fun updateItem(item: ListItemDataModel)
+        fun removeItem(item: ListItemDataModel)
     }
 }
