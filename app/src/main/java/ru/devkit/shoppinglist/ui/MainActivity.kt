@@ -10,6 +10,7 @@ import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
 import ru.devkit.shoppinglist.ui.additem.CreateNewItemViewRouter
+import ru.devkit.shoppinglist.ui.model.ShoppingListItemUiModel
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class MvpViewImpl : ShoppingListContract.MvpView {
-        override fun showItems(list: List<ShoppingListItemModel>) {
+        override fun showItems(list: List<ShoppingListItemUiModel>) {
             adapter.updateData(list)
         }
     }

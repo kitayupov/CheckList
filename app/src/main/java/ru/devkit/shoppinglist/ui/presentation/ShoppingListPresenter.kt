@@ -2,6 +2,7 @@ package ru.devkit.shoppinglist.ui.presentation
 
 import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
+import ru.devkit.shoppinglist.ui.model.ShoppingListItemUiModel
 
 class ShoppingListPresenter(
     private val repository: ShoppingListRepository
@@ -35,8 +36,16 @@ class ShoppingListPresenter(
 
     private fun updateItems() {
         view?.apply {
-            val items = repository.getItems()
-            showItems(items)
+            val items = repository.getItems().map { ShoppingListItemUiModel.Item(it) }
+            val unchecked = items.filterNot { it.data.checked }
+            val checked = items.filter { it.data.checked }
+            val uiItems = mutableListOf<ShoppingListItemUiModel>()
+            uiItems.addAll(unchecked)
+            if (checked.isNotEmpty()) {
+                uiItems.add(ShoppingListItemUiModel.Divider)
+                uiItems.addAll(checked)
+            }
+            showItems(uiItems)
         }
     }
 }

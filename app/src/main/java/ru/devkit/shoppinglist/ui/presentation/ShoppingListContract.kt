@@ -1,11 +1,12 @@
 package ru.devkit.shoppinglist.ui.presentation
 
 import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
+import ru.devkit.shoppinglist.ui.model.ShoppingListItemUiModel
 
 object ShoppingListContract {
 
     interface MvpView {
-        fun showItems(list: List<ShoppingListItemModel>)
+        fun showItems(list: List<ShoppingListItemUiModel>)
     }
 
     interface MvpPresenter {
