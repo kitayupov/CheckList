@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
-import ru.devkit.shoppinglist.model.ItemModel
+import ru.devkit.shoppinglist.model.ShoppingListItemModel
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ItemViewHolder>() {
 
-    var list: List<ItemModel> = emptyList()
+    var list: List<ShoppingListItemModel> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()

@@ -1,5 +1,5 @@
 package ru.devkit.shoppinglist.model
 
-data class ItemModel(
+data class ShoppingListItemModel(
     val title: String
 )
