@@ -1,4 +1,4 @@
-package ru.devkit.shoppinglist.ui.presentation
+package ru.devkit.shoppinglist.ui
 
 import android.os.Bundle
 import android.view.View
@@ -8,6 +8,8 @@ import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.data.model.ShoppingListItemModel
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
+import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
+import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 
 class MainActivity : AppCompatActivity() {
 
