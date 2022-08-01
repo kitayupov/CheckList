@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
+import ru.devkit.shoppinglist.data.db.ProductsDatabase
 import ru.devkit.shoppinglist.data.model.ListItemDataModel
-import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
-import ru.devkit.shoppinglist.data.source.TestShoppingListDataSource
+import ru.devkit.shoppinglist.data.repository.ProductsRepository
+import ru.devkit.shoppinglist.data.source.ProductsDataSource
+import ru.devkit.shoppinglist.domain.DataModelStorageInteractor
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
 import ru.devkit.shoppinglist.ui.additem.CreateNewItemViewRouter
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
@@ -18,7 +20,7 @@ import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 class MainActivity : AppCompatActivity() {
 
     private val createNewItemViewRouter = CreateNewItemViewRouter(supportFragmentManager)
-    private val presenter = ShoppingListPresenter(ShoppingListRepository(TestShoppingListDataSource()))
+    private lateinit var presenter: ShoppingListPresenter
     private val adapter = ShoppingListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupRecyclerView()
         setupActionButton()
+        createStorage()
     }
 
     override fun onResume() {
@@ -36,6 +39,14 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         presenter.detachView()
+    }
+
+    private fun createStorage() {
+        val database = ProductsDatabase.getInstance(this)
+        val dataSource = ProductsDataSource(database)
+        val repository = ProductsRepository(dataSource)
+        val interactor = DataModelStorageInteractor(repository)
+        presenter = ShoppingListPresenter(interactor)
     }
 
     private fun setupRecyclerView() {

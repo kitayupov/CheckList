@@ -1,28 +1,28 @@
 package ru.devkit.shoppinglist.data.source
 
-import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.data.model.Product
 
-class TestShoppingListDataSource : DataSource<ListItemDataModel> {
+class TestShoppingListDataSource : DataSource<Product> {
 
     private val list = mutableListOf(
-        ListItemDataModel("potato"),
-        ListItemDataModel("tomato"),
-        ListItemDataModel("soup"),
-        ListItemDataModel("banana"),
-        ListItemDataModel("milk"),
-        ListItemDataModel("bread"),
+        Product("potato", false),
+        Product("tomato", false),
+        Product("soup", false),
+        Product("banana", false),
+        Product("milk", false),
+        Product("bread", false),
     )
 
-    override fun getItems(): List<ListItemDataModel> {
+    override fun getItems(): List<Product> {
         return list
     }
 
-    override fun create(elem: ListItemDataModel) {
+    override fun create(elem: Product) {
         list.add(elem)
     }
 
-    override fun update(elem: ListItemDataModel) {
-        val index = list.indexOfFirst { it.title == elem.title }
+    override fun update(elem: Product) {
+        val index = list.indexOfFirst { it.name == elem.name }
         if (index != -1) {
             list[index] = elem
         } else {
@@ -30,7 +30,7 @@ class TestShoppingListDataSource : DataSource<ListItemDataModel> {
         }
     }
 
-    override fun delete(elem: ListItemDataModel) {
+    override fun delete(elem: Product) {
         list.remove(elem)
     }
 }
