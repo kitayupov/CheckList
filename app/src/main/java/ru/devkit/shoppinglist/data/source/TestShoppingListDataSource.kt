@@ -17,20 +17,20 @@ class TestShoppingListDataSource : DataSource<ListItemDataModel> {
         return list
     }
 
-    override fun add(item: ListItemDataModel) {
-        list.add(item)
+    override fun create(elem: ListItemDataModel) {
+        list.add(elem)
     }
 
-    override fun update(item: ListItemDataModel) {
-        val index = list.indexOfFirst { it.title == item.title }
+    override fun update(elem: ListItemDataModel) {
+        val index = list.indexOfFirst { it.title == elem.title }
         if (index != -1) {
-            list[index] = item
+            list[index] = elem
         } else {
-            list.add(item)
+            list.add(elem)
         }
     }
 
-    override fun remove(item: ListItemDataModel) {
-        list.remove(item)
+    override fun delete(elem: ListItemDataModel) {
+        list.remove(elem)
     }
 }

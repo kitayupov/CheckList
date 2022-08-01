@@ -11,16 +11,15 @@ class ShoppingListRepository(
         return dataSource.getItems()
     }
 
-    fun addItem(item: ListItemDataModel) {
-        dataSource.add(item)
+    fun addItem(elem: ListItemDataModel) {
+        dataSource.create(elem)
     }
 
-    fun updateItem(item: ListItemDataModel) {
-        dataSource.update(item)
-
+    fun updateItem(elem: ListItemDataModel) {
+        dataSource.update(elem)
     }
 
-    fun removeItem(item: ListItemDataModel) {
-        dataSource.remove(item)
+    fun removeItem(elem: ListItemDataModel) {
+        dataSource.delete(elem)
     }
 }

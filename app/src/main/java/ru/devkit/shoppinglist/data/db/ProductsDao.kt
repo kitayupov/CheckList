@@ -7,10 +7,10 @@ import ru.devkit.shoppinglist.data.model.Product
 interface ProductsDao {
 
     @Query("SELECT * FROM PRODUCT")
-    fun getAll()
+    fun getAll(): List<Product>
 
-    @Query("SELECT * FROM PRODUCT WHERE id = :id")
-    fun getById(id: Long)
+    @Query("SELECT * FROM PRODUCT WHERE name = :name")
+    fun getByName(name: String): Product?
 
     @Insert
     fun insert(product: Product)

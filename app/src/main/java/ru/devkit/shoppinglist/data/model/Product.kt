@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class Product(
     @PrimaryKey
-    val id: Long,
     val name: String,
     val checked: Boolean
 )
