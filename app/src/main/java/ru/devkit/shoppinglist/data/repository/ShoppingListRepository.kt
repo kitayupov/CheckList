@@ -1,36 +1,26 @@
 package ru.devkit.shoppinglist.data.repository
 
 import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.data.source.DataSource
 
-class ShoppingListRepository {
-
-    private val list = mutableListOf(
-        ListItemDataModel("potato"),
-        ListItemDataModel("tomato"),
-        ListItemDataModel("soup"),
-        ListItemDataModel("banana"),
-        ListItemDataModel("milk"),
-        ListItemDataModel("bread"),
-    )
+class ShoppingListRepository(
+    private val dataSource: DataSource<ListItemDataModel>
+) {
 
     fun getItems(): List<ListItemDataModel> {
-        return list
+        return dataSource.getItems()
     }
 
     fun addItem(item: ListItemDataModel) {
-        list.add(item)
+        dataSource.add(item)
     }
 
     fun updateItem(item: ListItemDataModel) {
-        val index = list.indexOfFirst { it.title == item.title }
-        if (index != -1) {
-            list[index] = item
-        } else {
-            list.add(item)
-        }
+        dataSource.update(item)
+
     }
 
     fun removeItem(item: ListItemDataModel) {
-        list.remove(item)
+        dataSource.remove(item)
     }
 }

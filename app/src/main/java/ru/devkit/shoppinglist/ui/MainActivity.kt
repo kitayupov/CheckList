@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.data.model.ListItemDataModel
 import ru.devkit.shoppinglist.data.repository.ShoppingListRepository
+import ru.devkit.shoppinglist.data.source.TestShoppingListDataSource
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
 import ru.devkit.shoppinglist.ui.additem.CreateNewItemViewRouter
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
@@ -17,7 +18,7 @@ import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 class MainActivity : AppCompatActivity() {
 
     private val createNewItemViewRouter = CreateNewItemViewRouter(supportFragmentManager)
-    private val presenter = ShoppingListPresenter(ShoppingListRepository())
+    private val presenter = ShoppingListPresenter(ShoppingListRepository(TestShoppingListDataSource()))
     private val adapter = ShoppingListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
