@@ -1,7 +1,7 @@
 package ru.devkit.shoppinglist.ui.presentation
 
+import kotlinx.coroutines.*
 import ru.devkit.shoppinglist.data.model.ListItemDataModel
-import ru.devkit.shoppinglist.data.repository.ProductsRepository
 import ru.devkit.shoppinglist.domain.DataModelStorageInteractor
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 
@@ -11,33 +11,53 @@ class ShoppingListPresenter(
 
     private var view: ShoppingListContract.MvpView? = null
 
+    private val mainScope = CoroutineScope(Dispatchers.Main)
+
     override fun attachView(view: ShoppingListContract.MvpView) {
         this.view = view
-        updateItems()
+        mainScope.launch {
+            updateItems()
+        }
     }
 
     override fun detachView() {
         this.view = null
+        mainScope.cancel()
     }
 
     override fun addItem(item: ListItemDataModel) {
-        interactor.addItem(item)
-        updateItems()
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                interactor.addItem(item)
+            }
+            updateItems()
+        }
     }
 
     override fun updateItem(item: ListItemDataModel) {
-        interactor.updateItem(item)
-        updateItems()
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                interactor.updateItem(item)
+            }
+            updateItems()
+        }
     }
 
     override fun removeItem(item: ListItemDataModel) {
-        interactor.removeItem(item)
-        updateItems()
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                interactor.removeItem(item)
+            }
+            updateItems()
+        }
     }
 
-    private fun updateItems() {
+    private suspend fun updateItems() {
         view?.apply {
-            val elements = interactor.getItems().map { ListItemUiModel.Element(it) }
+            val elements = withContext(Dispatchers.IO) {
+                interactor.getItems()
+                    .map { ListItemUiModel.Element(it) }
+            }
 
             val unchecked = elements.filterNot { it.data.checked }
             val checked = elements.filter { it.data.checked }
