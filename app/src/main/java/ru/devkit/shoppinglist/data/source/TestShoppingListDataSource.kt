@@ -33,4 +33,8 @@ class TestShoppingListDataSource : DataSource<Product> {
     override fun delete(elem: Product) {
         list.remove(elem)
     }
+
+    override fun clear() {
+        list.clear()
+    }
 }

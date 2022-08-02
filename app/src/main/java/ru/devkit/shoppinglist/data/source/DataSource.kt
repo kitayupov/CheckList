@@ -5,4 +5,5 @@ interface DataSource<T> {
     fun create(elem: T)
     fun update(elem: T)
     fun delete(elem: T)
+    fun clear()
 }

@@ -29,4 +29,8 @@ class ProductsDataSource(
     override fun delete(elem: Product) {
         dao.delete(elem)
     }
+
+    override fun clear() {
+        dao.clear()
+    }
 }

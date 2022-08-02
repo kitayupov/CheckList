@@ -22,4 +22,8 @@ class ProductsRepository(
     fun removeItem(elem: Product) {
         dataSource.delete(elem)
     }
+
+    fun clearData() {
+        dataSource.clear()
+    }
 }
