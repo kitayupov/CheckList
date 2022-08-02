@@ -52,6 +52,15 @@ class ShoppingListPresenter(
         }
     }
 
+    override fun clearData() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                interactor.clearData()
+            }
+            updateItems()
+        }
+    }
+
     private suspend fun updateItems() {
         view?.apply {
             val elements = withContext(Dispatchers.IO) {

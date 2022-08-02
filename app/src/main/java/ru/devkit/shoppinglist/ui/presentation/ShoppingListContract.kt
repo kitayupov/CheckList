@@ -15,5 +15,6 @@ object ShoppingListContract {
         fun addItem(item: ListItemDataModel)
         fun updateItem(item: ListItemDataModel)
         fun removeItem(item: ListItemDataModel)
+        fun clearData()
     }
 }

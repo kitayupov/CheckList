@@ -26,4 +26,9 @@ class DataModelStorageInteractor(
     suspend fun getItems(): List<ListItemDataModel> {
         return repository.getItems().map { it.mapToDataModel() }
     }
+
+    @WorkerThread
+    suspend fun clearData() {
+        return repository.clearData()
+    }
 }
