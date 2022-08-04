@@ -45,13 +45,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.action_menu, menu)
+        menuInflater.inflate(R.menu.menu_actions, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.clear_data -> {
+            R.id.menu_actions_clear_data -> {
                 showDialogForClearDataResponse()
                 true
             }
