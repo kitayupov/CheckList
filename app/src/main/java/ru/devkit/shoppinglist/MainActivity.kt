@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.data.db.ProductsDatabase
 import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.data.preferences.PreferencesProvider
 import ru.devkit.shoppinglist.data.repository.ProductsRepository
 import ru.devkit.shoppinglist.data.source.ProductsDataSource
 import ru.devkit.shoppinglist.domain.DataModelStorageInteractor
@@ -69,7 +70,8 @@ class MainActivity : AppCompatActivity() {
         val dataSource = ProductsDataSource(database)
         val repository = ProductsRepository(dataSource)
         val interactor = DataModelStorageInteractor(repository)
-        presenter = ShoppingListPresenter(interactor)
+        val preferences = PreferencesProvider(this)
+        presenter = ShoppingListPresenter(interactor, preferences)
     }
 
     private fun setupRecyclerView() {
@@ -77,7 +79,8 @@ class MainActivity : AppCompatActivity() {
         val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
         recyclerView.adapter = adapter
-        adapter.action = { presenter.updateItem(it) }
+        adapter.checkedAction = { presenter.updateItem(it) }
+        adapter.expandAction = { presenter.expandArchived(it) }
     }
 
     private fun setupActionButton() {

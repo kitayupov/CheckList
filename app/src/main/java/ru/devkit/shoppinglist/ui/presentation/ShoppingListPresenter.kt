@@ -2,11 +2,13 @@ package ru.devkit.shoppinglist.ui.presentation
 
 import kotlinx.coroutines.*
 import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.data.preferences.PreferencesProvider
 import ru.devkit.shoppinglist.domain.DataModelStorageInteractor
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 
 class ShoppingListPresenter(
-    private val interactor: DataModelStorageInteractor
+    private val interactor: DataModelStorageInteractor,
+    private val preferences: PreferencesProvider
 ) : ShoppingListContract.MvpPresenter {
 
     private var view: ShoppingListContract.MvpView? = null
@@ -52,6 +54,15 @@ class ShoppingListPresenter(
         }
     }
 
+    override fun expandArchived(checked: Boolean) {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                preferences.putBoolean(PreferencesProvider.EXPAND_ARCHIVED_KEY, checked)
+            }
+            updateItems()
+        }
+    }
+
     override fun clearData() {
         mainScope.launch {
             withContext(Dispatchers.IO) {
@@ -75,8 +86,11 @@ class ShoppingListPresenter(
             items.addAll(unchecked)
 
             if (checked.isNotEmpty()) {
-                items.add(ListItemUiModel.Divider)
-                items.addAll(checked)
+                val expanded = preferences.getBoolean(PreferencesProvider.EXPAND_ARCHIVED_KEY, true)
+                items.add(ListItemUiModel.Divider(expanded))
+                if (expanded) {
+                    items.addAll(checked)
+                }
             }
 
             showItems(items)
