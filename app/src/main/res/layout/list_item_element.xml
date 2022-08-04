@@ -8,8 +8,8 @@
         android:id="@+id/check_box"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:buttonTint="@color/item_color_selector"
-        android:textColor="@color/item_color_selector"
+        android:buttonTint="@color/color_item_checked"
+        android:textColor="@color/color_item_checked"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
