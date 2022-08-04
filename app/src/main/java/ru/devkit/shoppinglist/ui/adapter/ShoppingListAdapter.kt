@@ -60,7 +60,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
             is DividerViewHolder -> {
                 val data = list[position] as? ListItemUiModel.Divider ?: return
                 holder.chevron.isChecked = data.checked
-                holder.itemView.setOnClickListener {
+                holder.clickable.setOnClickListener {
                     holder.chevron.isChecked = holder.chevron.isChecked.not()
                     expandAction.invoke(holder.chevron.isChecked)
                 }
@@ -82,6 +82,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     inner class DividerViewHolder(view: View) : BaseViewHolder(view) {
         val chevron: CheckBox by lazy { view.findViewById(R.id.chevron) }
+        val clickable: View by lazy { view.findViewById(R.id.clickable) }
     }
 
     inner class ElementViewHolder(view: View) : BaseViewHolder(view) {
