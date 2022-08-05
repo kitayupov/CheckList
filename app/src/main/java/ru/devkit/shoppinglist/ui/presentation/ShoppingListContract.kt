@@ -29,5 +29,6 @@ object ShoppingListContract {
         fun removeSelected()
         fun selectAll()
         fun checkSelected()
+        fun uncheckSelected()
     }
 }

@@ -136,6 +136,17 @@ class ShoppingListPresenter(
         }
     }
 
+    override fun uncheckSelected() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                forEachSelected {
+                    updateItem(it.copy(checked = false))
+                }
+            }
+            updateItems()
+        }
+    }
+
     private inline fun forEachSelected(action: (ListItemDataModel) -> Unit) {
         selected.forEach { name ->
             cached.find { it.title == name }
