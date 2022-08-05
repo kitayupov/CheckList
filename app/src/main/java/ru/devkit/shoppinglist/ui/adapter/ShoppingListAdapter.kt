@@ -1,9 +1,11 @@
 package ru.devkit.shoppinglist.ui.adapter
 
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.core.util.isNotEmpty
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
@@ -19,6 +21,9 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
     var expandAction: (Boolean) -> Unit = {}
 
     private val list = mutableListOf<ListItemUiModel>()
+
+    private val selectedIds = SparseBooleanArray()
+    private var isSelectionMode = false
 
     fun updateData(update: List<ListItemUiModel>) {
         val callback = ShoppingListDiffCallback(list, update)
@@ -56,6 +61,19 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
                         checkedAction.invoke(data)
                     }
                 }
+                holder.clickable.isSelected = selectedIds.get(position, false)
+                holder.clickable.setOnClickListener {
+                    if (isSelectionMode) {
+                        setSelection(position)
+                    } else {
+                        holder.checkBox.performClick()
+                    }
+                }
+                holder.clickable.setOnLongClickListener {
+                    isSelectionMode = true
+                    setSelection(position)
+                    true
+                }
             }
             is DividerViewHolder -> {
                 val data = list[position] as? ListItemUiModel.Divider ?: return
@@ -78,6 +96,16 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
         }
     }
 
+    private fun setSelection(position: Int) {
+        if (selectedIds.get(position, false)) {
+            selectedIds.delete(position)
+            isSelectionMode = selectedIds.isNotEmpty()
+        } else {
+            selectedIds.put(position, true)
+        }
+        notifyItemChanged(position)
+    }
+
     abstract class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     inner class DividerViewHolder(view: View) : BaseViewHolder(view) {
@@ -87,5 +115,6 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     inner class ElementViewHolder(view: View) : BaseViewHolder(view) {
         val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
+        val clickable: View by lazy { view.findViewById(R.id.clickable) }
     }
 }
