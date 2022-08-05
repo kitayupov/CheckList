@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.fragment.app.FragmentManager
 import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.ui.confirmation.ConfirmationDialogFragment
-import ru.devkit.shoppinglist.ui.createitem.CreateItemDialogFragment
+import ru.devkit.shoppinglist.ui.createitem.CreateItemBottomSheetFragment
 
 class Router(private val context: Context) {
 
-    var supportFragmentManager: FragmentManager? = null
+    private var supportFragmentManager: FragmentManager? = null
 
     fun attach(fragmentManager: FragmentManager) {
         this.supportFragmentManager = fragmentManager
@@ -20,9 +20,9 @@ class Router(private val context: Context) {
 
     fun showCreateItemView(action: (String) -> Unit) {
         supportFragmentManager?.let {
-            CreateItemDialogFragment().apply {
+            CreateItemBottomSheetFragment().apply {
                 createAction = action
-                show(it, CreateItemDialogFragment.TAG)
+                show(it, CreateItemBottomSheetFragment.TAG)
             }
         }
     }

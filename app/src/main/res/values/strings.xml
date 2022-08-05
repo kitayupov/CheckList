@@ -2,7 +2,6 @@
     <string name="app_name">Shopping List</string>
     <string name="create_item_title">Create new item</string>
     <string name="create_item_hint">Enter name</string>
-    <string name="create_item_button">Create</string>
     <string name="list_item_divider">Completed</string>
     <string name="menu_clear_all">Clear all</string>
     <string name="menu_contextual_delete">Delete</string>

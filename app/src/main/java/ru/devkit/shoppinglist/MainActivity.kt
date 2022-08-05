@@ -71,9 +71,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupActionButton() {
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
-            router.showCreateItemView {
-                presenter.addItem(ListItemDataModel(it))
-            }
+            router.showCreateItemView { presenter.addItem(ListItemDataModel(it)) }
         }
     }
 
