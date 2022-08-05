@@ -5,7 +5,7 @@
     <string name="add_item_ok">OK</string>
     <string name="add_item_cancel">Cancel</string>
     <string name="list_item_divider">Completed</string>
-    <string name="menu_clear_data">Clear</string>
+    <string name="menu_clear_all">Clear all</string>
     <string name="menu_contextual_delete">Delete</string>
     <string name="dialog_clear_data_title">Do you really want to clear all data</string>
 </resources>
