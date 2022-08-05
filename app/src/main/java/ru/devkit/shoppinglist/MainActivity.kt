@@ -50,16 +50,19 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_actions_clear_data -> {
-                showDialogForClearDataResponse()
+                showConfirmationDialog(
+                    getString(R.string.dialog_clear_all_title),
+                    presenter::clearData
+                )
                 true
             }
             else -> return super.onOptionsItemSelected(item)
         }
     }
 
-    private fun showDialogForClearDataResponse() {
-        val dialog = ConfirmationDialogFragment.newInstance(getString(R.string.dialog_clear_data_title))
-        dialog.confirmAction = presenter::clearData
+    private fun showConfirmationDialog(title: String, action: () -> Unit) {
+        val dialog = ConfirmationDialogFragment.newInstance(title)
+        dialog.confirmAction = action
         dialog.show(supportFragmentManager, ConfirmationDialogFragment.TAG)
     }
 
@@ -104,7 +107,10 @@ class MainActivity : AppCompatActivity() {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.menu_contextual_delete -> {
-                    presenter.removeSelected()
+                    showConfirmationDialog(
+                        getString(R.string.dialog_remove_selected_title),
+                        presenter::removeSelected
+                    )
                     true
                 }
                 R.id.menu_contextual_select_all -> {
