@@ -4,7 +4,7 @@ import ru.devkit.shoppinglist.data.model.Product
 import ru.devkit.shoppinglist.data.source.DataSource
 
 class ProductsRepository(
-    private val dataSource: DataSource<Product>
+    private val dataSource: DataSource<Product, String>
 ) {
 
     fun getItems(): List<Product> {
@@ -25,5 +25,9 @@ class ProductsRepository(
 
     fun clearData() {
         dataSource.clear()
+    }
+
+    fun removeItemWithName(name: String) {
+        dataSource.getItemWithKey(name)?.let(dataSource::delete)
     }
 }

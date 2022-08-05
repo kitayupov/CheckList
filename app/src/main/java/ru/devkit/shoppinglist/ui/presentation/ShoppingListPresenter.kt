@@ -95,6 +95,19 @@ class ShoppingListPresenter(
     override fun clearSelected() {
         mainScope.launch {
             selected.clear()
+            view?.selectionMode(false)
+            updateItems()
+        }
+    }
+
+    override fun removeSelected() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                selected.forEach {
+                    interactor.removeItemWithName(it)
+                }
+            }
+            view?.selectionMode(false)
             updateItems()
         }
     }

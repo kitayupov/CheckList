@@ -10,7 +10,7 @@ interface ProductsDao {
     fun getAll(): List<Product>
 
     @Query("SELECT * FROM PRODUCT WHERE name = :name")
-    fun getByName(name: String): Product?
+    fun getByKey(name: String): Product?
 
     @Insert
     fun insert(product: Product)

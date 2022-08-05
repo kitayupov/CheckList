@@ -5,7 +5,7 @@ import ru.devkit.shoppinglist.data.model.Product
 
 class ProductsDataSource(
     productsDatabase: ProductsDatabase
-) : DataSource<Product> {
+) : DataSource<Product, String> {
 
     private val dao = productsDatabase.productsDao()
 
@@ -13,8 +13,12 @@ class ProductsDataSource(
         return dao.getAll()
     }
 
+    override fun getItemWithKey(key: String): Product? {
+        return dao.getByKey(key)
+    }
+
     override fun create(elem: Product) {
-        val existed = dao.getByName(elem.name)
+        val existed = dao.getByKey(elem.name)
         if (existed == null) {
             dao.insert(elem)
         } else {

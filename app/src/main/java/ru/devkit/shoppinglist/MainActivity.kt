@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.menu_contextual_delete -> {
-                    // delete selected
+                    presenter.removeSelected()
                     true
                 }
                 else -> return false
