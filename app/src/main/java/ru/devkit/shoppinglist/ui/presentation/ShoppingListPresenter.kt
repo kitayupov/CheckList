@@ -15,8 +15,8 @@ class ShoppingListPresenter(
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
 
-    private val cached = mutableListOf<ProductDataModel>()
-    private val selected = mutableListOf<String>()
+    private val cachedList = mutableListOf<ProductDataModel>()
+    private val selectedKeys = mutableListOf<String>()
 
     override fun attachView(view: ShoppingListContract.MvpView) {
         this.view = view
@@ -77,14 +77,14 @@ class ShoppingListPresenter(
 
     override fun selectItem(item: ProductDataModel) {
         mainScope.launch {
-            if (selected.isEmpty()) {
+            if (selectedKeys.isEmpty()) {
                 view?.setSelectionMode(true)
             }
             val element = item.title
-            if (selected.contains(element)) {
-                selected.remove(element)
+            if (selectedKeys.contains(element)) {
+                selectedKeys.remove(element)
             } else {
-                selected.add(element)
+                selectedKeys.add(element)
             }
             updateItems()
         }
@@ -92,7 +92,7 @@ class ShoppingListPresenter(
 
     override fun clearSelected() {
         mainScope.launch {
-            selected.clear()
+            selectedKeys.clear()
             updateItems()
         }
     }
@@ -103,7 +103,7 @@ class ShoppingListPresenter(
                 forEachSelected {
                     interactor.removeItem(it)
                 }
-                selected.clear()
+                selectedKeys.clear()
             }
             updateItems()
         }
@@ -112,9 +112,9 @@ class ShoppingListPresenter(
     override fun selectAll() {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                selected.clear()
-                cached.forEach {
-                    selected.add(it.title)
+                selectedKeys.clear()
+                cachedList.forEach {
+                    selectedKeys.add(it.title)
                 }
             }
             updateItems()
@@ -144,8 +144,8 @@ class ShoppingListPresenter(
     }
 
     private inline fun forEachSelected(action: (ProductDataModel) -> Unit) {
-        selected.forEach { name ->
-            cached.find { it.title == name }
+        selectedKeys.forEach { name ->
+            cachedList.find { it.title == name }
                 ?.let { action.invoke(it) }
         }
     }
@@ -155,8 +155,8 @@ class ShoppingListPresenter(
             val elements = withContext(Dispatchers.IO) {
                 interactor.getItems()
                     .also {
-                        cached.clear()
-                        cached.addAll(it)
+                        cachedList.clear()
+                        cachedList.addAll(it)
                     }
                     .map { ListItemModel.Element(it) }
             }
@@ -175,14 +175,14 @@ class ShoppingListPresenter(
                 }
             }
 
-            if (selected.isNotEmpty()) {
+            if (selectedKeys.isNotEmpty()) {
                 items.forEach {
                     if (it is ListItemModel.Element) {
                         val model = it.data
-                        model.selected = selected.contains(model.title)
+                        model.selected = selectedKeys.contains(model.title)
                     }
                 }
-                view?.showSelectedCount(selected.size)
+                view?.showSelectedCount(selectedKeys.size)
             } else {
                 view?.setSelectionMode(false)
             }
