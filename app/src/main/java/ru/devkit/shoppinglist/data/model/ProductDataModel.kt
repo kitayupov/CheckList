@@ -1,8 +1,8 @@
 package ru.devkit.shoppinglist.data.model
 
-data class ProductDataModel constructor(
+data class ProductDataModel(
     val title: String,
-    val completed: Boolean,
-    val position: Int,
-    var selected: Boolean
+    val completed: Boolean = false,
+    val lastUpdated: Long = System.currentTimeMillis(),
+    var selected: Boolean = false
 )

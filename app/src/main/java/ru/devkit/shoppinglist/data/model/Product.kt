@@ -8,5 +8,5 @@ data class Product(
     @PrimaryKey
     val name: String,
     val checked: Boolean,
-    val index: Int
+    val lastUpdated: Long
 )

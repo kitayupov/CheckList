@@ -30,15 +30,9 @@ class ShoppingListPresenter(
         mainScope.cancel()
     }
 
-    override fun createItem(name: String) {
+    override fun createItem(item: ProductDataModel) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                val item = ProductDataModel(
-                    title = name,
-                    completed = false,
-                    position = cachedList.size,
-                    selected = false
-                )
                 interactor.addItem(item)
             }
             updateItems()
@@ -167,8 +161,12 @@ class ShoppingListPresenter(
                     .map { ListItemModel.Element(it) }
             }
 
-            val unchecked = elements.filterNot { it.data.completed }
-            val checked = elements.filter { it.data.completed }
+            val unchecked = elements
+                .filterNot { it.data.completed }
+                .sortedBy { it.data.lastUpdated }
+            val checked = elements
+                .filter { it.data.completed }
+                .sortedByDescending { it.data.lastUpdated }
 
             val items = mutableListOf<ListItemModel>()
             items.addAll(unchecked)

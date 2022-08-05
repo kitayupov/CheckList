@@ -7,7 +7,7 @@ fun ProductDataModel.mapToProduct(): Product {
     return Product(
         name = title,
         checked = completed,
-        index = position
+        lastUpdated = lastUpdated
     )
 }
 
@@ -15,7 +15,7 @@ fun Product.mapToDataModel(): ProductDataModel {
     return ProductDataModel(
         title = name,
         completed = checked,
-        position = index,
+        lastUpdated = lastUpdated,
         selected = false
     )
 }
