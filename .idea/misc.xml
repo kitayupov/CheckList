@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/drawable/ic_arrow_down_24.xml" value="0.244" />
         <entry key="app/src/main/res/drawable/ic_arrow_up_24.xml" value="0.244" />
         <entry key="app/src/main/res/drawable/ic_clear_data_24.xml" value="0.244" />
+        <entry key="app/src/main/res/drawable/ic_delete_24.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_delete_data_24.xml" value="0.2445" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.244" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.37604166666666666" />
@@ -19,6 +20,8 @@
         <entry key="app/src/main/res/layout/list_item_divider.xml" value="0.375" />
         <entry key="app/src/main/res/layout/list_item_element.xml" value="0.37025641025641026" />
         <entry key="app/src/main/res/menu/action_menu.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/menu/menu_actions.xml" value="0.190625" />
+        <entry key="app/src/main/res/menu/menu_contextual.xml" value="0.18958333333333333" />
       </map>
     </option>
   </component>
