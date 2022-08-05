@@ -2,8 +2,6 @@
     <string name="app_name">Shopping List</string>
     <string name="add_item_title">Add Item</string>
     <string name="add_item_hint">Type something…</string>
-    <string name="add_item_ok">OK</string>
-    <string name="add_item_cancel">Cancel</string>
     <string name="list_item_divider">Completed</string>
     <string name="menu_clear_all">Clear all</string>
     <string name="menu_contextual_delete">Delete</string>

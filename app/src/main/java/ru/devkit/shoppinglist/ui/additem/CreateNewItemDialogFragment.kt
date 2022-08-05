@@ -17,8 +17,8 @@ class CreateNewItemDialogFragment : DialogFragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(R.string.add_item_title)
         builder.setView(R.layout.dialog_add_item)
-        builder.setPositiveButton(getString(R.string.add_item_ok)) { _, _ -> getText() }
-        builder.setNegativeButton(getString(R.string.add_item_cancel), null)
+        builder.setPositiveButton(android.R.string.ok) { _, _ -> getText() }
+        builder.setNegativeButton(android.R.string.cancel, null)
         return builder.create()
     }
 
