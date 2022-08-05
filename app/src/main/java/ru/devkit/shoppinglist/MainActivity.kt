@@ -82,13 +82,17 @@ class MainActivity : AppCompatActivity() {
             adapter.updateData(list)
         }
 
-        override fun selectionMode(checked: Boolean) {
+        override fun setSelectionMode(checked: Boolean) {
             adapter.selectionMode = checked
             if (checked) {
                 startSupportActionMode(actionModeCallback)
             } else {
                 actionModeCallback.mode?.finish()
             }
+        }
+
+        override fun showSelectedCount(value: Int) {
+            actionModeCallback.mode?.title = getString(R.string.action_mode_selected_count, value)
         }
     }
 

@@ -78,14 +78,11 @@ class ShoppingListPresenter(
     override fun selectItem(item: ListItemDataModel) {
         mainScope.launch {
             if (selected.isEmpty()) {
-                view?.selectionMode(true)
+                view?.setSelectionMode(true)
             }
             val element = item.title
             if (selected.contains(element)) {
                 selected.remove(element)
-                if (selected.isEmpty()) {
-                    view?.selectionMode(false)
-                }
             } else {
                 selected.add(element)
             }
@@ -96,7 +93,6 @@ class ShoppingListPresenter(
     override fun clearSelected() {
         mainScope.launch {
             selected.clear()
-            view?.selectionMode(false)
             updateItems()
         }
     }
@@ -107,8 +103,8 @@ class ShoppingListPresenter(
                 forEachSelected {
                     interactor.removeItem(it)
                 }
+                selected.clear()
             }
-            view?.selectionMode(false)
             updateItems()
         }
     }
@@ -186,6 +182,9 @@ class ShoppingListPresenter(
                         model.selected = selected.contains(model.title)
                     }
                 }
+                view?.showSelectedCount(selected.size)
+            } else {
+                view?.setSelectionMode(false)
             }
 
             showItems(items)

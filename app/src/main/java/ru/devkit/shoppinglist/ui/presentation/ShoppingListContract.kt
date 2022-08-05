@@ -7,7 +7,8 @@ object ShoppingListContract {
 
     interface MvpView {
         fun showItems(list: List<ListItemUiModel>)
-        fun selectionMode(checked: Boolean)
+        fun setSelectionMode(checked: Boolean)
+        fun showSelectedCount(value: Int)
     }
 
     interface MvpPresenter {
