@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment
 
 const val TITLE_KEY = "title_key"
 const val MESSAGE_KEY = "message_key"
+const val CONFIRM_BUTTON_KEY = "confirm_key"
 
 class ConfirmationDialogFragment : DialogFragment() {
 
@@ -17,10 +18,11 @@ class ConfirmationDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val title = arguments?.getString(TITLE_KEY)
         val message = arguments?.getString(MESSAGE_KEY)
+        val confirmButton = arguments?.getString(CONFIRM_BUTTON_KEY) ?: getString(android.R.string.ok)
         val builder = AlertDialog.Builder(requireContext())
         title?.let { builder.setTitle(it) }
         message?.let { builder.setMessage(it) }
-        builder.setPositiveButton(android.R.string.ok) { _, _ -> confirmAction.invoke() }
+        builder.setPositiveButton(confirmButton) { _, _ -> confirmAction.invoke() }
         builder.setNegativeButton(android.R.string.cancel) { _, _ -> declineAction.invoke() }
         return builder.create()
     }
@@ -28,11 +30,16 @@ class ConfirmationDialogFragment : DialogFragment() {
     companion object {
         const val TAG = "ConfirmationDialogFragment"
 
-        fun newInstance(title: String, message: String = ""): ConfirmationDialogFragment {
+        fun newInstance(
+            title: String,
+            message: String? = null,
+            confirmButton: String? = null
+        ): ConfirmationDialogFragment {
             return ConfirmationDialogFragment().apply {
                 arguments = bundleOf(
                     TITLE_KEY to title,
-                    MESSAGE_KEY to message
+                    MESSAGE_KEY to message,
+                    CONFIRM_BUTTON_KEY to confirmButton
                 )
             }
         }

@@ -51,8 +51,9 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_actions_clear_data -> {
                 showConfirmationDialog(
-                    getString(R.string.dialog_clear_all_title),
-                    presenter::clearData
+                    title = getString(R.string.dialog_clear_all_title),
+                    confirmButton = getString(R.string.dialog_clear_button),
+                    action = presenter::clearData
                 )
                 true
             }
@@ -60,10 +61,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showConfirmationDialog(title: String, action: () -> Unit) {
-        val dialog = ConfirmationDialogFragment.newInstance(title)
-        dialog.confirmAction = action
-        dialog.show(supportFragmentManager, ConfirmationDialogFragment.TAG)
+    private fun showConfirmationDialog(
+        title: String,
+        message: String? = null,
+        confirmButton: String? = null,
+        action: () -> Unit
+    ) {
+        ConfirmationDialogFragment.newInstance(title, message, confirmButton).apply {
+            confirmAction = action
+            show(supportFragmentManager, ConfirmationDialogFragment.TAG)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -108,8 +115,9 @@ class MainActivity : AppCompatActivity() {
             return when (item.itemId) {
                 R.id.menu_contextual_delete -> {
                     showConfirmationDialog(
-                        getString(R.string.dialog_remove_selected_title),
-                        presenter::removeSelected
+                        title = getString(R.string.dialog_remove_selected_title),
+                        confirmButton = getString(R.string.dialog_remove_button),
+                        action = presenter::removeSelected
                     )
                     true
                 }

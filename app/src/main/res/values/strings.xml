@@ -7,8 +7,10 @@
     <string name="list_item_divider">Completed</string>
     <string name="menu_clear_all">Clear all</string>
     <string name="menu_contextual_delete">Delete</string>
-    <string name="dialog_clear_all_title">Do you really want to clear all data?</string>
-    <string name="dialog_remove_selected_title">Do you really want to remove selected items?</string>
+    <string name="dialog_clear_all_title">Clear all data?</string>
+    <string name="dialog_clear_button">Clear</string>
+    <string name="dialog_remove_selected_title">Remove selected items?</string>
+    <string name="dialog_remove_button">Remove</string>
     <string name="menu_contextual_select_all">Select all</string>
     <string name="menu_contextual_check_selected">Check selected</string>
     <string name="menu_contextual_uncheck_selected">Uncheck selected</string>
