@@ -16,8 +16,9 @@ private const val TYPE_ELEMENT = 0
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHolder>() {
 
     var checkedAction: (ListItemDataModel) -> Unit = {}
-    var expandAction: (Boolean) -> Unit = {}
     var selectAction: (ListItemDataModel) -> Unit = {}
+
+    var expandAction: (Boolean) -> Unit = {}
 
     var selectionMode = false
 
@@ -48,9 +49,16 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+        val model = list[position]
         when (holder) {
-            is ElementViewHolder -> holder.bind(list[position].data)
-            is DividerViewHolder -> holder.bind(list[position].data)
+            is ElementViewHolder -> {
+                val element = model as? ListItemUiModel.Element ?: return
+                holder.bind(element.data)
+            }
+            is DividerViewHolder -> {
+                val divider = model as? ListItemUiModel.Divider ?: return
+                holder.bind(divider)
+            }
             else -> Unit
         }
     }
@@ -71,8 +79,8 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
         private val chevron: CheckBox by lazy { view.findViewById(R.id.chevron) }
         private val clickable: View by lazy { view.findViewById(R.id.clickable) }
 
-        fun bind(data: ListItemDataModel) {
-            chevron.isChecked = data.checked
+        fun bind(data: ListItemUiModel.Divider) {
+            chevron.isChecked = data.expanded
             clickable.setOnClickListener {
                 chevron.isChecked = chevron.isChecked.not()
                 expandAction.invoke(chevron.isChecked)

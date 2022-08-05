@@ -115,8 +115,10 @@ class ShoppingListPresenter(
 
             if (selected.isNotEmpty()) {
                 items.forEach {
-                    val model = it.data
-                    model.selected = selected.contains(model.title)
+                    if (it is ListItemUiModel.Element) {
+                        val model = it.data
+                        model.selected = selected.contains(model.title)
+                    }
                 }
             }
 
