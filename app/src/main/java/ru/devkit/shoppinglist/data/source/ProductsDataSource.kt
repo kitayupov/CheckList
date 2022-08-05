@@ -5,16 +5,12 @@ import ru.devkit.shoppinglist.data.model.Product
 
 class ProductsDataSource(
     productsDatabase: ProductsDatabase
-) : DataSource<Product, String> {
+) : DataSource<Product> {
 
     private val dao = productsDatabase.productsDao()
 
     override fun getItems(): List<Product> {
         return dao.getAll()
-    }
-
-    override fun getItemWithKey(key: String): Product? {
-        return dao.getByKey(key)
     }
 
     override fun create(elem: Product) {

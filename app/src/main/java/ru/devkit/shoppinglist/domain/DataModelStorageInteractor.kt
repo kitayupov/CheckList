@@ -31,9 +31,4 @@ class DataModelStorageInteractor(
     suspend fun clearData() {
         return repository.clearData()
     }
-
-    @WorkerThread
-    suspend fun removeItemWithName(name: String) {
-        return repository.removeItemWithName(name)
-    }
 }

@@ -104,8 +104,10 @@ class ShoppingListPresenter(
     override fun removeSelected() {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                selected.forEach {
-                    interactor.removeItemWithName(it)
+                selected.forEach { name ->
+                    cached.find { it.title == name }?.let {
+                        interactor.removeItem(it)
+                    }
                 }
             }
             view?.selectionMode(false)
@@ -117,7 +119,7 @@ class ShoppingListPresenter(
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 selected.clear()
-                interactor.getItems().forEach {
+                cached.forEach {
                     selected.add(it.title)
                 }
             }
