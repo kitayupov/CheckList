@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_contextual_select_all"
+        android:icon="@drawable/ic_select_all_24"
+        android:title="@string/menu_contextual_select_all"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_contextual_delete"
         android:icon="@drawable/ic_delete_24"
         android:title="@string/menu_contextual_delete"

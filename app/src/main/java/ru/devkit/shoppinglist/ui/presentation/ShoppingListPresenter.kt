@@ -112,6 +112,18 @@ class ShoppingListPresenter(
         }
     }
 
+    override fun selectAll() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                selected.clear()
+                interactor.getItems().forEach {
+                    selected.add(it.title)
+                }
+            }
+            updateItems()
+        }
+    }
+
     private suspend fun updateItems() {
         view?.apply {
             val elements = withContext(Dispatchers.IO) {

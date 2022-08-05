@@ -107,6 +107,10 @@ class MainActivity : AppCompatActivity() {
                     presenter.removeSelected()
                     true
                 }
+                R.id.menu_contextual_select_all -> {
+                    presenter.selectAll()
+                    true
+                }
                 else -> return false
             }
         }

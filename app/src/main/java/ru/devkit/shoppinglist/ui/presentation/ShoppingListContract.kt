@@ -27,5 +27,6 @@ object ShoppingListContract {
         fun selectItem(item: ListItemDataModel)
         fun clearSelected()
         fun removeSelected()
+        fun selectAll()
     }
 }
