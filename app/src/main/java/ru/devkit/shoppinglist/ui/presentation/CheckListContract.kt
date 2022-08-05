@@ -3,7 +3,7 @@ package ru.devkit.shoppinglist.ui.presentation
 import ru.devkit.shoppinglist.data.model.ProductDataModel
 import ru.devkit.shoppinglist.ui.model.ListItemModel
 
-object ShoppingListContract {
+object CheckListContract {
 
     interface MvpView {
         fun showItems(list: List<ListItemModel>)

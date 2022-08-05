@@ -10,16 +10,16 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.shoppinglist.data.model.ProductDataModel
-import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
+import ru.devkit.shoppinglist.ui.adapter.CheckListAdapter
 import ru.devkit.shoppinglist.ui.model.ListItemModel
-import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
+import ru.devkit.shoppinglist.ui.presentation.CheckListContract
 
 class MainActivity : AppCompatActivity() {
 
     private val presenter by lazy { (application as App).presenter }
     private val router by lazy { (application as App).router }
 
-    private val adapter = ShoppingListAdapter()
+    private val adapter = CheckListAdapter()
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val floatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.floating_button) }
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    inner class MvpViewImpl : ShoppingListContract.MvpView {
+    inner class MvpViewImpl : CheckListContract.MvpView {
         override fun showItems(list: List<ListItemModel>) {
             adapter.updateData(list)
         }

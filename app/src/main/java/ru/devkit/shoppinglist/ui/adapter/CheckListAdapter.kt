@@ -13,7 +13,7 @@ import ru.devkit.shoppinglist.ui.model.ListItemModel
 private const val TYPE_DIVIDER = -1
 private const val TYPE_ELEMENT = 0
 
-class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHolder>() {
+class CheckListAdapter : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>() {
 
     var checkedAction: (ProductDataModel) -> Unit = {}
     var selectAction: (ProductDataModel) -> Unit = {}
@@ -25,7 +25,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
     private val list = mutableListOf<ListItemModel>()
 
     fun updateData(update: List<ListItemModel>) {
-        val callback = ShoppingListDiffCallback(list, update)
+        val callback = CheckListDiffCallback(list, update)
         val result = DiffUtil.calculateDiff(callback)
         result.dispatchUpdatesTo(this)
         list.apply {

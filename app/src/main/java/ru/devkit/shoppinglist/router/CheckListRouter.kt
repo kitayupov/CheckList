@@ -6,7 +6,7 @@ import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.ui.confirmation.ConfirmationDialogFragment
 import ru.devkit.shoppinglist.ui.createitem.CreateItemBottomSheetFragment
 
-class Router(private val context: Context) {
+class CheckListRouter(private val context: Context) {
 
     private var supportFragmentManager: FragmentManager? = null
 

@@ -3,7 +3,7 @@ package ru.devkit.shoppinglist.ui.adapter
 import androidx.recyclerview.widget.DiffUtil
 import ru.devkit.shoppinglist.ui.model.ListItemModel
 
-class ShoppingListDiffCallback(
+class CheckListDiffCallback(
     private val oldList: List<ListItemModel>,
     private val newList: List<ListItemModel>
 ) : DiffUtil.Callback() {

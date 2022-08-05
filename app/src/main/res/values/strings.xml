@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Shopping List</string>
+    <string name="app_name">Check List</string>
     <string name="create_item_title">Create new item</string>
     <string name="create_item_hint">Enter name</string>
     <string name="list_item_divider">Completed</string>

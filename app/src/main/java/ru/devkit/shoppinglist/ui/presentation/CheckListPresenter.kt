@@ -6,19 +6,19 @@ import ru.devkit.shoppinglist.data.preferences.PreferencesProvider
 import ru.devkit.shoppinglist.domain.DataModelStorageInteractor
 import ru.devkit.shoppinglist.ui.model.ListItemModel
 
-class ShoppingListPresenter(
+class CheckListPresenter(
     private val interactor: DataModelStorageInteractor,
     private val preferences: PreferencesProvider
-) : ShoppingListContract.MvpPresenter {
+) : CheckListContract.MvpPresenter {
 
-    private var view: ShoppingListContract.MvpView? = null
+    private var view: CheckListContract.MvpView? = null
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
 
     private val cachedList = mutableListOf<ProductDataModel>()
     private val selectedKeys = mutableListOf<String>()
 
-    override fun attachView(view: ShoppingListContract.MvpView) {
+    override fun attachView(view: CheckListContract.MvpView) {
         this.view = view
         mainScope.launch {
             updateItems()
