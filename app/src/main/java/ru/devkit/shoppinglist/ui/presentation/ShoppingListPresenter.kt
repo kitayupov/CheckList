@@ -57,10 +57,10 @@ class ShoppingListPresenter(
         }
     }
 
-    override fun expandArchived(checked: Boolean) {
+    override fun expandCompleted(checked: Boolean) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                preferences.putBoolean(PreferencesProvider.EXPAND_ARCHIVED_KEY, checked)
+                preferences.putBoolean(PreferencesProvider.EXPAND_COMPLETED_KEY, checked)
             }
             updateItems()
         }
@@ -161,6 +161,7 @@ class ShoppingListPresenter(
                     .map { ListItemModel.Element(it) }
             }
 
+            // separate checked and unchecked
             val unchecked = elements
                 .filterNot { it.data.completed }
                 .sortedBy { it.data.lastUpdated }
@@ -171,14 +172,16 @@ class ShoppingListPresenter(
             val items = mutableListOf<ListItemModel>()
             items.addAll(unchecked)
 
+            // configure completed area
             if (checked.isNotEmpty()) {
-                val expanded = preferences.getBoolean(PreferencesProvider.EXPAND_ARCHIVED_KEY, true)
+                val expanded = preferences.getBoolean(PreferencesProvider.EXPAND_COMPLETED_KEY, true)
                 items.add(ListItemModel.Divider(expanded))
                 if (expanded) {
                     items.addAll(checked)
                 }
             }
 
+            // update selections
             if (selectedKeys.isNotEmpty()) {
                 items.forEach {
                     if (it is ListItemModel.Element) {

@@ -19,6 +19,6 @@ class PreferencesProvider(context: Context) {
         preferences.edit().putBoolean(name, value).apply()
 
     companion object {
-        const val EXPAND_ARCHIVED_KEY = "expand_archived"
+        const val EXPAND_COMPLETED_KEY = "expand_archived"
     }
 }

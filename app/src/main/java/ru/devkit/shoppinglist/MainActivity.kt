@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         adapter.checkedAction = presenter::updateItem
         adapter.selectAction = presenter::selectItem
-        adapter.expandAction = presenter::expandArchived
+        adapter.expandAction = presenter::expandCompleted
     }
 
     private fun setupActionButton() {

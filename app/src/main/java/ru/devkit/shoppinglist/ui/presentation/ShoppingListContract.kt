@@ -22,7 +22,7 @@ object ShoppingListContract {
         fun clearData()
 
         // appearance
-        fun expandArchived(checked: Boolean)
+        fun expandCompleted(checked: Boolean)
 
         // selection
         fun selectItem(item: ProductDataModel)
