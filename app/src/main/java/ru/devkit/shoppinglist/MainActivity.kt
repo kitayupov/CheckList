@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         adapter.checkedAction = presenter::updateItem
         adapter.expandAction = presenter::expandArchived
+        adapter.selectAction = presenter::selectItem
     }
 
     private fun setupActionButton() {
@@ -79,6 +80,10 @@ class MainActivity : AppCompatActivity() {
     inner class MvpViewImpl : ShoppingListContract.MvpView {
         override fun showItems(list: List<ListItemUiModel>) {
             adapter.updateData(list)
+        }
+
+        override fun selectionMode(checked: Boolean) {
+            adapter.selectionMode = checked
         }
     }
 }

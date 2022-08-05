@@ -1,11 +1,9 @@
 package ru.devkit.shoppinglist.ui.adapter
 
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.core.util.isNotEmpty
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
@@ -19,11 +17,11 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     var checkedAction: (ListItemDataModel) -> Unit = {}
     var expandAction: (Boolean) -> Unit = {}
+    var selectAction: (ListItemDataModel) -> Unit = {}
+
+    var selectionMode = false
 
     private val list = mutableListOf<ListItemUiModel>()
-
-    private val selectedIds = SparseBooleanArray()
-    private var isSelectionMode = false
 
     fun updateData(update: List<ListItemUiModel>) {
         val callback = ShoppingListDiffCallback(list, update)
@@ -56,22 +54,17 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
                 holder.checkBox.apply {
                     text = data.title
                     isChecked = data.checked
-                    setOnCheckedChangeListener { _, checked ->
-                        data.checked = checked
-                        checkedAction.invoke(data)
-                    }
                 }
-                holder.clickable.isSelected = selectedIds.get(position, false)
+                holder.clickable.isSelected = data.selected
                 holder.clickable.setOnClickListener {
-                    if (isSelectionMode) {
-                        setSelection(position)
+                    if (selectionMode) {
+                        selectAction.invoke(data.copy(selected = data.selected.not()))
                     } else {
-                        holder.checkBox.performClick()
+                        checkedAction.invoke(data.copy(checked = data.checked.not()))
                     }
                 }
                 holder.clickable.setOnLongClickListener {
-                    isSelectionMode = true
-                    setSelection(position)
+                    selectAction.invoke(data.copy(selected = data.selected.not()))
                     true
                 }
             }
@@ -94,16 +87,6 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
             is ListItemUiModel.Element -> TYPE_ELEMENT
             is ListItemUiModel.Divider -> TYPE_DIVIDER
         }
-    }
-
-    private fun setSelection(position: Int) {
-        if (selectedIds.get(position, false)) {
-            selectedIds.delete(position)
-            isSelectionMode = selectedIds.isNotEmpty()
-        } else {
-            selectedIds.put(position, true)
-        }
-        notifyItemChanged(position)
     }
 
     abstract class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view)

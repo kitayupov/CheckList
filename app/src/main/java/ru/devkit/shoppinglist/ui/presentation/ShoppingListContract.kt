@@ -7,6 +7,7 @@ object ShoppingListContract {
 
     interface MvpView {
         fun showItems(list: List<ListItemUiModel>)
+        fun selectionMode(checked: Boolean)
     }
 
     interface MvpPresenter {
@@ -16,6 +17,7 @@ object ShoppingListContract {
         fun updateItem(item: ListItemDataModel)
         fun removeItem(item: ListItemDataModel)
         fun expandArchived(checked: Boolean)
+        fun selectItem(item: ListItemDataModel)
         fun clearData()
     }
 }

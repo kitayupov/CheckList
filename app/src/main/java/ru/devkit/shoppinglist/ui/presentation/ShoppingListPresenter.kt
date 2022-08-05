@@ -15,6 +15,8 @@ class ShoppingListPresenter(
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
 
+    private val selected = mutableListOf<String>()
+
     override fun attachView(view: ShoppingListContract.MvpView) {
         this.view = view
         mainScope.launch {
@@ -63,6 +65,24 @@ class ShoppingListPresenter(
         }
     }
 
+    override fun selectItem(item: ListItemDataModel) {
+        mainScope.launch {
+            if (selected.isEmpty()) {
+                view?.selectionMode(true)
+            }
+            val element = item.title
+            if (selected.contains(element)) {
+                selected.remove(element)
+                if (selected.isEmpty()) {
+                    view?.selectionMode(false)
+                }
+            } else {
+                selected.add(element)
+            }
+            updateItems()
+        }
+    }
+
     override fun clearData() {
         mainScope.launch {
             withContext(Dispatchers.IO) {
@@ -90,6 +110,13 @@ class ShoppingListPresenter(
                 items.add(ListItemUiModel.Divider(expanded))
                 if (expanded) {
                     items.addAll(checked)
+                }
+            }
+
+            if (selected.isNotEmpty()) {
+                items.forEach {
+                    val model = it.data
+                    model.selected = selected.contains(model.title)
                 }
             }
 
