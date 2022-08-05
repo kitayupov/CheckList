@@ -16,7 +16,7 @@ object ShoppingListContract {
         fun detachView()
 
         // update storage
-        fun addItem(item: ProductDataModel)
+        fun createItem(name: String)
         fun updateItem(item: ProductDataModel)
         fun removeItem(item: ProductDataModel)
         fun clearData()

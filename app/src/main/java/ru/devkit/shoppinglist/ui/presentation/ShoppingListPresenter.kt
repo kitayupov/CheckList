@@ -30,9 +30,15 @@ class ShoppingListPresenter(
         mainScope.cancel()
     }
 
-    override fun addItem(item: ProductDataModel) {
+    override fun createItem(name: String) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
+                val item = ProductDataModel(
+                    title = name,
+                    completed = false,
+                    position = cachedList.size,
+                    selected = false
+                )
                 interactor.addItem(item)
             }
             updateItems()

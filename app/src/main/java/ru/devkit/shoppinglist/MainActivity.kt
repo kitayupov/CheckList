@@ -9,7 +9,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import ru.devkit.shoppinglist.data.model.ProductDataModel
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
 import ru.devkit.shoppinglist.ui.model.ListItemModel
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupActionButton() {
         floatingActionButton.setOnClickListener {
             router.showCreateItemView(
-                onCreate = { presenter.addItem(ProductDataModel(it)) },
+                onCreate = presenter::createItem,
                 onDismiss = { floatingActionButton.show() }
             )
             floatingActionButton.hide()

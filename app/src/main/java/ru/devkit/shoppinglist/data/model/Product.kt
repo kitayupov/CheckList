@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class Product(
     @PrimaryKey
     val name: String,
-    val checked: Boolean
+    val checked: Boolean,
+    val index: Int
 )
