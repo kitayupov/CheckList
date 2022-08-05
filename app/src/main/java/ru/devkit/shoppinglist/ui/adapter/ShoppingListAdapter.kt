@@ -49,33 +49,8 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         when (holder) {
-            is ElementViewHolder -> {
-                val data = list[position].data
-                holder.checkBox.apply {
-                    text = data.title
-                    isChecked = data.checked
-                }
-                holder.clickable.isSelected = data.selected
-                holder.clickable.setOnClickListener {
-                    if (selectionMode) {
-                        selectAction.invoke(data.copy(selected = data.selected.not()))
-                    } else {
-                        checkedAction.invoke(data.copy(checked = data.checked.not()))
-                    }
-                }
-                holder.clickable.setOnLongClickListener {
-                    selectAction.invoke(data.copy(selected = data.selected.not()))
-                    true
-                }
-            }
-            is DividerViewHolder -> {
-                val data = list[position] as? ListItemUiModel.Divider ?: return
-                holder.chevron.isChecked = data.checked
-                holder.clickable.setOnClickListener {
-                    holder.chevron.isChecked = holder.chevron.isChecked.not()
-                    expandAction.invoke(holder.chevron.isChecked)
-                }
-            }
+            is ElementViewHolder -> holder.bind(list[position].data)
+            is DividerViewHolder -> holder.bind(list[position].data)
             else -> Unit
         }
     }
@@ -92,12 +67,41 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
     abstract class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     inner class DividerViewHolder(view: View) : BaseViewHolder(view) {
-        val chevron: CheckBox by lazy { view.findViewById(R.id.chevron) }
-        val clickable: View by lazy { view.findViewById(R.id.clickable) }
+
+        private val chevron: CheckBox by lazy { view.findViewById(R.id.chevron) }
+        private val clickable: View by lazy { view.findViewById(R.id.clickable) }
+
+        fun bind(data: ListItemDataModel) {
+            chevron.isChecked = data.checked
+            clickable.setOnClickListener {
+                chevron.isChecked = chevron.isChecked.not()
+                expandAction.invoke(chevron.isChecked)
+            }
+        }
     }
 
     inner class ElementViewHolder(view: View) : BaseViewHolder(view) {
-        val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
-        val clickable: View by lazy { view.findViewById(R.id.clickable) }
+
+        private val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
+        private val clickable: View by lazy { view.findViewById(R.id.clickable) }
+
+        fun bind(data: ListItemDataModel) {
+            checkBox.apply {
+                text = data.title
+                isChecked = data.checked
+            }
+            clickable.isSelected = data.selected
+            clickable.setOnClickListener {
+                if (selectionMode) {
+                    selectAction.invoke(data.copy(selected = data.selected.not()))
+                } else {
+                    checkedAction.invoke(data.copy(checked = data.checked.not()))
+                }
+            }
+            clickable.setOnLongClickListener {
+                selectAction.invoke(data.copy(selected = data.selected.not()))
+                true
+            }
+        }
     }
 }
