@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_contextual_check_selected"
+        android:icon="@drawable/ic_check_all_24"
+        android:title="@string/menu_contextual_check_selected"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_contextual_delete"
         android:icon="@drawable/ic_delete_24"
         android:title="@string/menu_contextual_delete"

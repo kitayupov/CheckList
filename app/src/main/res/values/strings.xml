@@ -9,4 +9,5 @@
     <string name="menu_contextual_delete">Delete</string>
     <string name="dialog_clear_data_title">Do you really want to clear all data</string>
     <string name="menu_contextual_select_all">Select all</string>
+    <string name="menu_contextual_check_selected">Check selected</string>
 </resources>

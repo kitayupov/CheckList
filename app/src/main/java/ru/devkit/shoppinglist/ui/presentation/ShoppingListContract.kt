@@ -28,5 +28,6 @@ object ShoppingListContract {
         fun clearSelected()
         fun removeSelected()
         fun selectAll()
+        fun checkSelected()
     }
 }

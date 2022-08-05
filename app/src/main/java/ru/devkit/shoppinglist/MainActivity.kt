@@ -111,6 +111,10 @@ class MainActivity : AppCompatActivity() {
                     presenter.selectAll()
                     true
                 }
+                R.id.menu_contextual_check_selected -> {
+                    presenter.checkSelected()
+                    true
+                }
                 else -> return false
             }
         }

@@ -15,6 +15,7 @@ class ShoppingListPresenter(
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
 
+    private val cached = mutableListOf<ListItemDataModel>()
     private val selected = mutableListOf<String>()
 
     override fun attachView(view: ShoppingListContract.MvpView) {
@@ -124,10 +125,27 @@ class ShoppingListPresenter(
         }
     }
 
+    override fun checkSelected() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                selected.forEach { name ->
+                    cached.find { it.title == name }?.let {
+                        updateItem(it.copy(checked = true))
+                    }
+                }
+            }
+            updateItems()
+        }
+    }
+
     private suspend fun updateItems() {
         view?.apply {
             val elements = withContext(Dispatchers.IO) {
                 interactor.getItems()
+                    .also {
+                        cached.clear()
+                        cached.addAll(it)
+                    }
                     .map { ListItemUiModel.Element(it) }
             }
 
