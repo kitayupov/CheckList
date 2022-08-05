@@ -19,12 +19,13 @@ class ConfirmationDialogFragment : DialogFragment() {
         val title = arguments?.getString(TITLE_KEY)
         val message = arguments?.getString(MESSAGE_KEY)
         val confirmButton = arguments?.getString(CONFIRM_BUTTON_KEY) ?: getString(android.R.string.ok)
-        val builder = AlertDialog.Builder(requireContext())
-        title?.let { builder.setTitle(it) }
-        message?.let { builder.setMessage(it) }
-        builder.setPositiveButton(confirmButton) { _, _ -> confirmAction.invoke() }
-        builder.setNegativeButton(android.R.string.cancel) { _, _ -> declineAction.invoke() }
-        return builder.create()
+
+        return AlertDialog.Builder(requireContext()).apply {
+            title?.let { setTitle(it) }
+            message?.let { setMessage(it) }
+            setPositiveButton(confirmButton) { _, _ -> confirmAction.invoke() }
+            setNegativeButton(android.R.string.cancel) { _, _ -> declineAction.invoke() }
+        }.create()
     }
 
     companion object {

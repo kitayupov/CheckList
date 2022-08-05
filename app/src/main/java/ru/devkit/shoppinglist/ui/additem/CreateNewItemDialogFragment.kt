@@ -14,12 +14,12 @@ class CreateNewItemDialogFragment : DialogFragment() {
     var action: (String) -> Unit = {}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(R.string.add_item_title)
-        builder.setView(R.layout.dialog_add_item)
-        builder.setPositiveButton(android.R.string.ok) { _, _ -> getText() }
-        builder.setNegativeButton(android.R.string.cancel, null)
-        return builder.create()
+        return AlertDialog.Builder(requireContext())
+            .setTitle(R.string.add_item_title)
+            .setView(R.layout.dialog_add_item)
+            .setPositiveButton(android.R.string.ok) { _, _ -> getText() }
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
     }
 
     private fun getText() {
@@ -28,6 +28,6 @@ class CreateNewItemDialogFragment : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "AddItemDialogFragment"
+        const val TAG = "CreateNewItemDialogFragment"
     }
 }
