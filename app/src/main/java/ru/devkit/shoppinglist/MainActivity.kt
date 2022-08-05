@@ -11,15 +11,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.data.model.ListItemDataModel
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
-import ru.devkit.shoppinglist.ui.additem.CreateNewItemViewRouter
-import ru.devkit.shoppinglist.ui.confirmation.ConfirmationDialogFragment
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
 
 class MainActivity : AppCompatActivity() {
 
-    private val createNewItemViewRouter = CreateNewItemViewRouter(supportFragmentManager)
     private val presenter by lazy { (application as App).presenter }
+    private val router by lazy { (application as App).router }
+
     private val adapter = ShoppingListAdapter()
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
@@ -35,11 +34,13 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         presenter.attachView(MvpViewImpl())
+        router.attach(supportFragmentManager)
     }
 
     override fun onPause() {
         super.onPause()
         presenter.detachView()
+        router.detach()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -50,26 +51,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_actions_clear_data -> {
-                showConfirmationDialog(
-                    title = getString(R.string.dialog_clear_all_title),
-                    confirmButton = getString(R.string.dialog_clear_button),
-                    action = presenter::clearData
-                )
+                router.showClearAllConfirmation(presenter::clearData)
                 true
             }
             else -> return super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun showConfirmationDialog(
-        title: String,
-        message: String? = null,
-        confirmButton: String? = null,
-        action: () -> Unit
-    ) {
-        ConfirmationDialogFragment.newInstance(title, message, confirmButton).apply {
-            confirmAction = action
-            show(supportFragmentManager, ConfirmationDialogFragment.TAG)
         }
     }
 
@@ -86,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupActionButton() {
         val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
-            createNewItemViewRouter.showCreateNewItemView() {
+            router.showCreateItemView {
                 presenter.addItem(ListItemDataModel(it))
             }
         }
@@ -114,11 +99,7 @@ class MainActivity : AppCompatActivity() {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.menu_contextual_delete -> {
-                    showConfirmationDialog(
-                        title = getString(R.string.dialog_remove_selected_title),
-                        confirmButton = getString(R.string.dialog_remove_button),
-                        action = presenter::removeSelected
-                    )
+                    router.showRemoveSelectedConfirmation(presenter::removeSelected)
                     true
                 }
                 R.id.menu_contextual_select_all -> {

@@ -1,4 +1,4 @@
-package ru.devkit.shoppinglist.ui.additem
+package ru.devkit.shoppinglist.ui.createitem
 
 import android.app.Dialog
 import android.os.Bundle
@@ -7,11 +7,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import ru.devkit.shoppinglist.R
 
-class CreateNewItemDialogFragment : DialogFragment() {
+class CreateItemDialogFragment : DialogFragment() {
 
     private val editText: EditText? by lazy { dialog?.findViewById(R.id.input_text) }
 
-    var action: (String) -> Unit = {}
+    var createAction: (String) -> Unit = {}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
@@ -24,7 +24,7 @@ class CreateNewItemDialogFragment : DialogFragment() {
 
     private fun getText() {
         val text = editText?.text?.takeIf { it.isNotBlank() } ?: return
-        action.invoke(text.toString())
+        createAction.invoke(text.toString())
     }
 
     companion object {

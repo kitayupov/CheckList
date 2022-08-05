@@ -6,6 +6,7 @@ import ru.devkit.shoppinglist.data.preferences.PreferencesProvider
 import ru.devkit.shoppinglist.data.repository.ProductsRepository
 import ru.devkit.shoppinglist.data.source.ProductsDataSource
 import ru.devkit.shoppinglist.domain.DataModelStorageInteractor
+import ru.devkit.shoppinglist.router.Router
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListPresenter
 
 class App : Application() {
@@ -15,4 +16,5 @@ class App : Application() {
     private val interactor by lazy { DataModelStorageInteractor(repository) }
     private val preferences by lazy { PreferencesProvider(this) }
     val presenter by lazy { ShoppingListPresenter(interactor, preferences) }
+    val router by lazy { Router(this) }
 }
