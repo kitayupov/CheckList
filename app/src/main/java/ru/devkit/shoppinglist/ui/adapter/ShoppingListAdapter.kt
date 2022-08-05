@@ -7,7 +7,7 @@ import android.widget.CheckBox
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
-import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.data.model.ProductDataModel
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 
 private const val TYPE_DIVIDER = -1
@@ -15,8 +15,8 @@ private const val TYPE_ELEMENT = 0
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHolder>() {
 
-    var checkedAction: (ListItemDataModel) -> Unit = {}
-    var selectAction: (ListItemDataModel) -> Unit = {}
+    var checkedAction: (ProductDataModel) -> Unit = {}
+    var selectAction: (ProductDataModel) -> Unit = {}
 
     var expandAction: (Boolean) -> Unit = {}
 
@@ -91,17 +91,17 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
         private val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
         private val clickable: View by lazy { view.findViewById(R.id.clickable) }
 
-        fun bind(data: ListItemDataModel) {
+        fun bind(data: ProductDataModel) {
             checkBox.apply {
                 text = data.title
-                isChecked = data.checked
+                isChecked = data.completed
             }
             clickable.isSelected = data.selected
             clickable.setOnClickListener {
                 if (selectionMode) {
                     selectAction.invoke(data.copy(selected = data.selected.not()))
                 } else {
-                    checkedAction.invoke(data.copy(checked = data.checked.not()))
+                    checkedAction.invoke(data.copy(completed = data.completed.not()))
                 }
             }
             clickable.setOnLongClickListener {

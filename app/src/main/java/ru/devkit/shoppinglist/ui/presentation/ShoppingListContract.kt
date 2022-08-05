@@ -1,6 +1,6 @@
 package ru.devkit.shoppinglist.ui.presentation
 
-import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.data.model.ProductDataModel
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
 
 object ShoppingListContract {
@@ -16,16 +16,16 @@ object ShoppingListContract {
         fun detachView()
 
         // update storage
-        fun addItem(item: ListItemDataModel)
-        fun updateItem(item: ListItemDataModel)
-        fun removeItem(item: ListItemDataModel)
+        fun addItem(item: ProductDataModel)
+        fun updateItem(item: ProductDataModel)
+        fun removeItem(item: ProductDataModel)
         fun clearData()
 
         // appearance
         fun expandArchived(checked: Boolean)
 
         // selection
-        fun selectItem(item: ListItemDataModel)
+        fun selectItem(item: ProductDataModel)
         fun clearSelected()
         fun removeSelected()
         fun selectAll()

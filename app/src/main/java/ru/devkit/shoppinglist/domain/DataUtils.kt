@@ -1,12 +1,12 @@
 package ru.devkit.shoppinglist.domain
 
-import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.data.model.ProductDataModel
 import ru.devkit.shoppinglist.data.model.Product
 
-fun ListItemDataModel.mapToProduct(): Product {
-    return Product(title, checked)
+fun ProductDataModel.mapToProduct(): Product {
+    return Product(title, completed)
 }
 
-fun Product.mapToDataModel(): ListItemDataModel {
-    return ListItemDataModel(name, checked)
+fun Product.mapToDataModel(): ProductDataModel {
+    return ProductDataModel(name, checked)
 }

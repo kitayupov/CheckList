@@ -1,7 +1,7 @@
 package ru.devkit.shoppinglist.ui.presentation
 
 import kotlinx.coroutines.*
-import ru.devkit.shoppinglist.data.model.ListItemDataModel
+import ru.devkit.shoppinglist.data.model.ProductDataModel
 import ru.devkit.shoppinglist.data.preferences.PreferencesProvider
 import ru.devkit.shoppinglist.domain.DataModelStorageInteractor
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
@@ -15,7 +15,7 @@ class ShoppingListPresenter(
 
     private val mainScope = CoroutineScope(Dispatchers.Main)
 
-    private val cached = mutableListOf<ListItemDataModel>()
+    private val cached = mutableListOf<ProductDataModel>()
     private val selected = mutableListOf<String>()
 
     override fun attachView(view: ShoppingListContract.MvpView) {
@@ -30,7 +30,7 @@ class ShoppingListPresenter(
         mainScope.cancel()
     }
 
-    override fun addItem(item: ListItemDataModel) {
+    override fun addItem(item: ProductDataModel) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 interactor.addItem(item)
@@ -39,7 +39,7 @@ class ShoppingListPresenter(
         }
     }
 
-    override fun updateItem(item: ListItemDataModel) {
+    override fun updateItem(item: ProductDataModel) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 interactor.updateItem(item)
@@ -48,7 +48,7 @@ class ShoppingListPresenter(
         }
     }
 
-    override fun removeItem(item: ListItemDataModel) {
+    override fun removeItem(item: ProductDataModel) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 interactor.removeItem(item)
@@ -75,7 +75,7 @@ class ShoppingListPresenter(
         }
     }
 
-    override fun selectItem(item: ListItemDataModel) {
+    override fun selectItem(item: ProductDataModel) {
         mainScope.launch {
             if (selected.isEmpty()) {
                 view?.setSelectionMode(true)
@@ -125,7 +125,7 @@ class ShoppingListPresenter(
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 forEachSelected {
-                    updateItem(it.copy(checked = true))
+                    updateItem(it.copy(completed = true))
                 }
             }
             updateItems()
@@ -136,14 +136,14 @@ class ShoppingListPresenter(
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 forEachSelected {
-                    updateItem(it.copy(checked = false))
+                    updateItem(it.copy(completed = false))
                 }
             }
             updateItems()
         }
     }
 
-    private inline fun forEachSelected(action: (ListItemDataModel) -> Unit) {
+    private inline fun forEachSelected(action: (ProductDataModel) -> Unit) {
         selected.forEach { name ->
             cached.find { it.title == name }
                 ?.let { action.invoke(it) }
@@ -161,8 +161,8 @@ class ShoppingListPresenter(
                     .map { ListItemUiModel.Element(it) }
             }
 
-            val unchecked = elements.filterNot { it.data.checked }
-            val checked = elements.filter { it.data.checked }
+            val unchecked = elements.filterNot { it.data.completed }
+            val checked = elements.filter { it.data.completed }
 
             val items = mutableListOf<ListItemUiModel>()
             items.addAll(unchecked)
