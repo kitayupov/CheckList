@@ -4,7 +4,7 @@
     <string name="add_item_hint">Type something…</string>
     <string name="add_item_ok">OK</string>
     <string name="add_item_cancel">Cancel</string>
-    <string name="list_item_divider">Archive</string>
+    <string name="list_item_divider">Completed</string>
     <string name="menu_clear_data">Clear</string>
     <string name="dialog_clear_data_title">Do you really want to clear all data</string>
 </resources>
