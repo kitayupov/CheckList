@@ -104,10 +104,8 @@ class ShoppingListPresenter(
     override fun removeSelected() {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                selected.forEach { name ->
-                    cached.find { it.title == name }?.let {
-                        interactor.removeItem(it)
-                    }
+                forEachSelected {
+                    interactor.removeItem(it)
                 }
             }
             view?.selectionMode(false)
@@ -130,13 +128,18 @@ class ShoppingListPresenter(
     override fun checkSelected() {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                selected.forEach { name ->
-                    cached.find { it.title == name }?.let {
-                        updateItem(it.copy(checked = true))
-                    }
+                forEachSelected {
+                    updateItem(it.copy(checked = true))
                 }
             }
             updateItems()
+        }
+    }
+
+    private inline fun forEachSelected(action: (ListItemDataModel) -> Unit) {
+        selected.forEach { name ->
+            cached.find { it.title == name }
+                ?.let { action.invoke(it) }
         }
     }
 
