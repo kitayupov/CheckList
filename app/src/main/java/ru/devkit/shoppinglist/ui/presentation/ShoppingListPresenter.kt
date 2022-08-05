@@ -65,6 +65,15 @@ class ShoppingListPresenter(
         }
     }
 
+    override fun clearData() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                interactor.clearData()
+            }
+            updateItems()
+        }
+    }
+
     override fun selectItem(item: ListItemDataModel) {
         mainScope.launch {
             if (selected.isEmpty()) {
@@ -83,11 +92,9 @@ class ShoppingListPresenter(
         }
     }
 
-    override fun clearData() {
+    override fun clearSelected() {
         mainScope.launch {
-            withContext(Dispatchers.IO) {
-                interactor.clearData()
-            }
+            selected.clear()
             updateItems()
         }
     }

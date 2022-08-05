@@ -13,11 +13,18 @@ object ShoppingListContract {
     interface MvpPresenter {
         fun attachView(view: MvpView)
         fun detachView()
+
+        // update storage
         fun addItem(item: ListItemDataModel)
         fun updateItem(item: ListItemDataModel)
         fun removeItem(item: ListItemDataModel)
-        fun expandArchived(checked: Boolean)
-        fun selectItem(item: ListItemDataModel)
         fun clearData()
+
+        // appearance
+        fun expandArchived(checked: Boolean)
+
+        // selection
+        fun selectItem(item: ListItemDataModel)
+        fun clearSelected()
     }
 }

@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onDestroyActionMode(mode: ActionMode) {
-            // no-op
+            presenter.clearSelected()
         }
     }
 }
