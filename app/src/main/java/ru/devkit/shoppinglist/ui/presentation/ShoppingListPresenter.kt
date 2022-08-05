@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import ru.devkit.shoppinglist.data.model.ProductDataModel
 import ru.devkit.shoppinglist.data.preferences.PreferencesProvider
 import ru.devkit.shoppinglist.domain.DataModelStorageInteractor
-import ru.devkit.shoppinglist.ui.model.ListItemUiModel
+import ru.devkit.shoppinglist.ui.model.ListItemModel
 
 class ShoppingListPresenter(
     private val interactor: DataModelStorageInteractor,
@@ -158,18 +158,18 @@ class ShoppingListPresenter(
                         cached.clear()
                         cached.addAll(it)
                     }
-                    .map { ListItemUiModel.Element(it) }
+                    .map { ListItemModel.Element(it) }
             }
 
             val unchecked = elements.filterNot { it.data.completed }
             val checked = elements.filter { it.data.completed }
 
-            val items = mutableListOf<ListItemUiModel>()
+            val items = mutableListOf<ListItemModel>()
             items.addAll(unchecked)
 
             if (checked.isNotEmpty()) {
                 val expanded = preferences.getBoolean(PreferencesProvider.EXPAND_ARCHIVED_KEY, true)
-                items.add(ListItemUiModel.Divider(expanded))
+                items.add(ListItemModel.Divider(expanded))
                 if (expanded) {
                     items.addAll(checked)
                 }
@@ -177,7 +177,7 @@ class ShoppingListPresenter(
 
             if (selected.isNotEmpty()) {
                 items.forEach {
-                    if (it is ListItemUiModel.Element) {
+                    if (it is ListItemModel.Element) {
                         val model = it.data
                         model.selected = selected.contains(model.title)
                     }

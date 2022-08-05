@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.shoppinglist.data.model.ProductDataModel
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
-import ru.devkit.shoppinglist.ui.model.ListItemUiModel
+import ru.devkit.shoppinglist.ui.model.ListItemModel
 import ru.devkit.shoppinglist.ui.presentation.ShoppingListContract
 
 class MainActivity : AppCompatActivity() {
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class MvpViewImpl : ShoppingListContract.MvpView {
-        override fun showItems(list: List<ListItemUiModel>) {
+        override fun showItems(list: List<ListItemModel>) {
             adapter.updateData(list)
         }
 

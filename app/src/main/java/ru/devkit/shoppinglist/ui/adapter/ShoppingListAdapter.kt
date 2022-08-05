@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.shoppinglist.R
 import ru.devkit.shoppinglist.data.model.ProductDataModel
-import ru.devkit.shoppinglist.ui.model.ListItemUiModel
+import ru.devkit.shoppinglist.ui.model.ListItemModel
 
 private const val TYPE_DIVIDER = -1
 private const val TYPE_ELEMENT = 0
@@ -22,9 +22,9 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     var selectionMode = false
 
-    private val list = mutableListOf<ListItemUiModel>()
+    private val list = mutableListOf<ListItemModel>()
 
-    fun updateData(update: List<ListItemUiModel>) {
+    fun updateData(update: List<ListItemModel>) {
         val callback = ShoppingListDiffCallback(list, update)
         val result = DiffUtil.calculateDiff(callback)
         result.dispatchUpdatesTo(this)
@@ -52,11 +52,11 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
         val model = list[position]
         when (holder) {
             is ElementViewHolder -> {
-                val element = model as? ListItemUiModel.Element ?: return
+                val element = model as? ListItemModel.Element ?: return
                 holder.bind(element.data)
             }
             is DividerViewHolder -> {
-                val divider = model as? ListItemUiModel.Divider ?: return
+                val divider = model as? ListItemModel.Divider ?: return
                 holder.bind(divider)
             }
             else -> Unit
@@ -67,8 +67,8 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     override fun getItemViewType(position: Int): Int {
         return when (list[position]) {
-            is ListItemUiModel.Element -> TYPE_ELEMENT
-            is ListItemUiModel.Divider -> TYPE_DIVIDER
+            is ListItemModel.Element -> TYPE_ELEMENT
+            is ListItemModel.Divider -> TYPE_DIVIDER
         }
     }
 
@@ -78,7 +78,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
         private val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
 
-        fun bind(data: ListItemUiModel.Divider) {
+        fun bind(data: ListItemModel.Divider) {
             checkBox.isChecked = data.expanded
             checkBox.setOnCheckedChangeListener { _, checked ->
                 expandAction.invoke(checked)

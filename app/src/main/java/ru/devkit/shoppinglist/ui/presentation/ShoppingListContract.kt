@@ -1,12 +1,12 @@
 package ru.devkit.shoppinglist.ui.presentation
 
 import ru.devkit.shoppinglist.data.model.ProductDataModel
-import ru.devkit.shoppinglist.ui.model.ListItemUiModel
+import ru.devkit.shoppinglist.ui.model.ListItemModel
 
 object ShoppingListContract {
 
     interface MvpView {
-        fun showItems(list: List<ListItemUiModel>)
+        fun showItems(list: List<ListItemModel>)
         fun setSelectionMode(checked: Boolean)
         fun showSelectedCount(value: Int)
     }
