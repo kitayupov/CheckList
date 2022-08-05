@@ -3,12 +3,12 @@ package ru.devkit.shoppinglist
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.shoppinglist.data.model.ListItemDataModel
 import ru.devkit.shoppinglist.ui.adapter.ShoppingListAdapter
 import ru.devkit.shoppinglist.ui.model.ListItemUiModel
@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val adapter = ShoppingListAdapter()
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
+    private val floatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.floating_button) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +70,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupActionButton() {
-        val floatingActionButton = findViewById<View>(R.id.floating_button)
         floatingActionButton.setOnClickListener {
-            router.showCreateItemView { presenter.addItem(ListItemDataModel(it)) }
+            router.showCreateItemView(
+                onCreate = { presenter.addItem(ListItemDataModel(it)) },
+                onDismiss = { floatingActionButton.show() }
+            )
+            floatingActionButton.hide()
         }
     }
 
@@ -84,8 +88,10 @@ class MainActivity : AppCompatActivity() {
             adapter.selectionMode = checked
             if (checked) {
                 startSupportActionMode(actionModeCallback)
+                floatingActionButton.hide()
             } else {
                 actionModeCallback.mode?.finish()
+                floatingActionButton.show()
             }
         }
 

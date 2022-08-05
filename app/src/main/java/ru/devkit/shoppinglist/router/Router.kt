@@ -18,10 +18,14 @@ class Router(private val context: Context) {
         this.supportFragmentManager = null
     }
 
-    fun showCreateItemView(action: (String) -> Unit) {
+    fun showCreateItemView(
+        onCreate: (String) -> Unit,
+        onDismiss: () -> Unit
+    ) {
         supportFragmentManager?.let {
             CreateItemBottomSheetFragment().apply {
-                createAction = action
+                createAction = onCreate
+                dismissAction = onDismiss
                 show(it, CreateItemBottomSheetFragment.TAG)
             }
         }
