@@ -76,14 +76,12 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.BaseViewHol
 
     inner class DividerViewHolder(view: View) : BaseViewHolder(view) {
 
-        private val chevron: CheckBox by lazy { view.findViewById(R.id.chevron) }
-        private val clickable: View by lazy { view.findViewById(R.id.clickable) }
+        private val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
 
         fun bind(data: ListItemUiModel.Divider) {
-            chevron.isChecked = data.expanded
-            clickable.setOnClickListener {
-                chevron.isChecked = chevron.isChecked.not()
-                expandAction.invoke(chevron.isChecked)
+            checkBox.isChecked = data.expanded
+            checkBox.setOnCheckedChangeListener { _, checked ->
+                expandAction.invoke(checked)
             }
         }
     }
