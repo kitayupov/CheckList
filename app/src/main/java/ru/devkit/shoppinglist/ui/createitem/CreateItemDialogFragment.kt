@@ -15,19 +15,19 @@ class CreateItemDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
-            .setTitle(R.string.add_item_title)
-            .setView(R.layout.dialog_add_item)
-            .setPositiveButton(android.R.string.ok) { _, _ -> getText() }
+            .setTitle(R.string.create_item_title)
+            .setView(R.layout.dialog_create_item)
+            .setPositiveButton(R.string.create_item_button) { _, _ -> getText() }
             .setNegativeButton(android.R.string.cancel, null)
             .create()
     }
 
     private fun getText() {
-        val text = editText?.text?.takeIf { it.isNotBlank() } ?: return
+        val text = editText?.text?.trim()?.takeIf { it.isNotBlank() } ?: return
         createAction.invoke(text.toString())
     }
 
     companion object {
-        const val TAG = "CreateNewItemDialogFragment"
+        const val TAG = "CreateItemDialogFragment"
     }
 }
