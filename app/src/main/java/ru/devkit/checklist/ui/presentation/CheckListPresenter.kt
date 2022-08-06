@@ -43,7 +43,7 @@ class CheckListPresenter(
         }
     }
 
-    override fun switchCheck(name: String) {
+    override fun switchChecked(name: String) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 cachedList.find { it.title == name }?.let { data ->
@@ -104,7 +104,7 @@ class CheckListPresenter(
         }
     }
 
-    override fun switchSelect(name: String) {
+    override fun switchSelected(name: String) {
         mainScope.launch {
             if (selectedKeys.isEmpty()) {
                 view?.setSelectionMode(true)

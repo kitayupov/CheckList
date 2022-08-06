@@ -17,7 +17,7 @@ object CheckListContract {
 
         // update storage
         fun createItem(name: String)
-        fun switchCheck(name: String)
+        fun switchChecked(name: String)
         fun removeItem(item: ProductDataModel)
         fun clearData()
 
@@ -30,7 +30,7 @@ object CheckListContract {
         fun setSortName()
 
         // selection
-        fun switchSelect(name: String)
+        fun switchSelected(name: String)
         fun clearSelected()
         fun removeSelected()
         fun selectAll()

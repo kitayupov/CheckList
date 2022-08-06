@@ -75,8 +75,8 @@ class MainActivity : AppCompatActivity() {
         val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
         recyclerView.adapter = adapter.apply {
-            checkedAction = presenter::switchCheck
-            selectAction = presenter::switchSelect
+            checkedAction = presenter::switchChecked
+            selectAction = presenter::switchSelected
             expandAction = presenter::expandCompleted
         }
     }
