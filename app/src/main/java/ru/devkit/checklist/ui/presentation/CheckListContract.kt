@@ -17,7 +17,7 @@ object CheckListContract {
 
         // update storage
         fun createItem(item: ProductDataModel)
-        fun updateItem(item: ProductDataModel)
+        fun switchCheck(name: String)
         fun removeItem(item: ProductDataModel)
         fun clearData()
 

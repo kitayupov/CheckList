@@ -43,12 +43,18 @@ class CheckListPresenter(
         }
     }
 
-    override fun updateItem(item: ProductDataModel) {
+    override fun switchCheck(name: String) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                interactor.updateItem(item)
+                cachedList.find { it.title == name }?.let { data ->
+                    val update = data.copy(
+                        completed = data.completed.not(),
+                        lastUpdated = System.currentTimeMillis(),
+                        ranking = data.ranking + if (data.completed.not()) 0 else 1
+                    )
+                    updateItem(update)
+                }
             }
-            updateItems()
         }
     }
 
@@ -161,6 +167,15 @@ class CheckListPresenter(
                 forEachSelected {
                     updateItem(it.copy(completed = false))
                 }
+            }
+            updateItems()
+        }
+    }
+
+    private fun updateItem(model: ProductDataModel) {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                interactor.updateItem(model)
             }
             updateItems()
         }
