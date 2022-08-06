@@ -58,10 +58,12 @@ class CheckListPresenter(
         }
     }
 
-    override fun removeItem(item: ProductDataModel) {
+    override fun removeItem(name: String) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                interactor.removeItem(item)
+                cachedList.find { it.title == name }?.let {
+                    interactor.removeItem(it)
+                }
             }
             updateItems()
         }

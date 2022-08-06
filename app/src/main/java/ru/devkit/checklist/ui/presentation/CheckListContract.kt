@@ -1,6 +1,5 @@
 package ru.devkit.checklist.ui.presentation
 
-import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.ui.model.ListItemModel
 
 object CheckListContract {
@@ -18,7 +17,7 @@ object CheckListContract {
         // update storage
         fun createItem(name: String)
         fun switchChecked(name: String)
-        fun removeItem(item: ProductDataModel)
+        fun removeItem(name: String)
         fun clearData()
 
         // appearance
