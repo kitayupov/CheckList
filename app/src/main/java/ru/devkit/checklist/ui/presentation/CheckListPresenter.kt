@@ -4,6 +4,7 @@ import kotlinx.coroutines.*
 import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.data.preferences.PreferencesProvider
 import ru.devkit.checklist.domain.DataModelStorageInteractor
+import ru.devkit.checklist.domain.SortType
 import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListPresenter(
@@ -17,6 +18,8 @@ class CheckListPresenter(
 
     private val cachedList = mutableListOf<ProductDataModel>()
     private val selectedKeys = mutableListOf<String>()
+
+    private var sortType = readSortType()
 
     override fun attachView(view: CheckListContract.MvpView) {
         this.view = view
@@ -141,6 +144,15 @@ class CheckListPresenter(
             }
             updateItems()
         }
+    }
+
+    private fun readSortType(): SortType {
+        val value = preferences.getString(PreferencesProvider.SORT_TYPE_KEY, SortType.DEFAULT.name)
+        return SortType.fromString(value)
+    }
+
+    private fun writeSortType(sortType: SortType) {
+        preferences.putString(PreferencesProvider.SORT_TYPE_KEY, sortType.name)
     }
 
     private inline fun forEachSelected(action: (ProductDataModel) -> Unit) {
