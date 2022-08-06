@@ -101,7 +101,13 @@ class CheckListAdapter : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>()
                 if (selectionMode) {
                     selectAction.invoke(data.copy(selected = data.selected.not()))
                 } else {
-                    checkedAction.invoke(data.copy(completed = data.completed.not(), lastUpdated = System.currentTimeMillis()))
+                    checkedAction.invoke(
+                        data.copy(
+                            completed = data.completed.not(),
+                            lastUpdated = System.currentTimeMillis(),
+                            ranking = data.ranking + if (data.completed.not()) 0 else 1
+                        )
+                    )
                 }
             }
             clickable.setOnLongClickListener {
