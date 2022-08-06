@@ -24,6 +24,10 @@ object CheckListContract {
         // appearance
         fun expandCompleted(checked: Boolean)
 
+        // sort
+        fun setSortRanking()
+        fun setSortDefault()
+
         // selection
         fun selectItem(item: ProductDataModel)
         fun clearSelected()

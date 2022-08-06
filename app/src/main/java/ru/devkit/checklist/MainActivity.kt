@@ -55,6 +55,14 @@ class MainActivity : AppCompatActivity() {
                 router.showClearAllConfirmation(presenter::clearData)
                 true
             }
+            R.id.menu_actions_sort_ranking -> {
+                presenter.setSortRanking()
+                true
+            }
+            R.id.menu_actions_sort_default -> {
+                presenter.setSortDefault()
+                true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }

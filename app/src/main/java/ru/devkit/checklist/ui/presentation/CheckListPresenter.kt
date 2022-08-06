@@ -69,6 +69,20 @@ class CheckListPresenter(
         }
     }
 
+    override fun setSortRanking() = setSortType(SortType.RANKING)
+
+    override fun setSortDefault() = setSortType(SortType.DEFAULT)
+
+    private fun setSortType(sortType: SortType) {
+        this.sortType = sortType
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                writeSortType(sortType)
+            }
+            updateItems()
+        }
+    }
+
     override fun clearData() {
         mainScope.launch {
             withContext(Dispatchers.IO) {
@@ -176,10 +190,20 @@ class CheckListPresenter(
             // separate checked and unchecked
             val unchecked = elements
                 .filterNot { it.data.completed }
-                .sortedBy { it.data.lastUpdated }
+                .run {
+                    when (sortType) {
+                        SortType.DEFAULT -> sortedBy { it.data.lastUpdated }
+                        SortType.RANKING -> sortedByDescending { it.data.ranking }
+                    }
+                }
             val checked = elements
                 .filter { it.data.completed }
-                .sortedByDescending { it.data.lastUpdated }
+                .run {
+                    when (sortType) {
+                        SortType.DEFAULT -> sortedByDescending { it.data.lastUpdated }
+                        SortType.RANKING -> sortedBy { it.data.ranking }
+                    }
+                }
 
             val items = mutableListOf<ListItemModel>()
             items.addAll(unchecked)
