@@ -24,6 +24,7 @@
         android:layout_marginTop="16dp"
         android:hint="@string/create_item_hint"
         android:inputType="textCapWords"
+        android:imeOptions="actionSend"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/create_button"
         app:layout_constraintStart_toStartOf="parent"
