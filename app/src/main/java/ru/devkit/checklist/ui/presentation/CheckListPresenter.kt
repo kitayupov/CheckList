@@ -193,22 +193,10 @@ class CheckListPresenter(
             // separate checked and unchecked
             val unchecked = elements
                 .filterNot { it.data.completed }
-                .run {
-                    when (sortType) {
-                        SortType.DEFAULT -> sortedBy { it.data.lastUpdated }
-                        SortType.RANKING -> sortedByDescending { it.data.ranking }
-                        SortType.NAME -> sortedBy { it.data.title }
-                    }
-                }
+                .sortUnchecked()
             val checked = elements
                 .filter { it.data.completed }
-                .run {
-                    when (sortType) {
-                        SortType.DEFAULT -> sortedByDescending { it.data.lastUpdated }
-                        SortType.RANKING -> sortedBy { it.data.ranking }
-                        SortType.NAME -> sortedByDescending { it.data.title }
-                    }
-                }
+                .sortChecked()
 
             val items = mutableListOf<ListItemModel>()
             items.addAll(unchecked)
@@ -237,5 +225,17 @@ class CheckListPresenter(
 
             showItems(items)
         }
+    }
+
+    private fun List<ListItemModel.Element>.sortUnchecked() = when (sortType) {
+        SortType.DEFAULT -> sortedBy { it.data.lastUpdated }
+        SortType.RANKING -> sortedByDescending { it.data.ranking }
+        SortType.NAME -> sortedBy { it.data.title }
+    }
+
+    private fun List<ListItemModel.Element>.sortChecked() = when (sortType) {
+        SortType.DEFAULT -> sortedByDescending { it.data.lastUpdated }
+        SortType.RANKING -> sortedByDescending { it.data.ranking }
+        SortType.NAME -> sortedBy { it.data.title }
     }
 }
