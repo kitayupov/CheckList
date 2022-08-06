@@ -19,6 +19,7 @@ class CheckListPresenter(
     private val cachedList = mutableListOf<ProductDataModel>()
     private val selectedKeys = mutableListOf<String>()
 
+    private var expandCompleted = readExpandCompleted()
     private var sortType = readSortType()
 
     override fun attachView(view: CheckListContract.MvpView) {
@@ -61,9 +62,11 @@ class CheckListPresenter(
     }
 
     override fun expandCompleted(checked: Boolean) {
+        if (expandCompleted == checked) return
+        expandCompleted = checked
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                preferences.putBoolean(PreferencesProvider.EXPAND_COMPLETED_KEY, checked)
+                writeExpandCompleted(checked)
             }
             updateItems()
         }
@@ -163,6 +166,14 @@ class CheckListPresenter(
         }
     }
 
+    private fun readExpandCompleted(): Boolean {
+        return preferences.getBoolean(PreferencesProvider.EXPAND_COMPLETED_KEY, true)
+    }
+
+    private fun writeExpandCompleted(expanded: Boolean) {
+        preferences.putBoolean(PreferencesProvider.EXPAND_COMPLETED_KEY, expanded)
+    }
+
     private fun readSortType(): SortType {
         val value = preferences.getString(PreferencesProvider.SORT_TYPE_KEY, SortType.DEFAULT.name)
         return SortType.fromString(value)
@@ -203,9 +214,8 @@ class CheckListPresenter(
 
             // configure completed area
             if (checked.isNotEmpty()) {
-                val expanded = preferences.getBoolean(PreferencesProvider.EXPAND_COMPLETED_KEY, true)
-                items.add(ListItemModel.Divider(expanded))
-                if (expanded) {
+                items.add(ListItemModel.Divider(expandCompleted))
+                if (expandCompleted) {
                     items.addAll(checked)
                 }
             }
