@@ -27,6 +27,7 @@ object CheckListContract {
         // sort
         fun setSortRanking()
         fun setSortDefault()
+        fun setSortName()
 
         // selection
         fun selectItem(item: ProductDataModel)

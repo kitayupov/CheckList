@@ -15,4 +15,5 @@
     <string name="action_mode_selected_count">%d selected</string>
     <string name="menu_actions_sort_ranking">Sort by ranking</string>
     <string name="menu_actions_sort_default">Sort by default</string>
+    <string name="menu_actions_sort_name">Sort by name</string>
 </resources>

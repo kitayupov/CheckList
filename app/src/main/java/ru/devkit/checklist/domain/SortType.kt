@@ -2,7 +2,8 @@ package ru.devkit.checklist.domain
 
 enum class SortType {
     DEFAULT,
-    RANKING;
+    RANKING,
+    NAME;
 
     companion object {
         fun fromString(value: String): SortType {

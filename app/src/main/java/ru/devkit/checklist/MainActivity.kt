@@ -63,6 +63,10 @@ class MainActivity : AppCompatActivity() {
                 presenter.setSortDefault()
                 true
             }
+            R.id.menu_actions_sort_name -> {
+                presenter.setSortName()
+                true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }

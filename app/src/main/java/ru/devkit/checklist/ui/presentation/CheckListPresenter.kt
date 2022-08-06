@@ -73,7 +73,10 @@ class CheckListPresenter(
 
     override fun setSortDefault() = setSortType(SortType.DEFAULT)
 
+    override fun setSortName() = setSortType(SortType.NAME)
+
     private fun setSortType(sortType: SortType) {
+        if (this.sortType == sortType) return
         this.sortType = sortType
         mainScope.launch {
             withContext(Dispatchers.IO) {
@@ -194,6 +197,7 @@ class CheckListPresenter(
                     when (sortType) {
                         SortType.DEFAULT -> sortedBy { it.data.lastUpdated }
                         SortType.RANKING -> sortedByDescending { it.data.ranking }
+                        SortType.NAME -> sortedBy { it.data.title }
                     }
                 }
             val checked = elements
@@ -202,6 +206,7 @@ class CheckListPresenter(
                     when (sortType) {
                         SortType.DEFAULT -> sortedByDescending { it.data.lastUpdated }
                         SortType.RANKING -> sortedBy { it.data.ranking }
+                        SortType.NAME -> sortedByDescending { it.data.title }
                     }
                 }
 
