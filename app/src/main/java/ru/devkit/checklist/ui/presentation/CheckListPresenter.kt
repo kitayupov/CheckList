@@ -52,9 +52,10 @@ class CheckListPresenter(
                         lastUpdated = System.currentTimeMillis(),
                         ranking = data.ranking + if (data.completed.not()) 0 else 1
                     )
-                    updateItem(update)
+                    interactor.updateItem(update)
                 }
             }
+            updateItems()
         }
     }
 
@@ -64,6 +65,15 @@ class CheckListPresenter(
                 cachedList.find { it.title == name }?.let {
                     interactor.removeItem(it)
                 }
+            }
+            updateItems()
+        }
+    }
+
+    override fun clearData() {
+        mainScope.launch {
+            withContext(Dispatchers.IO) {
+                interactor.clearData()
             }
             updateItems()
         }
@@ -92,15 +102,6 @@ class CheckListPresenter(
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 preferences.sortType = sortType
-            }
-            updateItems()
-        }
-    }
-
-    override fun clearData() {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                interactor.clearData()
             }
             updateItems()
         }
@@ -155,7 +156,7 @@ class CheckListPresenter(
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 forEachSelected {
-                    updateItem(it.copy(completed = true))
+                    interactor.updateItem(it.copy(completed = true))
                 }
             }
             updateItems()
@@ -166,17 +167,8 @@ class CheckListPresenter(
         mainScope.launch {
             withContext(Dispatchers.IO) {
                 forEachSelected {
-                    updateItem(it.copy(completed = false))
+                    interactor.updateItem(it.copy(completed = false))
                 }
-            }
-            updateItems()
-        }
-    }
-
-    private fun updateItem(model: ProductDataModel) {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                interactor.updateItem(model)
             }
             updateItems()
         }
