@@ -30,7 +30,7 @@ object CheckListContract {
         fun setSortName()
 
         // selection
-        fun selectItem(item: ProductDataModel)
+        fun switchSelect(name: String)
         fun clearSelected()
         fun removeSelected()
         fun selectAll()

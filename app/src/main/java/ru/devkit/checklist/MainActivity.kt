@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.addItemDecoration(decoration)
         recyclerView.adapter = adapter
         adapter.checkedAction = presenter::switchCheck
-        adapter.selectAction = presenter::selectItem
+        adapter.selectAction = presenter::switchSelect
         adapter.expandAction = presenter::expandCompleted
     }
 

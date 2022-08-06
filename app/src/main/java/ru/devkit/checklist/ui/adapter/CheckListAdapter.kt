@@ -16,8 +16,7 @@ private const val TYPE_ELEMENT = 0
 class CheckListAdapter : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>() {
 
     var checkedAction: (String) -> Unit = {}
-    var selectAction: (ProductDataModel) -> Unit = {}
-
+    var selectAction: (String) -> Unit = {}
     var expandAction: (Boolean) -> Unit = {}
 
     var selectionMode = false
@@ -99,13 +98,13 @@ class CheckListAdapter : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>()
             clickable.isSelected = data.selected
             clickable.setOnClickListener {
                 if (selectionMode) {
-                    selectAction.invoke(data.copy(selected = data.selected.not()))
+                    selectAction.invoke(data.title)
                 } else {
                     checkedAction.invoke(data.title)
                 }
             }
             clickable.setOnLongClickListener {
-                selectAction.invoke(data.copy(selected = data.selected.not()))
+                selectAction.invoke(data.title)
                 true
             }
         }

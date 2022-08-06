@@ -104,16 +104,15 @@ class CheckListPresenter(
         }
     }
 
-    override fun selectItem(item: ProductDataModel) {
+    override fun switchSelect(name: String) {
         mainScope.launch {
             if (selectedKeys.isEmpty()) {
                 view?.setSelectionMode(true)
             }
-            val element = item.title
-            if (selectedKeys.contains(element)) {
-                selectedKeys.remove(element)
+            if (selectedKeys.contains(name)) {
+                selectedKeys.remove(name)
             } else {
-                selectedKeys.add(element)
+                selectedKeys.add(name)
             }
             updateItems()
         }
