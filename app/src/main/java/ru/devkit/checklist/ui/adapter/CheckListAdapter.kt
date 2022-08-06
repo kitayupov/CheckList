@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.checklist.R
@@ -76,12 +77,16 @@ class CheckListAdapter : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>()
     inner class DividerViewHolder(view: View) : BaseViewHolder(view) {
 
         private val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
+        private val counter: TextView by lazy { view.findViewById(R.id.counter) }
+        private val clickable: View by lazy { view.findViewById(R.id.clickable) }
 
         fun bind(data: ListItemModel.Divider) {
+            counter.text = data.count.toString()
             checkBox.isChecked = data.expanded
             checkBox.setOnCheckedChangeListener { _, checked ->
                 expandAction.invoke(checked)
             }
+            clickable.setOnClickListener { checkBox.performClick() }
         }
     }
 

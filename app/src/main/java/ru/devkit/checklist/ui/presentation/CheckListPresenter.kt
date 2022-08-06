@@ -157,7 +157,7 @@ class CheckListPresenter(
 
             // configure completed area
             if (checked.isNotEmpty()) {
-                items.add(ListItemModel.Divider(expandCompleted))
+                items.add(ListItemModel.Divider(checked.size, expandCompleted))
                 if (expandCompleted) {
                     items.addAll(checked)
                 }
