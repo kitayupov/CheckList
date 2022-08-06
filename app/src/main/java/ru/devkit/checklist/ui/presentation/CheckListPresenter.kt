@@ -34,10 +34,10 @@ class CheckListPresenter(
         mainScope.cancel()
     }
 
-    override fun createItem(item: ProductDataModel) {
+    override fun createItem(name: String) {
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                interactor.addItem(item)
+                interactor.addItem(ProductDataModel(name))
             }
             updateItems()
         }

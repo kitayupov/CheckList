@@ -16,7 +16,7 @@ object CheckListContract {
         fun detachView()
 
         // update storage
-        fun createItem(item: ProductDataModel)
+        fun createItem(name: String)
         fun switchCheck(name: String)
         fun removeItem(item: ProductDataModel)
         fun clearData()

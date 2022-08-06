@@ -9,7 +9,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 import ru.devkit.checklist.ui.model.ListItemModel
 import ru.devkit.checklist.ui.presentation.CheckListContract
@@ -75,17 +74,18 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
-        recyclerView.adapter = adapter
-        adapter.checkedAction = presenter::switchCheck
-        adapter.selectAction = presenter::switchSelect
-        adapter.expandAction = presenter::expandCompleted
+        recyclerView.adapter = adapter.apply {
+            checkedAction = presenter::switchCheck
+            selectAction = presenter::switchSelect
+            expandAction = presenter::expandCompleted
+        }
     }
 
     private fun setupActionButton() {
         floatingActionButton.setOnClickListener {
             router.showCreateItemView(
-                onCreate = { presenter.createItem(ProductDataModel(it)) },
-                onDismiss = { floatingActionButton.show() }
+                onCreate = presenter::createItem,
+                onDismiss = floatingActionButton::show
             )
             floatingActionButton.hide()
         }
