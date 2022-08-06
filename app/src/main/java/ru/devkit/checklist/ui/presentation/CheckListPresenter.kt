@@ -34,77 +34,45 @@ class CheckListPresenter(
         mainScope.cancel()
     }
 
-    override fun createItem(name: String) {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                interactor.addItem(ProductDataModel(name))
-            }
-            updateItems()
+    override fun createItem(name: String) = update {
+        interactor.addItem(ProductDataModel(name))
+    }
+
+    override fun switchChecked(name: String) = update {
+        cachedList.find { it.title == name }?.let { data ->
+            val update = data.copy(
+                completed = data.completed.not(),
+                lastUpdated = System.currentTimeMillis(),
+                ranking = data.ranking + if (data.completed.not()) 0 else 1
+            )
+            interactor.updateItem(update)
         }
     }
 
-    override fun switchChecked(name: String) {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                cachedList.find { it.title == name }?.let { data ->
-                    val update = data.copy(
-                        completed = data.completed.not(),
-                        lastUpdated = System.currentTimeMillis(),
-                        ranking = data.ranking + if (data.completed.not()) 0 else 1
-                    )
-                    interactor.updateItem(update)
-                }
-            }
-            updateItems()
+    override fun removeItem(name: String) = update {
+        cachedList.find { it.title == name }?.let {
+            interactor.removeItem(it)
         }
     }
 
-    override fun removeItem(name: String) {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                cachedList.find { it.title == name }?.let {
-                    interactor.removeItem(it)
-                }
-            }
-            updateItems()
-        }
+    override fun clearData() = update {
+        interactor.clearData()
     }
 
-    override fun clearData() {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                interactor.clearData()
-            }
-            updateItems()
-        }
-    }
-
-    override fun expandCompleted(checked: Boolean) {
-        if (expandCompleted == checked) return
+    override fun expandCompleted(checked: Boolean) = update {
+        if (expandCompleted == checked) return@update
         expandCompleted = checked
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                preferences.expandCompleted = checked
-            }
-            updateItems()
-        }
+        preferences.expandCompleted = checked
     }
 
     override fun setSortRanking() = setSortType(SortType.RANKING)
-
     override fun setSortDefault() = setSortType(SortType.DEFAULT)
-
     override fun setSortName() = setSortType(SortType.NAME)
 
-    private fun setSortType(sortType: SortType) {
-        if (this.sortType == sortType) return
-        this.sortType = sortType
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                preferences.sortType = sortType
-            }
-            updateItems()
-        }
+    private fun setSortType(sortType: SortType) = update {
+        if (this@CheckListPresenter.sortType == sortType) return@update
+        this@CheckListPresenter.sortType = sortType
+        preferences.sortType = sortType
     }
 
     override fun switchSelected(name: String) {
@@ -121,56 +89,33 @@ class CheckListPresenter(
         }
     }
 
-    override fun clearSelected() {
-        mainScope.launch {
-            selectedKeys.clear()
-            updateItems()
+    override fun clearSelected() = update {
+        selectedKeys.clear()
+    }
+
+    override fun removeSelected() = update {
+        forEachSelected {
+            interactor.removeItem(it)
+        }
+        selectedKeys.clear()
+    }
+
+    override fun selectAll() = update {
+        selectedKeys.clear()
+        cachedList.forEach {
+            selectedKeys.add(it.title)
         }
     }
 
-    override fun removeSelected() {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                forEachSelected {
-                    interactor.removeItem(it)
-                }
-                selectedKeys.clear()
-            }
-            updateItems()
+    override fun checkSelected() = update {
+        forEachSelected {
+            interactor.updateItem(it.copy(completed = true))
         }
     }
 
-    override fun selectAll() {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                selectedKeys.clear()
-                cachedList.forEach {
-                    selectedKeys.add(it.title)
-                }
-            }
-            updateItems()
-        }
-    }
-
-    override fun checkSelected() {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                forEachSelected {
-                    interactor.updateItem(it.copy(completed = true))
-                }
-            }
-            updateItems()
-        }
-    }
-
-    override fun uncheckSelected() {
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                forEachSelected {
-                    interactor.updateItem(it.copy(completed = false))
-                }
-            }
-            updateItems()
+    override fun uncheckSelected() = update {
+        forEachSelected {
+            interactor.updateItem(it.copy(completed = false))
         }
     }
 
@@ -178,6 +123,13 @@ class CheckListPresenter(
         selectedKeys.forEach { name ->
             cachedList.find { it.title == name }
                 ?.let { action.invoke(it) }
+        }
+    }
+
+    private fun update(action: suspend CoroutineScope.() -> Unit) {
+        mainScope.launch {
+            withContext(Dispatchers.IO, action)
+            updateItems()
         }
     }
 
