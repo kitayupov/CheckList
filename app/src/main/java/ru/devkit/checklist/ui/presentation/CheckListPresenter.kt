@@ -38,6 +38,14 @@ class CheckListPresenter(
         interactor.addItem(ProductDataModel(name))
     }
 
+    override fun renameItem(oldName: String, newName: String) = update {
+        cachedList.find { it.title == oldName }?.let { data ->
+            val update = data.copy(title = newName)
+            interactor.removeItem(data)
+            interactor.addItem(update)
+        }
+    }
+
     override fun switchChecked(name: String) = update {
         cachedList.find { it.title == name }?.let { data ->
             val update = data.copy(

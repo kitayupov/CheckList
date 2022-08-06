@@ -16,6 +16,7 @@ object CheckListContract {
 
         // update storage
         fun createItem(name: String)
+        fun renameItem(oldName: String, newName: String)
         fun switchChecked(name: String)
         fun removeItem(name: String)
         fun clearData()
