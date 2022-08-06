@@ -2,6 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu_actions_sort_default"
+        android:icon="@drawable/ic_sort_24"
+        android:title="@string/menu_actions_sort_default" />
+
+    <item
+        android:id="@+id/menu_actions_sort_ranking"
+        android:icon="@drawable/ic_sort_24"
+        android:title="@string/menu_actions_sort_ranking" />
+
+    <item
         android:id="@+id/menu_actions_clear_data"
         android:icon="@drawable/ic_clear_all_24"
         android:title="@string/menu_clear_all" />

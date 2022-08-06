@@ -13,4 +13,6 @@
     <string name="menu_contextual_check_selected">Check selected</string>
     <string name="menu_contextual_uncheck_selected">Uncheck selected</string>
     <string name="action_mode_selected_count">%d selected</string>
+    <string name="menu_actions_sort_ranking">Sort by ranking</string>
+    <string name="menu_actions_sort_default">Sort by default</string>
 </resources>
