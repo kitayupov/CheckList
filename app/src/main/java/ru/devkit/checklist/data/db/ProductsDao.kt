@@ -3,13 +3,15 @@ package ru.devkit.checklist.data.db
 import androidx.room.*
 import ru.devkit.checklist.data.model.Product
 
+const val TABLE_NAME = "PRODUCT"
+
 @Dao
 interface ProductsDao {
 
-    @Query("SELECT * FROM PRODUCT")
+    @Query("SELECT * FROM $TABLE_NAME")
     fun getAll(): List<Product>
 
-    @Query("SELECT * FROM PRODUCT WHERE name = :name")
+    @Query("SELECT * FROM $TABLE_NAME WHERE name = :name")
     fun getByKey(name: String): Product?
 
     @Insert
@@ -21,6 +23,6 @@ interface ProductsDao {
     @Delete
     fun delete(product: Product)
 
-    @Query("DELETE FROM Product")
+    @Query("DELETE FROM $TABLE_NAME")
     fun clear()
 }
