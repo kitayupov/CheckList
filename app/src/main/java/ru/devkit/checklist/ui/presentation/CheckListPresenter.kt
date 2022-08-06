@@ -19,8 +19,8 @@ class CheckListPresenter(
     private val cachedList = mutableListOf<ProductDataModel>()
     private val selectedKeys = mutableListOf<String>()
 
-    private var expandCompleted = preferences.readExpandCompleted()
-    private var sortType = preferences.readSortType()
+    private var expandCompleted = preferences.expandCompleted
+    private var sortType = preferences.sortType
 
     override fun attachView(view: CheckListContract.MvpView) {
         this.view = view
@@ -66,7 +66,7 @@ class CheckListPresenter(
         expandCompleted = checked
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                preferences.writeExpandCompleted(checked)
+                preferences.expandCompleted = checked
             }
             updateItems()
         }
@@ -83,7 +83,7 @@ class CheckListPresenter(
         this.sortType = sortType
         mainScope.launch {
             withContext(Dispatchers.IO) {
-                preferences.writeSortType(sortType)
+                preferences.sortType = sortType
             }
             updateItems()
         }

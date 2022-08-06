@@ -13,13 +13,13 @@ class PreferencesProvider(context: Context) {
 
     private val preferences: SharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
 
-    fun readExpandCompleted(): Boolean = getBoolean(EXPAND_COMPLETED_KEY, true)
+    var expandCompleted: Boolean
+        get() = getBoolean(EXPAND_COMPLETED_KEY, true)
+        set(value) = putBoolean(EXPAND_COMPLETED_KEY, value)
 
-    fun writeExpandCompleted(expanded: Boolean) = putBoolean(EXPAND_COMPLETED_KEY, expanded)
-
-    fun readSortType() = SortType.fromString(getString(SORT_TYPE_KEY, SortType.DEFAULT.name))
-
-    fun writeSortType(sortType: SortType) = putString(SORT_TYPE_KEY, sortType.name)
+    var sortType: SortType
+        get() = SortType.fromString(getString(SORT_TYPE_KEY, SortType.DEFAULT.name))
+        set(value) = putString(SORT_TYPE_KEY, value.name)
 
     private fun getBoolean(name: String, default: Boolean = false) = preferences.getBoolean(name, default)
 
