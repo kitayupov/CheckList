@@ -136,21 +136,19 @@ class CheckListPresenter(
 
     private fun update(action: suspend CoroutineScope.() -> Unit) {
         mainScope.launch {
-            withContext(Dispatchers.IO, action)
+            action()
             updateItems()
         }
     }
 
     private suspend fun updateItems() {
         view?.apply {
-            val elements = withContext(Dispatchers.IO) {
-                interactor.getItems()
-                    .also {
-                        cachedList.clear()
-                        cachedList.addAll(it)
-                    }
-                    .map { ListItemModel.Element(it) }
-            }
+            val elements = interactor.getItems()
+                .also {
+                    cachedList.clear()
+                    cachedList.addAll(it)
+                }
+                .map { ListItemModel.Element(it) }
 
             // separate checked and unchecked
             val unchecked = elements

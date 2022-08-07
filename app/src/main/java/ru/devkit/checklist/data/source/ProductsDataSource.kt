@@ -9,11 +9,11 @@ class ProductsDataSource(
 
     private val dao = productsDatabase.productsDao()
 
-    override fun getItems(): List<Product> {
+    override suspend fun getItems(): List<Product> {
         return dao.getAll()
     }
 
-    override fun create(elem: Product) {
+    override suspend fun create(elem: Product) {
         val existed = dao.getByKey(elem.name)
         if (existed == null) {
             dao.insert(elem)
@@ -22,15 +22,15 @@ class ProductsDataSource(
         }
     }
 
-    override fun update(elem: Product) {
+    override suspend fun update(elem: Product) {
         dao.update(elem)
     }
 
-    override fun delete(elem: Product) {
+    override suspend fun delete(elem: Product) {
         dao.delete(elem)
     }
 
-    override fun clear() {
+    override suspend fun clear() {
         dao.clear()
     }
 }

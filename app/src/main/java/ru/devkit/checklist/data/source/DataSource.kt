@@ -1,9 +1,9 @@
 package ru.devkit.checklist.data.source
 
 interface DataSource<T> {
-    fun getItems(): List<T>
-    fun create(elem: T)
-    fun update(elem: T)
-    fun delete(elem: T)
-    fun clear()
+    suspend fun getItems(): List<T>
+    suspend fun create(elem: T)
+    suspend fun update(elem: T)
+    suspend fun delete(elem: T)
+    suspend fun clear()
 }
