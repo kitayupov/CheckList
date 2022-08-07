@@ -35,7 +35,20 @@ class CheckListPresenter(
     }
 
     override fun createItem(name: String) = update {
-        interactor.addItem(ProductDataModel(name))
+        // check if item already exists
+        cachedList.find { it.title == name }?.let { data ->
+            if (data.completed.not()) {
+                // do nothing
+                view?.showMessage("The item \'$name\' already exists")
+            } else {
+                // just return to the list
+                interactor.updateItem(data.copy(completed = false))
+                view?.showMessage("The item \'$name\' returned")
+            }
+        } ?: kotlin.run {
+            interactor.addItem(ProductDataModel(name))
+            view?.showMessage("The item \'$name\' added")
+        }
     }
 
     override fun renameItem(oldName: String, newName: String) = update {

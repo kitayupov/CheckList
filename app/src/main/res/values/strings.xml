@@ -16,4 +16,7 @@
     <string name="menu_actions_sort_ranking">Sort by ranking</string>
     <string name="menu_actions_sort_default">Sort by default</string>
     <string name="menu_actions_sort_name">Sort by name</string>
+    <string name="message_item_exists">The item \'%s\' already exists</string>
+    <string name="message_item_returned">The item \'%s\' returned to the list</string>
+    <string name="message_item_added">The item \'%s\' added</string>
 </resources>

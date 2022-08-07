@@ -3,6 +3,7 @@ package ru.devkit.checklist
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
@@ -109,6 +110,10 @@ class MainActivity : AppCompatActivity() {
 
         override fun showSelectedCount(value: Int) {
             actionModeCallback.mode?.title = getString(R.string.action_mode_selected_count, value)
+        }
+
+        override fun showMessage(text: String) {
+            Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
         }
     }
 
