@@ -3,6 +3,8 @@ package ru.devkit.checklist.ui.presentation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import ru.devkit.checklist.R
+import ru.devkit.checklist.common.ResourceProvider
 import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.data.preferences.PreferencesProvider
 import ru.devkit.checklist.domain.DataModelStorageInteractor
@@ -11,7 +13,8 @@ import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListPresenter(
     private val interactor: DataModelStorageInteractor,
-    private val preferences: PreferencesProvider
+    private val preferences: PreferencesProvider,
+    private val resources: ResourceProvider
 ) : CheckListContract.MvpPresenter, CoroutinePresenter() {
 
     private var view: CheckListContract.MvpView? = null
@@ -39,15 +42,15 @@ class CheckListPresenter(
         cachedList.find { it.title == name }?.let { data ->
             if (data.completed.not()) {
                 // do nothing
-                view?.showMessage("The item \'$name\' already exists")
+                view?.showMessage(resources.getString(R.string.message_item_exists, name))
             } else {
                 // just return to the list
                 interactor.updateItem(data.copy(completed = false))
-                view?.showMessage("The item \'$name\' returned")
+                view?.showMessage(resources.getString(R.string.message_item_returned, name))
             }
         } ?: kotlin.run {
             interactor.addItem(ProductDataModel(name))
-            view?.showMessage("The item \'$name\' added")
+            view?.showMessage(resources.getString(R.string.message_item_added, name))
         }
     }
 

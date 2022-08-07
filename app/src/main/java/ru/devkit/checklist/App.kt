@@ -1,6 +1,7 @@
 package ru.devkit.checklist
 
 import android.app.Application
+import ru.devkit.checklist.common.ResourceProvider
 import ru.devkit.checklist.data.db.ProductsDatabase
 import ru.devkit.checklist.data.preferences.PreferencesProvider
 import ru.devkit.checklist.data.repository.ProductsRepository
@@ -15,6 +16,7 @@ class App : Application() {
     private val repository by lazy { ProductsRepository(dataSource) }
     private val interactor by lazy { DataModelStorageInteractor(repository) }
     private val preferences by lazy { PreferencesProvider(this) }
-    val presenter by lazy { CheckListPresenter(interactor, preferences) }
+    private val resources by lazy { ResourceProvider(this) }
+    val presenter by lazy { CheckListPresenter(interactor, preferences, resources) }
     val router by lazy { CheckListRouter(this) }
 }
