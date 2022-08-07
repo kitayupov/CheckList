@@ -1,6 +1,8 @@
 package ru.devkit.checklist.ui.presentation
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.data.preferences.PreferencesProvider
 import ru.devkit.checklist.domain.DataModelStorageInteractor
@@ -10,11 +12,9 @@ import ru.devkit.checklist.ui.model.ListItemModel
 class CheckListPresenter(
     private val interactor: DataModelStorageInteractor,
     private val preferences: PreferencesProvider
-) : CheckListContract.MvpPresenter {
+) : CheckListContract.MvpPresenter, CoroutinePresenter() {
 
     private var view: CheckListContract.MvpView? = null
-
-    private val mainScope = CoroutineScope(Dispatchers.Main)
 
     private val cachedList = mutableListOf<ProductDataModel>()
     private val selectedKeys = mutableListOf<String>()
@@ -24,14 +24,14 @@ class CheckListPresenter(
 
     override fun attachView(view: CheckListContract.MvpView) {
         this.view = view
-        mainScope.launch {
+        launch {
             updateItems()
         }
     }
 
     override fun detachView() {
         this.view = null
-        mainScope.cancel()
+        cancel()
     }
 
     override fun createItem(name: String) = update {
@@ -84,7 +84,7 @@ class CheckListPresenter(
     }
 
     override fun switchSelected(name: String) {
-        mainScope.launch {
+        launch {
             if (selectedKeys.isEmpty()) {
                 view?.setSelectionMode(true)
             }
@@ -134,9 +134,9 @@ class CheckListPresenter(
         }
     }
 
-    private fun update(action: suspend CoroutineScope.() -> Unit) {
-        mainScope.launch {
-            action()
+    private fun update(modification: suspend CoroutineScope.() -> Unit) {
+        launch {
+            modification()
             updateItems()
         }
     }
