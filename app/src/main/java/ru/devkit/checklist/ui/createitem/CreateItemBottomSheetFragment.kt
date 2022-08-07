@@ -22,18 +22,19 @@ class CreateItemBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val closeButton = view.findViewById<View>(R.id.close_button)
+        closeButton.setOnClickListener { dismiss() }
+
         val editText = view.findViewById<EditText>(R.id.input_text)
         editText.setOnKeyListener { _, _, event ->
             if (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 getText(editText)
             }
-            true
+            false
         }
 
         val createButton = view.findViewById<View>(R.id.create_button)
-        createButton.setOnClickListener {
-            getText(editText)
-        }
+        createButton.setOnClickListener { getText(editText) }
 
         editText.requestFocus()
     }
@@ -44,8 +45,8 @@ class CreateItemBottomSheetFragment : BottomSheetDialogFragment() {
         editText.text = null
     }
 
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
         dismissAction.invoke()
     }
 
