@@ -1,5 +1,6 @@
 package ru.devkit.checklist.ui.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -17,6 +18,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     }
 
     private val adapter = CheckListAdapter()
+    var presenter: CheckListPresenter? = null
 
     var callback: Callback? = null
 
@@ -25,8 +27,14 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         setupRecyclerView(view)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        presenter?.attachView(this)
+    }
+
     override fun onDetach() {
         super.onDetach()
+        presenter?.detachView()
         callback = null
     }
 
@@ -35,9 +43,9 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         val decoration = DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
         recyclerView.adapter = adapter.apply {
-            checkedAction = { name -> callback?.onSwitchChecked(name) }
-            selectAction = { name -> callback?.onSwitchSelected(name) }
-            expandAction = { checked -> callback?.onExpandCompleted(checked) }
+            checkedAction = { name -> presenter?.switchChecked(name) }
+            selectAction = { name -> presenter?.switchSelected(name) }
+            expandAction = { checked -> presenter?.expandCompleted(checked) }
         }
     }
 
@@ -59,9 +67,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     }
 
     interface Callback {
-        fun onSwitchChecked(name: String)
-        fun onSwitchSelected(name: String)
-        fun onExpandCompleted(checked: Boolean)
         fun onSelectionMode(checked: Boolean)
         fun onShowSelectionCount(count: Int)
     }

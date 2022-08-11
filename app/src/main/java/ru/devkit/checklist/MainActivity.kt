@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupCheckList() {
         val fragment = CheckListFragment().apply {
-            callback = checkListCallback
-            presenter.attachView(this)
+            callback = this@MainActivity.callback
+            presenter = this@MainActivity.presenter
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment, CheckListFragment.TAG)
@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        presenter.detachView()
         router.detach()
     }
 
@@ -83,19 +82,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val checkListCallback = object : CheckListFragment.Callback {
-        override fun onSwitchChecked(name: String) {
-            presenter.switchChecked(name)
-        }
-
-        override fun onSwitchSelected(name: String) {
-            presenter.switchSelected(name)
-        }
-
-        override fun onExpandCompleted(checked: Boolean) {
-            presenter.expandCompleted(checked)
-        }
-
+    private val callback = object : CheckListFragment.Callback {
         override fun onSelectionMode(checked: Boolean) {
             if (checked) {
                 startSupportActionMode(actionModeCallback)
