@@ -15,7 +15,7 @@ class CheckListPresenter(
     private val interactor: DataModelStorageInteractor,
     private val preferences: PreferencesProvider,
     private val resources: ResourceProvider
-) : CheckListContract.MvpPresenter, CoroutinePresenter() {
+) : CheckListContract.MvpPresenter, BaseCoroutinePresenter() {
 
     private var view: CheckListContract.MvpView? = null
 
