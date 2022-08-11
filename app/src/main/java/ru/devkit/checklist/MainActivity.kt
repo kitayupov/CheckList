@@ -3,23 +3,16 @@ package ru.devkit.checklist
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import ru.devkit.checklist.ui.adapter.CheckListAdapter
-import ru.devkit.checklist.ui.model.ListItemModel
-import ru.devkit.checklist.ui.presentation.CheckListContract
+import ru.devkit.checklist.ui.presentation.CheckListFragment
 
 class MainActivity : AppCompatActivity() {
 
     private val presenter by lazy { (application as App).presenter }
     private val router by lazy { (application as App).router }
-
-    private val adapter = CheckListAdapter()
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val floatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.floating_button) }
@@ -28,14 +21,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        setupRecyclerView()
         setupActionButton()
     }
 
     override fun onResume() {
         super.onResume()
-        presenter.attachView(MvpViewImpl())
         router.attach(supportFragmentManager)
+        setupCheckList()
+    }
+
+    private fun setupCheckList() {
+        val fragment = CheckListFragment().apply {
+            callback = checkListCallback
+            presenter.attachView(this)
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment, CheckListFragment.TAG)
+            .commit()
     }
 
     override fun onPause() {
@@ -71,17 +73,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRecyclerView() {
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        recyclerView.addItemDecoration(decoration)
-        recyclerView.adapter = adapter.apply {
-            checkedAction = presenter::switchChecked
-            selectAction = presenter::switchSelected
-            expandAction = presenter::expandCompleted
-        }
-    }
-
     private fun setupActionButton() {
         floatingActionButton.setOnClickListener {
             router.showCreateItemView(
@@ -92,13 +83,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    inner class MvpViewImpl : CheckListContract.MvpView {
-        override fun showItems(list: List<ListItemModel>) {
-            adapter.updateData(list)
+    private val checkListCallback = object : CheckListFragment.Callback {
+        override fun onSwitchChecked(name: String) {
+            presenter.switchChecked(name)
         }
 
-        override fun setSelectionMode(checked: Boolean) {
-            adapter.selectionMode = checked
+        override fun onSwitchSelected(name: String) {
+            presenter.switchSelected(name)
+        }
+
+        override fun onExpandCompleted(checked: Boolean) {
+            presenter.expandCompleted(checked)
+        }
+
+        override fun onSelectionMode(checked: Boolean) {
             if (checked) {
                 startSupportActionMode(actionModeCallback)
                 floatingActionButton.hide()
@@ -108,12 +106,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        override fun showSelectedCount(value: Int) {
-            actionModeCallback.mode?.title = getString(R.string.action_mode_selected_count, value)
-        }
-
-        override fun showMessage(text: String) {
-            Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
+        override fun onShowSelectionCount(count: Int) {
+            actionModeCallback.mode?.title = getString(R.string.action_mode_selected_count, count)
         }
     }
 
