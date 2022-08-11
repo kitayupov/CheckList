@@ -3,10 +3,10 @@ package ru.devkit.checklist
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.Toolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.ui.presentation.CheckListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -15,13 +15,11 @@ class MainActivity : AppCompatActivity() {
     private val router by lazy { (application as App).router }
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
-    private val floatingActionButton by lazy { findViewById<FloatingActionButton>(R.id.floating_button) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        setupActionButton()
     }
 
     override fun onResume() {
@@ -34,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val fragment = CheckListFragment().apply {
             callback = this@MainActivity.callback
             presenter = this@MainActivity.presenter
+            router = this@MainActivity.router
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment, CheckListFragment.TAG)
@@ -72,29 +71,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupActionButton() {
-        floatingActionButton.setOnClickListener {
-            router.showCreateItemView(
-                onCreate = presenter::createItem,
-                onDismiss = floatingActionButton::show
-            )
-            floatingActionButton.hide()
-        }
-    }
-
     private val callback = object : CheckListFragment.Callback {
         override fun onSelectionMode(checked: Boolean) {
             if (checked) {
                 startSupportActionMode(actionModeCallback)
-                floatingActionButton.hide()
             } else {
                 actionModeCallback.mode?.finish()
-                floatingActionButton.show()
             }
         }
 
         override fun onShowSelectionCount(count: Int) {
             actionModeCallback.mode?.title = getString(R.string.action_mode_selected_count, count)
+        }
+
+        override fun onShowMessage(text: String) {
+            Toast.makeText(this@MainActivity, text, Toast.LENGTH_SHORT).show()
         }
     }
 

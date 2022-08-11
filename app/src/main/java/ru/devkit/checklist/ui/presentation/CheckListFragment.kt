@@ -3,11 +3,12 @@ package ru.devkit.checklist.ui.presentation
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
+import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 import ru.devkit.checklist.ui.model.ListItemModel
 
@@ -17,14 +18,19 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         const val TAG = "CheckListFragment"
     }
 
+    private var floatingActionButton: FloatingActionButton? = null
+
     private val adapter = CheckListAdapter()
+
     var presenter: CheckListPresenter? = null
+    var router: CheckListRouter? = null
 
     var callback: Callback? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view)
+        setupActionButton(view)
     }
 
     override fun onAttach(context: Context) {
@@ -49,13 +55,30 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         }
     }
 
+    private fun setupActionButton(view: View) {
+        floatingActionButton = view.findViewById<FloatingActionButton?>(R.id.floating_button).apply {
+            setOnClickListener {
+                router?.showCreateItemView(
+                    onCreate = { name -> presenter?.createItem(name) },
+                    onDismiss = { show() }
+                )
+                hide()
+            }
+        }
+    }
+
     override fun showItems(list: List<ListItemModel>) {
         adapter.updateData(list)
     }
 
     override fun setSelectionMode(checked: Boolean) {
-        adapter.selectionMode = checked
         callback?.onSelectionMode(checked)
+        adapter.selectionMode = checked
+        if (checked) {
+            floatingActionButton?.hide()
+        } else {
+            floatingActionButton?.show()
+        }
     }
 
     override fun showSelectedCount(value: Int) {
@@ -63,11 +86,12 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     }
 
     override fun showMessage(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+        callback?.onShowMessage(text)
     }
 
     interface Callback {
         fun onSelectionMode(checked: Boolean)
         fun onShowSelectionCount(count: Int)
+        fun onShowMessage(text: String)
     }
 }
