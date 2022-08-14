@@ -31,6 +31,11 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     var presenter: CheckListPresenter? = null
     var router: CheckListRouter? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view)
@@ -96,7 +101,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_actions, menu)
+        activity?.menuInflater?.inflate(R.menu.menu_actions, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
