@@ -7,6 +7,7 @@ object CheckListContract {
     interface MvpView {
         fun showItems(list: List<ListItemModel>)
         fun setSelectionMode(checked: Boolean)
+        fun scrollToPosition(position: Int)
     }
 
     interface MvpPresenter {

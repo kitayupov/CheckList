@@ -9,11 +9,11 @@ import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.data.preferences.PreferencesProvider
 import ru.devkit.checklist.domain.DataModelStorageInteractor
 import ru.devkit.checklist.domain.SortType
-import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
 import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
-import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
-import ru.devkit.checklist.ui.model.ListItemModel
 import ru.devkit.checklist.presentation.common.BaseCoroutinePresenter
+import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
+import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
+import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListPresenter(
     private val storageInteractor: DataModelStorageInteractor,
@@ -28,6 +28,8 @@ class CheckListPresenter(
 
     private val cachedList = mutableListOf<ProductDataModel>()
     private val selectedKeys = mutableListOf<String>()
+
+    private var focusedItemName: String? = null
 
     private var expandCompleted = preferences.expandCompleted
     private var sortType = preferences.sortType
@@ -48,6 +50,7 @@ class CheckListPresenter(
 
     override fun createItem(name: String) = update {
         // check if item already exists
+        focusedItemName = name
         cachedList.find { it.title == name }?.let { data ->
             if (data.completed.not()) {
                 // do nothing
@@ -169,49 +172,54 @@ class CheckListPresenter(
     }
 
     private suspend fun updateItems() {
-        view?.apply {
-            val elements = storageInteractor.getItems()
-                .also {
-                    cachedList.clear()
-                    cachedList.addAll(it)
-                }
-                .map { ListItemModel.Element(it) }
+        val elements = storageInteractor.getItems()
+            .also {
+                cachedList.clear()
+                cachedList.addAll(it)
+            }
+            .map { ListItemModel.Element(it) }
 
-            // separate checked and unchecked
-            val unchecked = elements
-                .filterNot { it.data.completed }
-                .sortUnchecked()
-            val checked = elements
-                .filter { it.data.completed }
-                .sortChecked()
+        // separate checked and unchecked
+        val unchecked = elements
+            .filterNot { it.data.completed }
+            .sortUnchecked()
+        val checked = elements
+            .filter { it.data.completed }
+            .sortChecked()
 
-            val items = mutableListOf<ListItemModel>()
-            items.addAll(unchecked)
+        val items = mutableListOf<ListItemModel>()
+        items.addAll(unchecked)
 
-            // configure completed area
-            if (checked.isNotEmpty()) {
-                items.add(ListItemModel.Divider(checked.size, expandCompleted))
-                if (expandCompleted) {
-                    items.addAll(checked)
+        // configure completed area
+        if (checked.isNotEmpty()) {
+            items.add(ListItemModel.Divider(checked.size, expandCompleted))
+            if (expandCompleted) {
+                items.addAll(checked)
+            }
+        }
+
+        // update selections
+        if (selectedKeys.isNotEmpty()) {
+            items.forEach {
+                if (it is ListItemModel.Element) {
+                    val model = it.data
+                    model.selected = selectedKeys.contains(model.title)
                 }
             }
+            actionModePresenter.setSelectedCount(selectedKeys.size)
+        } else {
+            view?.setSelectionMode(false)
+            createItemActionPresenter.showView()
+            actionModePresenter.setSelectionMode(false)
+        }
 
-            // update selections
-            if (selectedKeys.isNotEmpty()) {
-                items.forEach {
-                    if (it is ListItemModel.Element) {
-                        val model = it.data
-                        model.selected = selectedKeys.contains(model.title)
-                    }
-                }
-                actionModePresenter.setSelectedCount(selectedKeys.size)
-            } else {
-                view?.setSelectionMode(false)
-                createItemActionPresenter.showView()
-                actionModePresenter.setSelectionMode(false)
-            }
+        view?.showItems(items)
 
-            showItems(items)
+        focusedItemName?.let { name ->
+            items.indexOfFirst { (it is ListItemModel.Element) && (it.data.title == name) }
+                .takeIf { it >= 0 }
+                ?.let { view?.scrollToPosition(it) }
+            focusedItemName = null
         }
     }
 

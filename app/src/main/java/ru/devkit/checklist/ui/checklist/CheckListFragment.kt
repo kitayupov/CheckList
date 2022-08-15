@@ -6,7 +6,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
@@ -59,17 +58,13 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
     }
 
     private fun setupRecyclerView(view: View) {
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         val adapter = CheckListAdapter(
             checkedAction = { name -> checkListPresenter?.switchChecked(name) },
             selectAction = { name -> checkListPresenter?.switchSelected(name) },
             expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
         )
-        checkListPresenter?.attachView(CheckListViewWrapper(adapter))
-
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        val decoration = DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL)
-        recyclerView.addItemDecoration(decoration)
-        recyclerView.adapter = adapter
+        checkListPresenter?.attachView(CheckListViewWrapper(recyclerView, adapter))
     }
 
     private fun setupFloatingActionButton(view: View) {
