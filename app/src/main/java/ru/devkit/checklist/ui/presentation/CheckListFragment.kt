@@ -13,8 +13,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
-import ru.devkit.checklist.presentation.toolbar.ActionModePresenter
-import ru.devkit.checklist.presentation.toolbar.ActionModeViewWrapper
+import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
+import ru.devkit.checklist.presentation.actionmode.ActionModeViewWrapper
 import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 import ru.devkit.checklist.ui.model.ListItemModel

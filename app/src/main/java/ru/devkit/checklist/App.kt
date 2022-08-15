@@ -9,7 +9,7 @@ import ru.devkit.checklist.data.source.ProductsDataSource
 import ru.devkit.checklist.domain.DataModelStorageInteractor
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
-import ru.devkit.checklist.presentation.toolbar.ActionModePresenter
+import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
 import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.presentation.CheckListPresenter
 

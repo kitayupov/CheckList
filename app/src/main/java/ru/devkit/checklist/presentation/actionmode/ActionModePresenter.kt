@@ -1,4 +1,4 @@
-package ru.devkit.checklist.presentation.toolbar
+package ru.devkit.checklist.presentation.actionmode
 
 import ru.devkit.checklist.R
 import ru.devkit.checklist.common.ResourceProvider

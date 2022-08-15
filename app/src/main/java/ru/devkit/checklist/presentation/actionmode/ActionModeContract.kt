@@ -1,4 +1,4 @@
-package ru.devkit.checklist.presentation.toolbar
+package ru.devkit.checklist.presentation.actionmode
 
 object ActionModeContract {
 
