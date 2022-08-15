@@ -27,9 +27,12 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
         const val TAG = "CheckListFragment"
     }
 
+    private var wrapper: ActionModeViewWrapper? = null
+
     private var createItemActionPresenter: CreateItemActionPresenter? = null
     private var checkListPresenter: CheckListPresenter? = null
     private var actionModePresenter: ActionModePresenter? = null
+
     private var router: CheckListRouter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +40,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
         setHasOptionsMenu(true)
         setupRecyclerView(view)
         setupFloatingActionButton(view)
-        setupActionMode()
+        setupActionToolbar()
     }
 
     override fun onAttach(context: Context) {
@@ -92,34 +95,16 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
         createItemActionPresenter?.attachView(CreateItemActionViewWrapper(fab))
     }
 
-    private fun setupActionMode() {
-        val wrapper = ActionModeViewWrapper(activity, checkListPresenter, router)
-        actionModePresenter?.attachView(wrapper)
+    private fun setupActionToolbar() {
+        wrapper = ActionModeViewWrapper(activity, checkListPresenter, router)
+            .also { actionModePresenter?.attachView(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        activity?.menuInflater?.inflate(R.menu.menu_actions, menu)
+        wrapper?.setOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_actions_clear_data -> {
-                router?.showClearAllConfirmation { checkListPresenter?.clearData() }
-                true
-            }
-            R.id.menu_actions_sort_ranking -> {
-                checkListPresenter?.setSortRanking()
-                true
-            }
-            R.id.menu_actions_sort_default -> {
-                checkListPresenter?.setSortDefault()
-                true
-            }
-            R.id.menu_actions_sort_name -> {
-                checkListPresenter?.setSortName()
-                true
-            }
-            else -> return super.onOptionsItemSelected(item)
-        }
+        return wrapper?.onOptionsItemSelected(item) ?: super.onOptionsItemSelected(item)
     }
 }

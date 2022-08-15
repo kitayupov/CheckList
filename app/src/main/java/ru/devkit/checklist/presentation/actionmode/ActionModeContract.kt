@@ -11,6 +11,7 @@ object ActionModeContract {
         fun attachView(view: MvpView)
         fun detachView()
 
+        // action mode
         fun setSelectionMode(checked: Boolean)
         fun setSelectedCount(count: Int)
     }
