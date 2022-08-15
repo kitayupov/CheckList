@@ -1,6 +1,5 @@
 package ru.devkit.checklist.ui.checklist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import ru.devkit.checklist.App
 import ru.devkit.checklist.R
 import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
 import ru.devkit.checklist.presentation.actionmode.ActionModeViewWrapper
@@ -29,11 +27,11 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
 
     private var wrapper: ActionModeViewWrapper? = null
 
-    private var createItemActionPresenter: CreateItemActionPresenter? = null
-    private var checkListPresenter: CheckListPresenter? = null
-    private var actionModePresenter: ActionModePresenter? = null
+    var checkListPresenter: CheckListPresenter? = null
+    var actionModePresenter: ActionModePresenter? = null
+    var createItemActionPresenter: CreateItemActionPresenter? = null
 
-    private var router: CheckListRouter? = null
+    var router: CheckListRouter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,14 +39,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
         setupRecyclerView(view)
         setupFloatingActionButton(view)
         setupActionToolbar()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        checkListPresenter = (activity?.application as? App)?.checkListPresenter
-        createItemActionPresenter = (activity?.application as? App)?.createItemActionPresenter
-        actionModePresenter = (activity?.application as? App)?.actionModePresenter
-        router = (activity?.application as? App)?.router
     }
 
     override fun onResume() {
@@ -64,8 +54,8 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
     override fun onDetach() {
         super.onDetach()
         checkListPresenter?.detachView()
-        createItemActionPresenter?.detachView()
         actionModePresenter?.detachView()
+        createItemActionPresenter?.detachView()
     }
 
     private fun setupRecyclerView(view: View) {
