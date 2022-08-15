@@ -7,7 +7,6 @@ import ru.devkit.checklist.ui.presentation.CheckListFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private val presenter by lazy { (application as App).presenter }
     private val router by lazy { (application as App).router }
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
@@ -26,7 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupCheckList() {
         val fragment = CheckListFragment().apply {
-            checkListPresenter = this@MainActivity.presenter
+            checkListPresenter = (application as App).checkListPresenter
+            createItemActionPresenter = (application as App).createItemActionPresenter
             router = this@MainActivity.router
         }
         supportFragmentManager.beginTransaction()

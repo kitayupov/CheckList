@@ -26,11 +26,9 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         const val TAG = "CheckListFragment"
     }
 
-    private lateinit var floatingActionButton: FloatingActionButton
-    private var createItemActionPresenter = CreateItemActionPresenter()
-
     private val adapter = CheckListAdapter()
 
+    var createItemActionPresenter: CreateItemActionPresenter? = null
     var checkListPresenter: CheckListPresenter? = null
     var router: CheckListRouter? = null
 
@@ -48,15 +46,22 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     override fun onAttach(context: Context) {
         super.onAttach(context)
         checkListPresenter?.attachView(this)
-        createItemActionPresenter.attachView(CreateItemActionViewWrapper(floatingActionButton))
-        createItemActionPresenter.showView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        createItemActionPresenter?.showView()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        createItemActionPresenter?.hideView()
     }
 
     override fun onDetach() {
         super.onDetach()
         checkListPresenter?.detachView()
-        createItemActionPresenter.hideView()
-        createItemActionPresenter.detachView()
+        createItemActionPresenter?.detachView()
     }
 
     private fun setupRecyclerView(view: View) {
@@ -71,7 +76,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     }
 
     private fun setupFloatingActionButton(view: View) {
-        floatingActionButton = view.findViewById<FloatingActionButton?>(R.id.floating_button).apply {
+        val fab = view.findViewById<FloatingActionButton?>(R.id.floating_button).apply {
             setOnClickListener {
                 router?.showCreateItemView(
                     onCreate = { name -> checkListPresenter?.createItem(name) },
@@ -80,6 +85,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
                 hide()
             }
         }
+        createItemActionPresenter?.attachView(CreateItemActionViewWrapper(fab))
     }
 
     override fun showItems(list: List<ListItemModel>) {
@@ -90,10 +96,10 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         adapter.selectionMode = checked
         if (checked) {
             (activity as? AppCompatActivity)?.startSupportActionMode(actionModeCallback)
-            createItemActionPresenter.hideView()
+            createItemActionPresenter?.hideView()
         } else {
             actionModeCallback.mode?.finish()
-            createItemActionPresenter.showView()
+            createItemActionPresenter?.showView()
         }
     }
 

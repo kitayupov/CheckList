@@ -7,6 +7,7 @@ import ru.devkit.checklist.data.preferences.PreferencesProvider
 import ru.devkit.checklist.data.repository.ProductsRepository
 import ru.devkit.checklist.data.source.ProductsDataSource
 import ru.devkit.checklist.domain.DataModelStorageInteractor
+import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.presentation.CheckListPresenter
 
@@ -17,6 +18,7 @@ class App : Application() {
     private val interactor by lazy { DataModelStorageInteractor(repository) }
     private val preferences by lazy { PreferencesProvider(this) }
     private val resources by lazy { ResourceProvider(this) }
-    val presenter by lazy { CheckListPresenter(interactor, preferences, resources) }
+    val checkListPresenter by lazy { CheckListPresenter(interactor, preferences, resources) }
+    val createItemActionPresenter by lazy { CreateItemActionPresenter() }
     val router by lazy { CheckListRouter(this) }
 }
