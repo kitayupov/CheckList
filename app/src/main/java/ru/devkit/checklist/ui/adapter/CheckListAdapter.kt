@@ -14,11 +14,11 @@ import ru.devkit.checklist.ui.model.ListItemModel
 private const val TYPE_DIVIDER = -1
 private const val TYPE_ELEMENT = 0
 
-class CheckListAdapter : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>() {
-
-    var checkedAction: (String) -> Unit = {}
-    var selectAction: (String) -> Unit = {}
-    var expandAction: (Boolean) -> Unit = {}
+class CheckListAdapter(
+    private var checkedAction: (String) -> Unit = {},
+    private var selectAction: (String) -> Unit = {},
+    private var expandAction: (Boolean) -> Unit = {}
+) : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>() {
 
     var selectionMode = false
 

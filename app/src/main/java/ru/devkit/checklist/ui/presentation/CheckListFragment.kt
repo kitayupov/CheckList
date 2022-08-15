@@ -1,6 +1,5 @@
 package ru.devkit.checklist.ui.presentation
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,21 +10,19 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
-import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
-import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
 import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
 import ru.devkit.checklist.presentation.actionmode.ActionModeViewWrapper
+import ru.devkit.checklist.presentation.checklist.CheckListViewWrapper
+import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
+import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
 import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
-import ru.devkit.checklist.ui.model.ListItemModel
 
-class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContract.MvpView {
+class CheckListFragment : Fragment(R.layout.fragment_check_list) {
 
     companion object {
         const val TAG = "CheckListFragment"
     }
-
-    private val adapter = CheckListAdapter()
 
     var createItemActionPresenter: CreateItemActionPresenter? = null
     var checkListPresenter: CheckListPresenter? = null
@@ -43,11 +40,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         setupRecyclerView(view)
         setupFloatingActionButton(view)
         setupActionMode()
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        checkListPresenter?.attachView(this)
     }
 
     override fun onResume() {
@@ -68,14 +60,17 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     }
 
     private fun setupRecyclerView(view: View) {
+        val adapter = CheckListAdapter(
+            checkedAction = { name -> checkListPresenter?.switchChecked(name) },
+            selectAction = { name -> checkListPresenter?.switchSelected(name) },
+            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
+        )
+        checkListPresenter?.attachView(CheckListViewWrapper(adapter))
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         val decoration = DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
-        recyclerView.adapter = adapter.apply {
-            checkedAction = { name -> checkListPresenter?.switchChecked(name) }
-            selectAction = { name -> checkListPresenter?.switchSelected(name) }
-            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
-        }
+        recyclerView.adapter = adapter
     }
 
     private fun setupFloatingActionButton(view: View) {
@@ -94,14 +89,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     private fun setupActionMode() {
         val wrapper = ActionModeViewWrapper(activity, checkListPresenter, router)
         actionModePresenter?.attachView(wrapper)
-    }
-
-    override fun showItems(list: List<ListItemModel>) {
-        adapter.updateData(list)
-    }
-
-    override fun setSelectionMode(checked: Boolean) {
-        adapter.selectionMode = checked
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
