@@ -9,10 +9,12 @@ import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.data.preferences.PreferencesProvider
 import ru.devkit.checklist.domain.DataModelStorageInteractor
 import ru.devkit.checklist.domain.SortType
+import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
 import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListPresenter(
-    private val interactor: DataModelStorageInteractor,
+    private val storageInteractor: DataModelStorageInteractor,
+    private val messageInteractor: ScreenMessageInteractor,
     private val preferences: PreferencesProvider,
     private val resources: ResourceProvider
 ) : CheckListContract.MvpPresenter, BaseCoroutinePresenter() {
@@ -42,23 +44,23 @@ class CheckListPresenter(
         cachedList.find { it.title == name }?.let { data ->
             if (data.completed.not()) {
                 // do nothing
-                view?.showMessage(resources.getString(R.string.message_item_exists, name))
+                messageInteractor.showMessage(resources.getString(R.string.message_item_exists, name))
             } else {
                 // just return to the list
-                interactor.updateItem(data.copy(completed = false))
-                view?.showMessage(resources.getString(R.string.message_item_returned, name))
+                storageInteractor.updateItem(data.copy(completed = false))
+                messageInteractor.showMessage(resources.getString(R.string.message_item_returned, name))
             }
         } ?: kotlin.run {
-            interactor.addItem(ProductDataModel(name))
-            view?.showMessage(resources.getString(R.string.message_item_added, name))
+            storageInteractor.addItem(ProductDataModel(name))
+            messageInteractor.showMessage(resources.getString(R.string.message_item_added, name))
         }
     }
 
     override fun renameItem(oldName: String, newName: String) = update {
         cachedList.find { it.title == oldName }?.let { data ->
             val update = data.copy(title = newName)
-            interactor.removeItem(data)
-            interactor.addItem(update)
+            storageInteractor.removeItem(data)
+            storageInteractor.addItem(update)
         }
     }
 
@@ -69,18 +71,18 @@ class CheckListPresenter(
                 lastUpdated = System.currentTimeMillis(),
                 ranking = data.ranking + if (data.completed.not()) 0 else 1
             )
-            interactor.updateItem(update)
+            storageInteractor.updateItem(update)
         }
     }
 
     override fun removeItem(name: String) = update {
         cachedList.find { it.title == name }?.let {
-            interactor.removeItem(it)
+            storageInteractor.removeItem(it)
         }
     }
 
     override fun clearData() = update {
-        interactor.clearData()
+        storageInteractor.clearData()
     }
 
     override fun expandCompleted(checked: Boolean) = update {
@@ -119,7 +121,7 @@ class CheckListPresenter(
 
     override fun removeSelected() = update {
         forEachSelected {
-            interactor.removeItem(it)
+            storageInteractor.removeItem(it)
         }
         selectedKeys.clear()
     }
@@ -133,13 +135,13 @@ class CheckListPresenter(
 
     override fun checkSelected() = update {
         forEachSelected {
-            interactor.updateItem(it.copy(completed = true))
+            storageInteractor.updateItem(it.copy(completed = true))
         }
     }
 
     override fun uncheckSelected() = update {
         forEachSelected {
-            interactor.updateItem(it.copy(completed = false))
+            storageInteractor.updateItem(it.copy(completed = false))
         }
     }
 
@@ -159,7 +161,7 @@ class CheckListPresenter(
 
     private suspend fun updateItems() {
         view?.apply {
-            val elements = interactor.getItems()
+            val elements = storageInteractor.getItems()
                 .also {
                     cachedList.clear()
                     cachedList.addAll(it)

@@ -107,10 +107,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         actionModeCallback.mode?.title = getString(R.string.action_mode_selected_count, value)
     }
 
-    override fun showMessage(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.menu_actions, menu)
     }

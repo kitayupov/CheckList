@@ -8,7 +8,6 @@ object CheckListContract {
         fun showItems(list: List<ListItemModel>)
         fun setSelectionMode(checked: Boolean)
         fun showSelectedCount(value: Int)
-        fun showMessage(text: String)
     }
 
     interface MvpPresenter {
