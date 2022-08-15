@@ -9,12 +9,10 @@ class MainActivity : AppCompatActivity() {
 
     private val router by lazy { (application as App).router }
 
-    private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setupToolbar()
     }
 
     override fun onResume() {
@@ -23,13 +21,13 @@ class MainActivity : AppCompatActivity() {
         setupCheckList()
     }
 
+    private fun setupToolbar() {
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+    }
+
     private fun setupCheckList() {
-        val fragment = CheckListFragment().apply {
-            checkListPresenter = (application as App).checkListPresenter
-            createItemActionPresenter = (application as App).createItemActionPresenter
-            actionModePresenter = (application as App).actionModePresenter
-            router = this@MainActivity.router
-        }
+        val fragment = CheckListFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment, CheckListFragment.TAG)
             .commit()
