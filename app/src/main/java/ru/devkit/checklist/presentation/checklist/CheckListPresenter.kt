@@ -41,6 +41,8 @@ class CheckListPresenter(
 
     override fun detachView() {
         this.view = null
+        selectedKeys.clear()
+        cachedList.clear()
         cancel()
     }
 
