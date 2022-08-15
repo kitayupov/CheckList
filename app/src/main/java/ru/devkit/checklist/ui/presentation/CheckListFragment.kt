@@ -13,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
+import ru.devkit.checklist.presentation.toolbar.ActionModePresenter
 import ru.devkit.checklist.presentation.toolbar.ActionModeViewWrapper
 import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
@@ -26,10 +27,10 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
 
     private val adapter = CheckListAdapter()
 
-    private var actionModeWrapper: ActionModeViewWrapper? = null
-
     var createItemActionPresenter: CreateItemActionPresenter? = null
     var checkListPresenter: CheckListPresenter? = null
+    var actionModePresenter: ActionModePresenter? = null
+
     var router: CheckListRouter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +42,12 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view)
         setupFloatingActionButton(view)
+        setupActionMode()
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         checkListPresenter?.attachView(this)
-        actionModeWrapper = ActionModeViewWrapper(activity, checkListPresenter, router)
     }
 
     override fun onResume() {
@@ -63,6 +64,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         super.onDetach()
         checkListPresenter?.detachView()
         createItemActionPresenter?.detachView()
+        actionModePresenter?.detachView()
     }
 
     private fun setupRecyclerView(view: View) {
@@ -89,22 +91,22 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         createItemActionPresenter?.attachView(CreateItemActionViewWrapper(fab))
     }
 
+    private fun setupActionMode() {
+        val wrapper = ActionModeViewWrapper(activity, checkListPresenter, router)
+        actionModePresenter?.attachView(wrapper)
+    }
+
     override fun showItems(list: List<ListItemModel>) {
         adapter.updateData(list)
     }
 
     override fun setSelectionMode(checked: Boolean) {
         adapter.selectionMode = checked
-        actionModeWrapper?.setSelectionMode(checked)
         if (checked) {
             createItemActionPresenter?.hideView()
         } else {
             createItemActionPresenter?.showView()
         }
-    }
-
-    override fun showSelectedCount(value: Int) {
-        actionModeWrapper?.setTitle(getString(R.string.action_mode_selected_count, value))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

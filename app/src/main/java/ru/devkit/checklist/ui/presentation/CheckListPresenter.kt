@@ -10,11 +10,13 @@ import ru.devkit.checklist.data.preferences.PreferencesProvider
 import ru.devkit.checklist.domain.DataModelStorageInteractor
 import ru.devkit.checklist.domain.SortType
 import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
+import ru.devkit.checklist.presentation.toolbar.ActionModePresenter
 import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListPresenter(
     private val storageInteractor: DataModelStorageInteractor,
     private val messageInteractor: ScreenMessageInteractor,
+    private val actionModePresenter: ActionModePresenter,
     private val preferences: PreferencesProvider,
     private val resources: ResourceProvider
 ) : CheckListContract.MvpPresenter, BaseCoroutinePresenter() {
@@ -105,6 +107,7 @@ class CheckListPresenter(
         launch {
             if (selectedKeys.isEmpty()) {
                 view?.setSelectionMode(true)
+                actionModePresenter.setSelectionMode(true)
             }
             if (selectedKeys.contains(name)) {
                 selectedKeys.remove(name)
@@ -195,9 +198,10 @@ class CheckListPresenter(
                         model.selected = selectedKeys.contains(model.title)
                     }
                 }
-                view?.showSelectedCount(selectedKeys.size)
+                actionModePresenter.setSelectedCount(selectedKeys.size)
             } else {
                 view?.setSelectionMode(false)
+                actionModePresenter.setSelectionMode(false)
             }
 
             showItems(items)

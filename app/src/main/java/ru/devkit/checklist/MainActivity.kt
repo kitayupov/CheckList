@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         val fragment = CheckListFragment().apply {
             checkListPresenter = (application as App).checkListPresenter
             createItemActionPresenter = (application as App).createItemActionPresenter
+            actionModePresenter = (application as App).actionModePresenter
             router = this@MainActivity.router
         }
         supportFragmentManager.beginTransaction()
