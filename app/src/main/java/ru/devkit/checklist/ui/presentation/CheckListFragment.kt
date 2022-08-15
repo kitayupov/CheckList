@@ -6,9 +6,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
+import ru.devkit.checklist.presentation.toolbar.ActionModeViewWrapper
 import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 import ru.devkit.checklist.ui.model.ListItemModel
@@ -27,6 +25,8 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     }
 
     private val adapter = CheckListAdapter()
+
+    private var actionModeWrapper: ActionModeViewWrapper? = null
 
     var createItemActionPresenter: CreateItemActionPresenter? = null
     var checkListPresenter: CheckListPresenter? = null
@@ -46,6 +46,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     override fun onAttach(context: Context) {
         super.onAttach(context)
         checkListPresenter?.attachView(this)
+        actionModeWrapper = ActionModeViewWrapper(activity, checkListPresenter, router)
     }
 
     override fun onResume() {
@@ -94,17 +95,16 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
 
     override fun setSelectionMode(checked: Boolean) {
         adapter.selectionMode = checked
+        actionModeWrapper?.setSelectionMode(checked)
         if (checked) {
-            (activity as? AppCompatActivity)?.startSupportActionMode(actionModeCallback)
             createItemActionPresenter?.hideView()
         } else {
-            actionModeCallback.mode?.finish()
             createItemActionPresenter?.showView()
         }
     }
 
     override fun showSelectedCount(value: Int) {
-        actionModeCallback.mode?.title = getString(R.string.action_mode_selected_count, value)
+        actionModeWrapper?.setTitle(getString(R.string.action_mode_selected_count, value))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -130,48 +130,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
                 true
             }
             else -> return super.onOptionsItemSelected(item)
-        }
-    }
-
-    private val actionModeCallback = object : ActionMode.Callback {
-
-        var mode: ActionMode? = null
-
-        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-            return when (item.itemId) {
-                R.id.menu_contextual_delete -> {
-                    router?.showRemoveSelectedConfirmation { checkListPresenter?.removeSelected() }
-                    true
-                }
-                R.id.menu_contextual_select_all -> {
-                    checkListPresenter?.selectAll()
-                    true
-                }
-                R.id.menu_contextual_check_selected -> {
-                    checkListPresenter?.checkSelected()
-                    true
-                }
-                R.id.menu_contextual_uncheck_selected -> {
-                    checkListPresenter?.uncheckSelected()
-                    true
-                }
-                else -> return false
-            }
-        }
-
-        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            activity?.menuInflater?.inflate(R.menu.menu_contextual, menu)
-            this.mode = mode
-            return true
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            // no-op
-            return false
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode) {
-            checkListPresenter?.clearSelected()
         }
     }
 }
