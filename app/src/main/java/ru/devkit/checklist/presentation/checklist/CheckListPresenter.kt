@@ -26,6 +26,8 @@ class CheckListPresenter(
 
     private var view: CheckListContract.MvpView? = null
 
+    private var cachedSelectionMode = false
+
     private val cachedList = mutableListOf<ProductDataModel>()
     private val selectedKeys = mutableListOf<String>()
 
@@ -43,9 +45,8 @@ class CheckListPresenter(
 
     override fun detachView() {
         this.view = null
-        selectedKeys.clear()
-        cachedList.clear()
         cancel()
+        cachedSelectionMode = selectedKeys.isNotEmpty()
     }
 
     override fun createItem(name: String) = update {
@@ -111,19 +112,16 @@ class CheckListPresenter(
         preferences.sortType = sortType
     }
 
-    override fun switchSelected(name: String) {
-        launch {
-            if (selectedKeys.isEmpty()) {
-                view?.setSelectionMode(true)
-                createItemActionPresenter.hideView()
-                actionModePresenter.setSelectionMode(true)
-            }
-            if (selectedKeys.contains(name)) {
-                selectedKeys.remove(name)
-            } else {
-                selectedKeys.add(name)
-            }
-            updateItems()
+    override fun switchSelected(name: String) = update {
+        if (selectedKeys.isEmpty()) {
+            view?.setSelectionMode(true)
+            createItemActionPresenter.hideView()
+            actionModePresenter.setSelectionMode(true)
+        }
+        if (selectedKeys.contains(name)) {
+            selectedKeys.remove(name)
+        } else {
+            selectedKeys.add(name)
         }
     }
 
@@ -211,6 +209,15 @@ class CheckListPresenter(
             view?.setSelectionMode(false)
             createItemActionPresenter.showView()
             actionModePresenter.setSelectionMode(false)
+        }
+
+        // update selection mode after rotate
+        if (cachedSelectionMode) {
+            cachedSelectionMode = false
+            view?.setSelectionMode(true)
+            createItemActionPresenter.hideView()
+            actionModePresenter.setSelectionMode(true)
+            actionModePresenter.setSelectedCount(selectedKeys.size)
         }
 
         view?.showItems(items)
