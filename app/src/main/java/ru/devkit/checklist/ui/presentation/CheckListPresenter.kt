@@ -11,11 +11,13 @@ import ru.devkit.checklist.domain.DataModelStorageInteractor
 import ru.devkit.checklist.domain.SortType
 import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
 import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
+import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListPresenter(
     private val storageInteractor: DataModelStorageInteractor,
     private val messageInteractor: ScreenMessageInteractor,
+    private val createItemActionPresenter: CreateItemActionPresenter,
     private val actionModePresenter: ActionModePresenter,
     private val preferences: PreferencesProvider,
     private val resources: ResourceProvider
@@ -107,6 +109,7 @@ class CheckListPresenter(
         launch {
             if (selectedKeys.isEmpty()) {
                 view?.setSelectionMode(true)
+                createItemActionPresenter.hideView()
                 actionModePresenter.setSelectionMode(true)
             }
             if (selectedKeys.contains(name)) {
@@ -201,6 +204,7 @@ class CheckListPresenter(
                 actionModePresenter.setSelectedCount(selectedKeys.size)
             } else {
                 view?.setSelectionMode(false)
+                createItemActionPresenter.showView()
                 actionModePresenter.setSelectionMode(false)
             }
 

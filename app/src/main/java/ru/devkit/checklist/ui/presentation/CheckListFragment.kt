@@ -102,11 +102,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
 
     override fun setSelectionMode(checked: Boolean) {
         adapter.selectionMode = checked
-        if (checked) {
-            createItemActionPresenter?.hideView()
-        } else {
-            createItemActionPresenter?.showView()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
