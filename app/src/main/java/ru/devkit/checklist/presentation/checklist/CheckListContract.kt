@@ -1,4 +1,4 @@
-package ru.devkit.checklist.ui.presentation
+package ru.devkit.checklist.presentation.checklist
 
 import ru.devkit.checklist.ui.model.ListItemModel
 

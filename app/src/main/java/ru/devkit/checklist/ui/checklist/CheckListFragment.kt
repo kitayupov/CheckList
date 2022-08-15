@@ -1,4 +1,4 @@
-package ru.devkit.checklist.ui.presentation
+package ru.devkit.checklist.ui.checklist
 
 import android.os.Bundle
 import android.view.Menu
@@ -12,6 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
 import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
 import ru.devkit.checklist.presentation.actionmode.ActionModeViewWrapper
+import ru.devkit.checklist.presentation.checklist.CheckListPresenter
 import ru.devkit.checklist.presentation.checklist.CheckListViewWrapper
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper

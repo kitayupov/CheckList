@@ -1,4 +1,4 @@
-package ru.devkit.checklist.ui.presentation
+package ru.devkit.checklist.presentation.checklist
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -13,6 +13,7 @@ import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
 import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.ui.model.ListItemModel
+import ru.devkit.checklist.presentation.common.BaseCoroutinePresenter
 
 class CheckListPresenter(
     private val storageInteractor: DataModelStorageInteractor,

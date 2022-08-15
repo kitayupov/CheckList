@@ -1,4 +1,4 @@
-package ru.devkit.checklist.ui.presentation
+package ru.devkit.checklist.presentation.common
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import ru.devkit.checklist.R
 import ru.devkit.checklist.router.CheckListRouter
-import ru.devkit.checklist.ui.presentation.CheckListPresenter
+import ru.devkit.checklist.presentation.checklist.CheckListPresenter
 
 class ActionModeViewWrapper(
     private val activity: Activity?,

@@ -3,7 +3,7 @@ package ru.devkit.checklist
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import ru.devkit.checklist.ui.presentation.CheckListFragment
+import ru.devkit.checklist.ui.checklist.CheckListFragment
 
 class MainActivity : AppCompatActivity() {
 

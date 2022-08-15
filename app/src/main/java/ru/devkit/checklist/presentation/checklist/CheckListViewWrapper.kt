@@ -2,7 +2,6 @@ package ru.devkit.checklist.presentation.checklist
 
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 import ru.devkit.checklist.ui.model.ListItemModel
-import ru.devkit.checklist.ui.presentation.CheckListContract
 
 class CheckListViewWrapper(
     private val adapter: CheckListAdapter

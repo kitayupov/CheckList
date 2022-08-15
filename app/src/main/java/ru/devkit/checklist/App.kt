@@ -11,7 +11,7 @@ import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
 import ru.devkit.checklist.router.CheckListRouter
-import ru.devkit.checklist.ui.presentation.CheckListPresenter
+import ru.devkit.checklist.presentation.checklist.CheckListPresenter
 
 class App : Application() {
     private val database by lazy { ProductsDatabase.getInstance(this) }
