@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
+import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
+import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
 import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 import ru.devkit.checklist.ui.model.ListItemModel
@@ -24,11 +26,12 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         const val TAG = "CheckListFragment"
     }
 
-    private var floatingActionButton: FloatingActionButton? = null
+    private lateinit var floatingActionButton: FloatingActionButton
+    private var createItemActionPresenter = CreateItemActionPresenter()
 
     private val adapter = CheckListAdapter()
 
-    var presenter: CheckListPresenter? = null
+    var checkListPresenter: CheckListPresenter? = null
     var router: CheckListRouter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,19 +42,21 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView(view)
-        setupActionButton(view)
+        setupFloatingActionButton(view)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        presenter?.attachView(this)
-        floatingActionButton?.show()
+        checkListPresenter?.attachView(this)
+        createItemActionPresenter.attachView(CreateItemActionViewWrapper(floatingActionButton))
+        createItemActionPresenter.showView()
     }
 
     override fun onDetach() {
         super.onDetach()
-        presenter?.detachView()
-        floatingActionButton?.hide()
+        checkListPresenter?.detachView()
+        createItemActionPresenter.hideView()
+        createItemActionPresenter.detachView()
     }
 
     private fun setupRecyclerView(view: View) {
@@ -59,17 +64,17 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         val decoration = DividerItemDecoration(view.context, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
         recyclerView.adapter = adapter.apply {
-            checkedAction = { name -> presenter?.switchChecked(name) }
-            selectAction = { name -> presenter?.switchSelected(name) }
-            expandAction = { checked -> presenter?.expandCompleted(checked) }
+            checkedAction = { name -> checkListPresenter?.switchChecked(name) }
+            selectAction = { name -> checkListPresenter?.switchSelected(name) }
+            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
         }
     }
 
-    private fun setupActionButton(view: View) {
+    private fun setupFloatingActionButton(view: View) {
         floatingActionButton = view.findViewById<FloatingActionButton?>(R.id.floating_button).apply {
             setOnClickListener {
                 router?.showCreateItemView(
-                    onCreate = { name -> presenter?.createItem(name) },
+                    onCreate = { name -> checkListPresenter?.createItem(name) },
                     onDismiss = { show() }
                 )
                 hide()
@@ -85,10 +90,10 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         adapter.selectionMode = checked
         if (checked) {
             (activity as? AppCompatActivity)?.startSupportActionMode(actionModeCallback)
-            floatingActionButton?.hide()
+            createItemActionPresenter.hideView()
         } else {
             actionModeCallback.mode?.finish()
-            floatingActionButton?.show()
+            createItemActionPresenter.showView()
         }
     }
 
@@ -107,19 +112,19 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_actions_clear_data -> {
-                router?.showClearAllConfirmation { presenter?.clearData() }
+                router?.showClearAllConfirmation { checkListPresenter?.clearData() }
                 true
             }
             R.id.menu_actions_sort_ranking -> {
-                presenter?.setSortRanking()
+                checkListPresenter?.setSortRanking()
                 true
             }
             R.id.menu_actions_sort_default -> {
-                presenter?.setSortDefault()
+                checkListPresenter?.setSortDefault()
                 true
             }
             R.id.menu_actions_sort_name -> {
-                presenter?.setSortName()
+                checkListPresenter?.setSortName()
                 true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -133,19 +138,19 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.menu_contextual_delete -> {
-                    router?.showRemoveSelectedConfirmation { presenter?.removeSelected() }
+                    router?.showRemoveSelectedConfirmation { checkListPresenter?.removeSelected() }
                     true
                 }
                 R.id.menu_contextual_select_all -> {
-                    presenter?.selectAll()
+                    checkListPresenter?.selectAll()
                     true
                 }
                 R.id.menu_contextual_check_selected -> {
-                    presenter?.checkSelected()
+                    checkListPresenter?.checkSelected()
                     true
                 }
                 R.id.menu_contextual_uncheck_selected -> {
-                    presenter?.uncheckSelected()
+                    checkListPresenter?.uncheckSelected()
                     true
                 }
                 else -> return false
@@ -164,7 +169,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list), CheckListContr
         }
 
         override fun onDestroyActionMode(mode: ActionMode) {
-            presenter?.clearSelected()
+            checkListPresenter?.clearSelected()
         }
     }
 }

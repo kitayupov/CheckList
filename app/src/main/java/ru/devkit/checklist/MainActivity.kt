@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupCheckList() {
         val fragment = CheckListFragment().apply {
-            presenter = this@MainActivity.presenter
+            checkListPresenter = this@MainActivity.presenter
             router = this@MainActivity.router
         }
         supportFragmentManager.beginTransaction()
