@@ -3,7 +3,7 @@ package ru.devkit.checklist.ui.adapter
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-class CheckListSwipeCallback(
+class RecyclerViewTouchHelperCallback(
     private val adapter: ItemTouchHelperAdapter
 ): ItemTouchHelper.Callback() {
 

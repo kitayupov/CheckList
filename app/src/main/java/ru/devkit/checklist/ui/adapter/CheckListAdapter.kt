@@ -21,13 +21,13 @@ class CheckListAdapter(
     private var checkedAction: (String) -> Unit = {},
     private var selectAction: (String) -> Unit = {},
     private var expandAction: (Boolean) -> Unit = {}
-) : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>(), CheckListSwipeCallback.ItemTouchHelperAdapter {
+) : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>(), RecyclerViewTouchHelperCallback.ItemTouchHelperAdapter {
 
     var selectionMode = false
 
     private val list = mutableListOf<ListItemModel>()
 
-    var onStartDragListener: CheckListSwipeCallback.OnStartDragListener? = null
+    var onStartDragListener: RecyclerViewTouchHelperCallback.OnStartDragListener? = null
 
     fun updateData(update: List<ListItemModel>) {
         val callback = CheckListDiffCallback(list, update)

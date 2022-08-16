@@ -6,7 +6,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
@@ -18,7 +17,6 @@ import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresent
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
 import ru.devkit.checklist.router.CheckListRouter
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
-import ru.devkit.checklist.ui.adapter.CheckListSwipeCallback
 
 class CheckListFragment : Fragment(R.layout.fragment_check_list) {
 
@@ -67,16 +65,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
             expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
         )
         checkListPresenter?.attachView(CheckListViewWrapper(recyclerView, adapter))
-
-        val swipeController = CheckListSwipeCallback(adapter)
-        val touchHelper = ItemTouchHelper(swipeController)
-        touchHelper.attachToRecyclerView(recyclerView)
-
-        adapter.onStartDragListener = object : CheckListSwipeCallback.OnStartDragListener {
-            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-                touchHelper.startDrag(viewHolder)
-            }
-        }
     }
 
     private fun setupFloatingActionButton(view: View) {
