@@ -27,7 +27,7 @@ class CheckListAdapter(
 
     private val list = mutableListOf<ListItemModel>()
 
-    var onStartDragListener: RecyclerViewTouchHelperCallback.OnStartDragListener? = null
+    var onStartDragListener: RecyclerViewTouchHelperCallback.OnDragListener? = null
 
     fun updateData(update: List<ListItemModel>) {
         val callback = CheckListDiffCallback(list, update)
@@ -128,7 +128,7 @@ class CheckListAdapter(
         }
     }
 
-    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+    override fun onItemMoved(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(list, i, i + 1)
@@ -141,7 +141,7 @@ class CheckListAdapter(
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    override fun onItemDismiss(position: Int) {
+    override fun onItemSwiped(position: Int) {
         list.removeAt(position)
         notifyItemChanged(position)
     }

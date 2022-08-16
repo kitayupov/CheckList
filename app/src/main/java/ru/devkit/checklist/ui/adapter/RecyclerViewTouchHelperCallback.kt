@@ -14,12 +14,12 @@ class RecyclerViewTouchHelperCallback(
     }
 
     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-        adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+        adapter.onItemMoved(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        adapter.onItemDismiss(viewHolder.adapterPosition)
+        adapter.onItemSwiped(viewHolder.adapterPosition)
     }
 
     override fun isLongPressDragEnabled(): Boolean {
@@ -31,11 +31,11 @@ class RecyclerViewTouchHelperCallback(
     }
 
     interface ItemTouchHelperAdapter {
-        fun onItemMove(fromPosition: Int, toPosition: Int)
-        fun onItemDismiss(position: Int)
+        fun onItemMoved(fromPosition: Int, toPosition: Int)
+        fun onItemSwiped(position: Int)
     }
 
-    interface OnStartDragListener {
+    interface OnDragListener {
         fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
     }
 }
