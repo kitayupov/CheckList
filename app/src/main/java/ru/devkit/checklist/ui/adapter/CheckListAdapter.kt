@@ -20,7 +20,8 @@ private const val TYPE_ELEMENT = 0
 class CheckListAdapter(
     private var checkedAction: (String) -> Unit = {},
     private var selectAction: (String) -> Unit = {},
-    private var expandAction: (Boolean) -> Unit = {}
+    private var expandAction: (Boolean) -> Unit = {},
+    private var reorderAction: (List<ListItemModel>) -> Unit = {}
 ) : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>(), RecyclerViewTouchHelperCallback.ItemTouchHelperAdapter {
 
     var selectionMode = false
@@ -139,6 +140,7 @@ class CheckListAdapter(
             }
         }
         notifyItemMoved(fromPosition, toPosition)
+        reorderAction.invoke(list)
     }
 
     override fun onItemSwiped(position: Int) {

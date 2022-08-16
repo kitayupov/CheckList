@@ -62,7 +62,8 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
         val adapter = CheckListAdapter(
             checkedAction = { name -> checkListPresenter?.switchChecked(name) },
             selectAction = { name -> checkListPresenter?.switchSelected(name) },
-            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
+            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) },
+            reorderAction = { list -> checkListPresenter?.reorderResult(list) }
         )
         checkListPresenter?.attachView(CheckListViewWrapper(recyclerView, adapter))
     }

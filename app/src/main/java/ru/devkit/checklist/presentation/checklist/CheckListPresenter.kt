@@ -96,6 +96,11 @@ class CheckListPresenter(
         storageInteractor.clearData()
     }
 
+    override fun reorderResult(list: List<ListItemModel>) {
+        // store custom sort type
+        // update storage
+    }
+
     override fun expandCompleted(checked: Boolean) = update {
         if (expandCompleted == checked) return@update
         expandCompleted = checked

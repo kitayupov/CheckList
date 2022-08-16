@@ -21,6 +21,9 @@ object CheckListContract {
         fun removeItem(name: String)
         fun clearData()
 
+        // reorder
+        fun reorderResult(list: List<ListItemModel>)
+
         // appearance
         fun expandCompleted(checked: Boolean)
 
