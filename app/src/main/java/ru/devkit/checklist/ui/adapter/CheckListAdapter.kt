@@ -1,6 +1,8 @@
 package ru.devkit.checklist.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.checklist.R
 import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.ui.model.ListItemModel
+import java.util.*
 
 private const val TYPE_DIVIDER = -1
 private const val TYPE_ELEMENT = 0
@@ -18,11 +21,13 @@ class CheckListAdapter(
     private var checkedAction: (String) -> Unit = {},
     private var selectAction: (String) -> Unit = {},
     private var expandAction: (Boolean) -> Unit = {}
-) : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>() {
+) : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>(), CheckListSwipeCallback.ItemTouchHelperAdapter {
 
     var selectionMode = false
 
     private val list = mutableListOf<ListItemModel>()
+
+    var onStartDragListener: CheckListSwipeCallback.OnStartDragListener? = null
 
     fun updateData(update: List<ListItemModel>) {
         val callback = CheckListDiffCallback(list, update)
@@ -94,7 +99,9 @@ class CheckListAdapter(
 
         private val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
         private val clickable: View by lazy { view.findViewById(R.id.clickable) }
+        private val handle: View by lazy { view.findViewById(R.id.handle) }
 
+        @SuppressLint("ClickableViewAccessibility")
         fun bind(data: ProductDataModel) {
             checkBox.apply {
                 text = data.title
@@ -112,6 +119,30 @@ class CheckListAdapter(
                 selectAction.invoke(data.title)
                 true
             }
+            handle.setOnTouchListener { _, motionEvent ->
+                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                    onStartDragListener?.onStartDrag(this)
+                }
+                return@setOnTouchListener false
+            }
         }
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(list, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(list, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onItemDismiss(position: Int) {
+        list.removeAt(position)
+        notifyItemChanged(position)
     }
 }
