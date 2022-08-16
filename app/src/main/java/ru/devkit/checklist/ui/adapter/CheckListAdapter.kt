@@ -144,7 +144,10 @@ class CheckListAdapter(
     }
 
     override fun onItemSwiped(position: Int) {
-        list.removeAt(position)
+        when (val data = list[position]) {
+            is ListItemModel.Element -> checkedAction.invoke(data.data.title)
+            is ListItemModel.Divider -> checkedAction.invoke("")
+        }
         notifyItemChanged(position)
     }
 }
