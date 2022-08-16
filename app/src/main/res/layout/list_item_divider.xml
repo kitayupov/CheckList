@@ -21,7 +21,6 @@
         android:id="@+id/counter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/list_item_divider"
         android:textColor="?attr/colorControlHighlight"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/check_box"

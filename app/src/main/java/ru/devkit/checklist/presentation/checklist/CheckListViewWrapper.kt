@@ -8,20 +8,25 @@ import ru.devkit.checklist.ui.adapter.RecyclerViewTouchHelperCallback
 import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListViewWrapper(
-    private val recyclerView: RecyclerView,
-    private val adapter: CheckListAdapter
+    private val recyclerViewActual: RecyclerView,
+    private val adapterActual: CheckListAdapter,
+    private val recyclerViewCompleted: RecyclerView,
+    private val adapterCompleted: CheckListAdapter
 ) : CheckListContract.MvpView {
 
     init {
-        val decoration = DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL)
-        recyclerView.addItemDecoration(decoration)
-        recyclerView.adapter = adapter
+        val decoration = DividerItemDecoration(recyclerViewActual.context, DividerItemDecoration.VERTICAL)
+        recyclerViewActual.addItemDecoration(decoration)
+        recyclerViewActual.adapter = adapterActual
 
-        val swipeController = RecyclerViewTouchHelperCallback(adapter)
+        recyclerViewCompleted.addItemDecoration(decoration)
+        recyclerViewCompleted.adapter = adapterCompleted
+
+        val swipeController = RecyclerViewTouchHelperCallback(adapterActual)
         val touchHelper = ItemTouchHelper(swipeController)
-        touchHelper.attachToRecyclerView(recyclerView)
+        touchHelper.attachToRecyclerView(recyclerViewActual)
 
-        adapter.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
+        adapterActual.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
                 touchHelper.startDrag(viewHolder)
             }
@@ -29,14 +34,19 @@ class CheckListViewWrapper(
     }
 
     override fun showItems(list: List<ListItemModel>) {
-        adapter.updateData(list)
+        adapterActual.updateData(list)
     }
 
+//    override fun showItems(unchecked: List<ListItemModel>, checked: List<ListItemModel>) {
+//        adapterActual.updateData(unchecked)
+//        adapterCompleted.updateData(checked)
+//    }
+
     override fun setSelectionMode(checked: Boolean) {
-        adapter.selectionMode = checked
+        adapterActual.selectionMode = checked
     }
 
     override fun scrollToPosition(position: Int) {
-        recyclerView.smoothScrollToPosition(position)
+        recyclerViewActual.smoothScrollToPosition(position)
     }
 }

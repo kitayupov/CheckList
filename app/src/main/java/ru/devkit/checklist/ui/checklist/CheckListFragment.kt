@@ -58,14 +58,28 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
     }
 
     private fun setupRecyclerView(view: View) {
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        val adapter = CheckListAdapter(
+        val recyclerViewActual = view.findViewById<RecyclerView>(R.id.recycler_view_actual)
+        val adapterActual = CheckListAdapter(
             checkedAction = { name -> checkListPresenter?.switchChecked(name) },
             selectAction = { name -> checkListPresenter?.switchSelected(name) },
             expandAction = { checked -> checkListPresenter?.expandCompleted(checked) },
             reorderAction = { list -> checkListPresenter?.reorderResult(list) }
         )
-        checkListPresenter?.attachView(CheckListViewWrapper(recyclerView, adapter))
+        val recyclerViewCompleted = view.findViewById<RecyclerView>(R.id.recycler_view_checked)
+        val adapterCompleted = CheckListAdapter(
+            checkedAction = { name -> checkListPresenter?.switchChecked(name) },
+            selectAction = { name -> checkListPresenter?.switchSelected(name) },
+            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) },
+            reorderAction = { list -> checkListPresenter?.reorderResult(list) }
+        )
+        checkListPresenter?.attachView(
+            CheckListViewWrapper(
+                recyclerViewActual,
+                adapterActual,
+                recyclerViewCompleted,
+                adapterCompleted
+            )
+        )
     }
 
     private fun setupFloatingActionButton(view: View) {
