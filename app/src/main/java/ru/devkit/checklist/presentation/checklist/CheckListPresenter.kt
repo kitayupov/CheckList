@@ -102,7 +102,6 @@ class CheckListPresenter(
             val date = System.currentTimeMillis()
             for (indexedValue in list.withIndex()) {
                 when (val elem = indexedValue.value) {
-                    is ListItemModel.Divider -> continue
                     is ListItemModel.Element -> {
                         val update = elem.data.copy(lastUpdated = date + indexedValue.index)
                         storageInteractor.updateItem(update)
