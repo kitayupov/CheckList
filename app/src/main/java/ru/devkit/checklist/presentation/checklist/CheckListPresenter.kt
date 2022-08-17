@@ -96,6 +96,7 @@ class CheckListPresenter(
         storageInteractor.clearData()
     }
 
+    // todo check and remove divider
     override fun reorderResult(list: List<ListItemModel>) {
         launch {
             val date = System.currentTimeMillis()

@@ -40,9 +40,9 @@ class CheckListViewWrapper(
         adapterCompleted.updateData(completed)
     }
 
-    // todo selection mode for completed?
     override fun setSelectionMode(checked: Boolean) {
         adapterActual.selectionMode = checked
+        adapterCompleted.selectionMode = checked
     }
 
     override fun scrollToPosition(position: Int) {
