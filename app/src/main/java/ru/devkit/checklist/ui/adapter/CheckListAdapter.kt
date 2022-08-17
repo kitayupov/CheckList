@@ -10,23 +10,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.checklist.R
 import ru.devkit.checklist.data.model.ProductDataModel
-import ru.devkit.checklist.ui.model.ListItemModel
 import java.util.*
 
 class CheckListAdapter(
     private var checkedAction: (String) -> Unit = {},
     private var selectAction: (String) -> Unit = {},
     private var expandAction: (Boolean) -> Unit = {},
-    private var reorderAction: (List<ListItemModel>) -> Unit = {}
-) : RecyclerView.Adapter<CheckListAdapter.BaseViewHolder>(), RecyclerViewTouchHelperCallback.ItemTouchHelperAdapter {
+    private var reorderAction: (List<ProductDataModel>) -> Unit = {}
+) : RecyclerView.Adapter<CheckListAdapter.ElementViewHolder>(), RecyclerViewTouchHelperCallback.ItemTouchHelperAdapter {
 
     var selectionMode = false
 
-    private val list = mutableListOf<ListItemModel>()
+    private val list = mutableListOf<ProductDataModel>()
 
     var onStartDragListener: RecyclerViewTouchHelperCallback.OnDragListener? = null
 
-    fun updateData(update: List<ListItemModel>) {
+    fun updateData(update: List<ProductDataModel>) {
         val callback = CheckListDiffCallback(list, update)
         val result = DiffUtil.calculateDiff(callback)
         result.dispatchUpdatesTo(this)
@@ -36,26 +35,17 @@ class CheckListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.list_item_element, parent, false)
         return ElementViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        val model = list[position]
-        when (holder) {
-            is ElementViewHolder -> {
-                val element = model as? ListItemModel.Element ?: return
-                holder.bind(element.data)
-            }
-            else -> Unit
-        }
+    override fun onBindViewHolder(holder: ElementViewHolder, position: Int) {
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int = list.size
-
-    abstract class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
 //    inner class DividerViewHolder(view: View) : BaseViewHolder(view) {
 //
@@ -73,7 +63,7 @@ class CheckListAdapter(
 //        }
 //    }
 
-    inner class ElementViewHolder(view: View) : BaseViewHolder(view) {
+    inner class ElementViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
         private val clickable: View by lazy { view.findViewById(R.id.clickable) }
@@ -121,9 +111,7 @@ class CheckListAdapter(
     }
 
     override fun onItemSwiped(position: Int) {
-        when (val data = list[position]) {
-            is ListItemModel.Element -> checkedAction.invoke(data.data.title)
-        }
+        checkedAction.invoke(list[position].title)
         notifyItemChanged(position)
     }
 }

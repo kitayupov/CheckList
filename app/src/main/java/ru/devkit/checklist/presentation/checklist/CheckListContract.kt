@@ -1,11 +1,11 @@
 package ru.devkit.checklist.presentation.checklist
 
-import ru.devkit.checklist.ui.model.ListItemModel
+import ru.devkit.checklist.data.model.ProductDataModel
 
 object CheckListContract {
 
     interface MvpView {
-        fun showItems(actual: List<ListItemModel>, completed: List<ListItemModel>)
+        fun showItems(actual: List<ProductDataModel>, completed: List<ProductDataModel>)
         fun setSelectionMode(checked: Boolean)
         fun scrollToPosition(position: Int)
     }
@@ -22,7 +22,7 @@ object CheckListContract {
         fun clearData()
 
         // reorder
-        fun reorderResult(list: List<ListItemModel>)
+        fun reorderResult(list: List<ProductDataModel>)
 
         // appearance
         fun expandCompleted(checked: Boolean)

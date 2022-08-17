@@ -3,9 +3,9 @@ package ru.devkit.checklist.presentation.checklist
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import ru.devkit.checklist.data.model.ProductDataModel
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 import ru.devkit.checklist.ui.adapter.RecyclerViewTouchHelperCallback
-import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListViewWrapper(
     private val recyclerViewActual: RecyclerView,
@@ -35,7 +35,7 @@ class CheckListViewWrapper(
         }
     }
 
-    override fun showItems(actual: List<ListItemModel>, completed: List<ListItemModel>) {
+    override fun showItems(actual: List<ProductDataModel>, completed: List<ProductDataModel>) {
         adapterActual.updateData(actual)
         adapterCompleted.updateData(completed)
     }

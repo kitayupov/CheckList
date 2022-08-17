@@ -13,7 +13,6 @@ import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
 import ru.devkit.checklist.presentation.common.BaseCoroutinePresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.screenmessage.ScreenMessageInteractor
-import ru.devkit.checklist.ui.model.ListItemModel
 
 class CheckListPresenter(
     private val storageInteractor: DataModelStorageInteractor,
@@ -96,17 +95,12 @@ class CheckListPresenter(
         storageInteractor.clearData()
     }
 
-    // todo check and remove divider
-    override fun reorderResult(list: List<ListItemModel>) {
+    override fun reorderResult(list: List<ProductDataModel>) {
         launch {
             val date = System.currentTimeMillis()
             for (indexedValue in list.withIndex()) {
-                when (val elem = indexedValue.value) {
-                    is ListItemModel.Element -> {
-                        val update = elem.data.copy(lastUpdated = date + indexedValue.index)
-                        storageInteractor.updateItem(update)
-                    }
-                }
+                val update = indexedValue.value.copy(lastUpdated = date + indexedValue.index)
+                storageInteractor.updateItem(update)
             }
         }
     }
@@ -190,26 +184,19 @@ class CheckListPresenter(
                 cachedList.clear()
                 cachedList.addAll(it)
             }
-            .map { ListItemModel.Element(it) }
 
         // separate checked and unchecked
         val unchecked = elements
-            .filterNot { it.data.completed }
+            .filterNot { it.completed }
             .sortUnchecked()
         val checked = elements
-            .filter { it.data.completed }
+            .filter { it.completed }
             .sortChecked()
 
         // update selections
         if (selectedKeys.isNotEmpty()) {
-            unchecked.forEach {
-                val model = it.data
-                model.selected = selectedKeys.contains(model.title)
-            }
-            checked.forEach {
-                val model = it.data
-                model.selected = selectedKeys.contains(model.title)
-            }
+            unchecked.forEach { it.selected = selectedKeys.contains(it.title) }
+            checked.forEach { it.selected = selectedKeys.contains(it.title) }
             actionModePresenter.setSelectedCount(selectedKeys.size)
         } else {
             view?.setSelectionMode(false)
@@ -229,22 +216,22 @@ class CheckListPresenter(
         view?.showItems(unchecked, checked)
 
         focusedItemName?.let { name ->
-            checked.indexOfFirst { it.data.title == name }
+            checked.indexOfFirst { it.title == name }
                 .takeIf { it >= 0 }
                 ?.let { view?.scrollToPosition(it) }
             focusedItemName = null
         }
     }
 
-    private fun List<ListItemModel.Element>.sortUnchecked() = when (sortType) {
-        SortType.DEFAULT -> sortedBy { it.data.lastUpdated }
-        SortType.RANKING -> sortedByDescending { it.data.ranking }
-        SortType.NAME -> sortedBy { it.data.title }
+    private fun List<ProductDataModel>.sortUnchecked() = when (sortType) {
+        SortType.DEFAULT -> sortedBy { it.lastUpdated }
+        SortType.RANKING -> sortedByDescending { it.ranking }
+        SortType.NAME -> sortedBy { it.title }
     }
 
-    private fun List<ListItemModel.Element>.sortChecked() = when (sortType) {
-        SortType.DEFAULT -> sortedByDescending { it.data.lastUpdated }
-        SortType.RANKING -> sortedByDescending { it.data.ranking }
-        SortType.NAME -> sortedBy { it.data.title }
+    private fun List<ProductDataModel>.sortChecked() = when (sortType) {
+        SortType.DEFAULT -> sortedByDescending { it.lastUpdated }
+        SortType.RANKING -> sortedByDescending { it.ranking }
+        SortType.NAME -> sortedBy { it.title }
     }
 }
