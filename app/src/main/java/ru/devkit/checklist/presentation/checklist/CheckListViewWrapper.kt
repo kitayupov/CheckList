@@ -15,6 +15,7 @@ class CheckListViewWrapper(
 ) : CheckListContract.MvpView {
 
     init {
+        // todo avoid duplications
         val decoration = DividerItemDecoration(recyclerViewActual.context, DividerItemDecoration.VERTICAL)
         recyclerViewActual.addItemDecoration(decoration)
         recyclerViewActual.adapter = adapterActual
@@ -26,6 +27,7 @@ class CheckListViewWrapper(
         val touchHelper = ItemTouchHelper(swipeController)
         touchHelper.attachToRecyclerView(recyclerViewActual)
 
+        // todo do we need dragging for completed?
         adapterActual.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
                 touchHelper.startDrag(viewHolder)
@@ -33,6 +35,7 @@ class CheckListViewWrapper(
         }
     }
 
+    // todo replace with double list implementation
     override fun showItems(list: List<ListItemModel>) {
         adapterActual.updateData(list)
     }
@@ -42,6 +45,7 @@ class CheckListViewWrapper(
 //        adapterCompleted.updateData(checked)
 //    }
 
+    // todo selection mode for completed?
     override fun setSelectionMode(checked: Boolean) {
         adapterActual.selectionMode = checked
     }

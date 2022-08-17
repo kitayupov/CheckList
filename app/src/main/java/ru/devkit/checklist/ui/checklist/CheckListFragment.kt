@@ -58,6 +58,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
     }
 
     private fun setupRecyclerView(view: View) {
+        // todo think about duplications - move to wrapper adapters initialization?
         val recyclerViewActual = view.findViewById<RecyclerView>(R.id.recycler_view_actual)
         val adapterActual = CheckListAdapter(
             checkedAction = { name -> checkListPresenter?.switchChecked(name) },
@@ -72,6 +73,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
             expandAction = { checked -> checkListPresenter?.expandCompleted(checked) },
             reorderAction = { list -> checkListPresenter?.reorderResult(list) }
         )
+        // todo move actions to wrapper or create callback / listener
         checkListPresenter?.attachView(
             CheckListViewWrapper(
                 recyclerViewActual,
