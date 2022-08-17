@@ -35,15 +35,10 @@ class CheckListViewWrapper(
         }
     }
 
-    // todo replace with double list implementation
-    override fun showItems(list: List<ListItemModel>) {
-        adapterActual.updateData(list)
+    override fun showItems(actual: List<ListItemModel>, completed: List<ListItemModel>) {
+        adapterActual.updateData(actual)
+        adapterCompleted.updateData(completed)
     }
-
-//    override fun showItems(unchecked: List<ListItemModel>, checked: List<ListItemModel>) {
-//        adapterActual.updateData(unchecked)
-//        adapterCompleted.updateData(checked)
-//    }
 
     // todo selection mode for completed?
     override fun setSelectionMode(checked: Boolean) {

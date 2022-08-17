@@ -200,24 +200,15 @@ class CheckListPresenter(
             .filter { it.data.completed }
             .sortChecked()
 
-        val items = mutableListOf<ListItemModel>()
-        items.addAll(unchecked)
-
-        // configure completed area
-        if (checked.isNotEmpty()) {
-            items.add(ListItemModel.Divider(checked.size, expandCompleted))
-            if (expandCompleted) {
-                items.addAll(checked)
-            }
-        }
-
         // update selections
         if (selectedKeys.isNotEmpty()) {
-            items.forEach {
-                if (it is ListItemModel.Element) {
-                    val model = it.data
-                    model.selected = selectedKeys.contains(model.title)
-                }
+            unchecked.forEach {
+                val model = it.data
+                model.selected = selectedKeys.contains(model.title)
+            }
+            checked.forEach {
+                val model = it.data
+                model.selected = selectedKeys.contains(model.title)
             }
             actionModePresenter.setSelectedCount(selectedKeys.size)
         } else {
@@ -235,10 +226,10 @@ class CheckListPresenter(
             actionModePresenter.setSelectedCount(selectedKeys.size)
         }
 
-        view?.showItems(items)
+        view?.showItems(unchecked, checked)
 
         focusedItemName?.let { name ->
-            items.indexOfFirst { (it is ListItemModel.Element) && (it.data.title == name) }
+            checked.indexOfFirst { it.data.title == name }
                 .takeIf { it >= 0 }
                 ?.let { view?.scrollToPosition(it) }
             focusedItemName = null

@@ -5,7 +5,7 @@ import ru.devkit.checklist.ui.model.ListItemModel
 object CheckListContract {
 
     interface MvpView {
-        fun showItems(list: List<ListItemModel>)
+        fun showItems(actual: List<ListItemModel>, completed: List<ListItemModel>)
         fun setSelectionMode(checked: Boolean)
         fun scrollToPosition(position: Int)
     }
