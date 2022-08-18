@@ -28,8 +28,17 @@ class DividerView @JvmOverloads constructor(
             isVisible = (count != 0)
         }
 
+    var expanded: Boolean = false
+        set(value) {
+            field = value
+            checkBox.isChecked = expanded
+        }
+
+    var expandAction: (Boolean) -> Unit = {}
+
     init {
         LayoutInflater.from(context).inflate(R.layout.list_item_divider, this)
+        checkBox.setOnCheckedChangeListener { _, checked -> expandAction.invoke(checked) }
         val clickable = findViewById<View>(R.id.clickable)
         clickable.setOnClickListener { checkBox.performClick() }
     }

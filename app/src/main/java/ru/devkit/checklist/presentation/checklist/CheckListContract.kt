@@ -8,6 +8,7 @@ object CheckListContract {
         fun showItems(actual: List<ProductDataModel>, completed: List<ProductDataModel>)
         fun setSelectionMode(checked: Boolean)
         fun scrollToPosition(position: Int)
+        fun expandCompleted(checked: Boolean)
     }
 
     interface MvpPresenter {

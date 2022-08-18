@@ -74,7 +74,9 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
             expandAction = { checked -> checkListPresenter?.expandCompleted(checked) },
             reorderAction = { list -> checkListPresenter?.reorderResult(list) }
         )
-        val divider = view.findViewById<DividerView>(R.id.divider)
+        val divider = view.findViewById<DividerView>(R.id.divider).apply {
+            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
+        }
         // todo move actions to wrapper or create callback / listener
         checkListPresenter?.attachView(
             CheckListViewWrapper(

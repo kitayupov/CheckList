@@ -1,5 +1,6 @@
 package ru.devkit.checklist.presentation.checklist
 
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -50,5 +51,10 @@ class CheckListViewWrapper(
 
     override fun scrollToPosition(position: Int) {
         recyclerViewActual.smoothScrollToPosition(position)
+    }
+
+    override fun expandCompleted(checked: Boolean) {
+        recyclerViewCompleted.isVisible = checked
+        divider.expanded = checked
     }
 }

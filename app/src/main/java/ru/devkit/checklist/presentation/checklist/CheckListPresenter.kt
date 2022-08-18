@@ -39,6 +39,7 @@ class CheckListPresenter(
         this.view = view
         launch {
             updateItems()
+            view.expandCompleted(expandCompleted)
         }
     }
 
@@ -109,6 +110,7 @@ class CheckListPresenter(
         if (expandCompleted == checked) return@update
         expandCompleted = checked
         preferences.expandCompleted = checked
+        view?.expandCompleted(checked)
     }
 
     override fun setSortRanking() = setSortType(SortType.RANKING)
