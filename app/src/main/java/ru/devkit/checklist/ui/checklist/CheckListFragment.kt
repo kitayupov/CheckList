@@ -6,7 +6,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ru.devkit.checklist.R
 import ru.devkit.checklist.presentation.actionmode.ActionModePresenter
@@ -16,8 +15,6 @@ import ru.devkit.checklist.presentation.checklist.CheckListViewWrapper
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
 import ru.devkit.checklist.router.CheckListRouter
-import ru.devkit.checklist.ui.DividerView
-import ru.devkit.checklist.ui.adapter.CheckListAdapter
 
 class CheckListFragment : Fragment(R.layout.fragment_check_list) {
 
@@ -36,7 +33,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setupRecyclerView(view)
+        setupCheckListView(view)
         setupFloatingActionButton(view)
         setupActionToolbar()
     }
@@ -58,32 +55,18 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
         createItemActionPresenter?.detachView()
     }
 
-    private fun setupRecyclerView(view: View) {
-        // todo think about duplications - move to wrapper adapters initialization?
-        val recyclerViewActual = view.findViewById<RecyclerView>(R.id.recycler_view_actual)
-        val adapterActual = CheckListAdapter(
+    private fun setupCheckListView(view: View) {
+        val checkListViewWrapper = CheckListViewWrapper(
+            recyclerViewActual = view.findViewById(R.id.recycler_view_actual),
+            recyclerViewCompleted = view.findViewById(R.id.recycler_view_checked),
+            divider = view.findViewById(R.id.divider),
             checkedAction = { name -> checkListPresenter?.switchChecked(name) },
             selectAction = { name -> checkListPresenter?.switchSelected(name) },
-            reorderAction = { list -> checkListPresenter?.reorderResult(list) }
-        )
-        val recyclerViewCompleted = view.findViewById<RecyclerView>(R.id.recycler_view_checked)
-        val adapterCompleted = CheckListAdapter(
-            checkedAction = { name -> checkListPresenter?.switchChecked(name) },
-            selectAction = { name -> checkListPresenter?.switchSelected(name) },
-            reorderAction = { list -> checkListPresenter?.reorderResult(list) }
-        )
-        val divider = view.findViewById<DividerView>(R.id.divider).apply {
+            reorderAction = { list -> checkListPresenter?.reorderResult(list) },
             expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
-        }
-        // todo move actions to wrapper or create callback / listener
+        )
         checkListPresenter?.attachView(
-            CheckListViewWrapper(
-                recyclerViewActual,
-                adapterActual,
-                recyclerViewCompleted,
-                adapterCompleted,
-                divider
-            )
+            checkListViewWrapper
         )
     }
 

@@ -11,15 +11,21 @@ import ru.devkit.checklist.ui.adapter.RecyclerViewTouchHelperCallback
 
 class CheckListViewWrapper(
     private val recyclerViewActual: RecyclerView,
-    private val adapterActual: CheckListAdapter,
     private val recyclerViewCompleted: RecyclerView,
-    private val adapterCompleted: CheckListAdapter,
-    private val divider: DividerView
+    private val divider: DividerView,
+    checkedAction: (String) -> Unit = {},
+    selectAction: (String) -> Unit = {},
+    reorderAction: (List<ProductDataModel>) -> Unit = {},
+    expandAction: (Boolean) -> Unit = {}
 ) : CheckListContract.MvpView {
+
+    private val adapterActual = CheckListAdapter(checkedAction, selectAction, reorderAction)
+    private val adapterCompleted = CheckListAdapter(checkedAction, selectAction, reorderAction)
 
     init {
         setupRecyclerView(recyclerViewActual, adapterActual)
         setupRecyclerView(recyclerViewCompleted, adapterCompleted)
+        divider.expandAction = expandAction
     }
 
     override fun showItems(actual: List<ProductDataModel>, completed: List<ProductDataModel>) {
