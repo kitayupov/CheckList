@@ -38,11 +38,6 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
         setupActionToolbar()
     }
 
-    override fun onResume() {
-        super.onResume()
-        createItemActionPresenter?.showView()
-    }
-
     override fun onPause() {
         super.onPause()
         checkListPresenter?.detachView()
@@ -65,16 +60,19 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
     }
 
     private fun setupFloatingActionButton(view: View) {
-        val fab = view.findViewById<FloatingActionButton?>(R.id.floating_button).apply {
-            setOnClickListener {
+        val fab = view.findViewById<FloatingActionButton?>(R.id.floating_button)
+        val createItemActionViewWrapper = CreateItemActionViewWrapper(
+            floatingActionButton = fab,
+            clickAction = {
                 router?.showCreateItemView(
                     onCreate = { name -> checkListPresenter?.createItem(name) },
-                    onDismiss = { show() }
+                    onDismiss = { fab.show() }
                 )
-                hide()
+                fab.hide()
             }
-        }
-        createItemActionPresenter?.attachView(CreateItemActionViewWrapper(fab))
+        )
+        createItemActionPresenter?.attachView(createItemActionViewWrapper)
+        createItemActionPresenter?.showView()
     }
 
     private fun setupActionToolbar() {
