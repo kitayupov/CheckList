@@ -18,32 +18,8 @@ class CheckListViewWrapper(
 ) : CheckListContract.MvpView {
 
     init {
-        // todo avoid duplications
-        val decoration = DividerItemDecoration(recyclerViewActual.context, DividerItemDecoration.VERTICAL)
-        recyclerViewActual.addItemDecoration(decoration)
-        recyclerViewActual.adapter = adapterActual
-
-        recyclerViewCompleted.addItemDecoration(decoration)
-        recyclerViewCompleted.adapter = adapterCompleted
-
-        val swipeController = RecyclerViewTouchHelperCallback(adapterActual)
-        val touchHelper = ItemTouchHelper(swipeController)
-        touchHelper.attachToRecyclerView(recyclerViewActual)
-
-        val swipeController2 = RecyclerViewTouchHelperCallback(adapterCompleted)
-        val touchHelper2 = ItemTouchHelper(swipeController2)
-        touchHelper2.attachToRecyclerView(recyclerViewCompleted)
-
-        adapterActual.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
-            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-                touchHelper.startDrag(viewHolder)
-            }
-        }
-        adapterCompleted.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
-            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-                touchHelper2.startDrag(viewHolder)
-            }
-        }
+        setupRecyclerView(recyclerViewActual, adapterActual)
+        setupRecyclerView(recyclerViewCompleted, adapterCompleted)
     }
 
     override fun showItems(actual: List<ProductDataModel>, completed: List<ProductDataModel>) {
@@ -64,5 +40,20 @@ class CheckListViewWrapper(
     override fun expandCompleted(checked: Boolean) {
         recyclerViewCompleted.isVisible = checked
         divider.expanded = checked
+    }
+
+    private fun setupRecyclerView(recyclerView: RecyclerView, adapter: CheckListAdapter) {
+        val decoration = DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL)
+        recyclerView.addItemDecoration(decoration)
+        recyclerView.adapter = adapter
+        // touch helper
+        val swipeController = RecyclerViewTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(swipeController)
+        touchHelper.attachToRecyclerView(recyclerView)
+        adapter.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
+            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+                touchHelper.startDrag(viewHolder)
+            }
+        }
     }
 }
