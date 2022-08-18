@@ -38,8 +38,8 @@ class CheckListPresenter(
     override fun attachView(view: CheckListContract.MvpView) {
         this.view = view
         launch {
-            updateItems()
             view.expandCompleted(expandCompleted)
+            updateItems()
         }
     }
 

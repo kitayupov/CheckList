@@ -15,9 +15,9 @@ import java.util.*
 class CheckListAdapter(
     private var checkedAction: (String) -> Unit = {},
     private var selectAction: (String) -> Unit = {},
-    private var expandAction: (Boolean) -> Unit = {},
     private var reorderAction: (List<ProductDataModel>) -> Unit = {}
-) : RecyclerView.Adapter<CheckListAdapter.ElementViewHolder>(), RecyclerViewTouchHelperCallback.ItemTouchHelperAdapter {
+) : RecyclerView.Adapter<CheckListAdapter.ElementViewHolder>(),
+    RecyclerViewTouchHelperCallback.ItemTouchHelperAdapter {
 
     var selectionMode = false
 
@@ -46,22 +46,6 @@ class CheckListAdapter(
     }
 
     override fun getItemCount(): Int = list.size
-
-//    inner class DividerViewHolder(view: View) : BaseViewHolder(view) {
-//
-//        private val checkBox: CheckBox by lazy { view.findViewById(R.id.check_box) }
-//        private val counter: TextView by lazy { view.findViewById(R.id.counter) }
-//        private val clickable: View by lazy { view.findViewById(R.id.clickable) }
-//
-//        fun bind(data: ListItemModel.Divider) {
-//            counter.text = data.count.toString()
-//            checkBox.isChecked = data.expanded
-//            checkBox.setOnCheckedChangeListener { _, checked ->
-//                expandAction.invoke(checked)
-//            }
-//            clickable.setOnClickListener { checkBox.performClick() }
-//        }
-//    }
 
     inner class ElementViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

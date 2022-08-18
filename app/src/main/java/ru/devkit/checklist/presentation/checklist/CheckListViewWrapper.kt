@@ -30,8 +30,12 @@ class CheckListViewWrapper(
         val touchHelper = ItemTouchHelper(swipeController)
         touchHelper.attachToRecyclerView(recyclerViewActual)
 
-        // todo do we need dragging for completed?
         adapterActual.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
+            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+                touchHelper.startDrag(viewHolder)
+            }
+        }
+        adapterCompleted.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
                 touchHelper.startDrag(viewHolder)
             }

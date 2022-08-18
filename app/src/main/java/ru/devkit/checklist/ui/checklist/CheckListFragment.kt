@@ -64,14 +64,12 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
         val adapterActual = CheckListAdapter(
             checkedAction = { name -> checkListPresenter?.switchChecked(name) },
             selectAction = { name -> checkListPresenter?.switchSelected(name) },
-            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) },
             reorderAction = { list -> checkListPresenter?.reorderResult(list) }
         )
         val recyclerViewCompleted = view.findViewById<RecyclerView>(R.id.recycler_view_checked)
         val adapterCompleted = CheckListAdapter(
             checkedAction = { name -> checkListPresenter?.switchChecked(name) },
             selectAction = { name -> checkListPresenter?.switchSelected(name) },
-            expandAction = { checked -> checkListPresenter?.expandCompleted(checked) },
             reorderAction = { list -> checkListPresenter?.reorderResult(list) }
         )
         val divider = view.findViewById<DividerView>(R.id.divider).apply {
