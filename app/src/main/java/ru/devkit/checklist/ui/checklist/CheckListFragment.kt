@@ -16,6 +16,7 @@ import ru.devkit.checklist.presentation.checklist.CheckListViewWrapper
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionPresenter
 import ru.devkit.checklist.presentation.createitemaction.CreateItemActionViewWrapper
 import ru.devkit.checklist.router.CheckListRouter
+import ru.devkit.checklist.ui.DividerView
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 
 class CheckListFragment : Fragment(R.layout.fragment_check_list) {
@@ -73,13 +74,15 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
             expandAction = { checked -> checkListPresenter?.expandCompleted(checked) },
             reorderAction = { list -> checkListPresenter?.reorderResult(list) }
         )
+        val divider = view.findViewById<DividerView>(R.id.divider)
         // todo move actions to wrapper or create callback / listener
         checkListPresenter?.attachView(
             CheckListViewWrapper(
                 recyclerViewActual,
                 adapterActual,
                 recyclerViewCompleted,
-                adapterCompleted
+                adapterCompleted,
+                divider
             )
         )
     }

@@ -21,9 +21,10 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/list_item_element" />
 
-            <include
-                android:id="@+id/include"
-                layout="@layout/list_item_divider" />
+            <ru.devkit.checklist.ui.DividerView
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_checked"

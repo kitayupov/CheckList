@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.devkit.checklist.data.model.ProductDataModel
+import ru.devkit.checklist.ui.DividerView
 import ru.devkit.checklist.ui.adapter.CheckListAdapter
 import ru.devkit.checklist.ui.adapter.RecyclerViewTouchHelperCallback
 
@@ -11,7 +12,8 @@ class CheckListViewWrapper(
     private val recyclerViewActual: RecyclerView,
     private val adapterActual: CheckListAdapter,
     private val recyclerViewCompleted: RecyclerView,
-    private val adapterCompleted: CheckListAdapter
+    private val adapterCompleted: CheckListAdapter,
+    private val divider: DividerView
 ) : CheckListContract.MvpView {
 
     init {
