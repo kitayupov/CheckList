@@ -45,13 +45,9 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
 
     override fun onPause() {
         super.onPause()
-        createItemActionPresenter?.hideView()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
         checkListPresenter?.detachView()
         actionModePresenter?.detachView()
+        createItemActionPresenter?.hideView()
         createItemActionPresenter?.detachView()
     }
 
@@ -65,9 +61,7 @@ class CheckListFragment : Fragment(R.layout.fragment_check_list) {
             reorderAction = { list -> checkListPresenter?.reorderResult(list) },
             expandAction = { checked -> checkListPresenter?.expandCompleted(checked) }
         )
-        checkListPresenter?.attachView(
-            checkListViewWrapper
-        )
+        checkListPresenter?.attachView(checkListViewWrapper)
     }
 
     private fun setupFloatingActionButton(view: View) {
