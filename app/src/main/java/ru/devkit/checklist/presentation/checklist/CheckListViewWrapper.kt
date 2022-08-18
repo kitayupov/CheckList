@@ -30,6 +30,10 @@ class CheckListViewWrapper(
         val touchHelper = ItemTouchHelper(swipeController)
         touchHelper.attachToRecyclerView(recyclerViewActual)
 
+        val swipeController2 = RecyclerViewTouchHelperCallback(adapterCompleted)
+        val touchHelper2 = ItemTouchHelper(swipeController2)
+        touchHelper2.attachToRecyclerView(recyclerViewCompleted)
+
         adapterActual.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
                 touchHelper.startDrag(viewHolder)
@@ -37,7 +41,7 @@ class CheckListViewWrapper(
         }
         adapterCompleted.onStartDragListener = object : RecyclerViewTouchHelperCallback.OnDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-                touchHelper.startDrag(viewHolder)
+                touchHelper2.startDrag(viewHolder)
             }
         }
     }
