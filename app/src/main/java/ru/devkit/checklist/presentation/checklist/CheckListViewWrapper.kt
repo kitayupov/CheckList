@@ -40,6 +40,7 @@ class CheckListViewWrapper(
     override fun showItems(actual: List<ProductDataModel>, completed: List<ProductDataModel>) {
         adapterActual.updateData(actual)
         adapterCompleted.updateData(completed)
+        divider.count = completed.size
     }
 
     override fun setSelectionMode(checked: Boolean) {
